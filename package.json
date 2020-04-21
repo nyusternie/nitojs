@@ -1,0 +1,25 @@
+{
+  "name": "nitojs",
+  "version": "20.4.21",
+  "license": "MIT",
+  "author": "Shomari Prince <nyusternie@sdot.io>",
+  "description": "Nito JavaScript Library and Software Development Kit (SDK).",
+  "repository": "git@gitlab.com:bchplease/nitojs.git",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test:unit": "jest"
+  },
+  "dependencies": {
+    "ipfs": "0.43.0",
+    "moment": "2.24.0",
+    "numeral": "2.0.6",
+    "orbit-db": "0.23.1"
+  },
+  "devDependencies": {
+    "babel-eslint": "10.1.0",
+    "eslint": "6.8.0",
+    "eslint-plugin-jest": "23.8.2",
+    "jest": "25.3.0"
+  }
+}
