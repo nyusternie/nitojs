@@ -1,6 +1,6 @@
 {
   "name": "nitojs",
-  "version": "20.4.21",
+  "version": "20.5.1",
   "license": "MIT",
   "author": "Shomari Prince <nyusternie@sdot.io>",
   "description": "Nito JavaScript Library and Software Development Kit (SDK).",
@@ -11,10 +11,16 @@
     "test:unit": "jest"
   },
   "dependencies": {
+    "bitbox-sdk": "8.11.2",
+    "bitcore-lib-cash": "8.19.0",
     "ipfs": "0.43.0",
+    "lodash": "4.17.15",
     "moment": "2.24.0",
     "numeral": "2.0.6",
-    "orbit-db": "0.23.1"
+    "orbit-db": "0.23.1",
+    "protobufjs": "6.9.0",
+    "qrcode-terminal": "0.12.0",
+    "ws": "7.2.5"
   },
   "devDependencies": {
     "babel-eslint": "10.1.0",

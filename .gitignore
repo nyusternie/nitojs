@@ -138,4 +138,8 @@ temp/
 
 # End of https://www.gitignore.io/api/node,macos
 
+_failedFusion*
+_failedShuffle*
+test_json_wallet.js
+
 NOTES
