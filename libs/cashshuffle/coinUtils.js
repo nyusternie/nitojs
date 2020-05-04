@@ -195,7 +195,6 @@ const verifyTransactionSignature = function (
         verificationResults = false
     }
     debug('Verification results', verificationResults)
-    verificationResults = true
 
     /* Validate verification results. */
     if (verificationResults) {
@@ -490,6 +489,9 @@ const getShuffleTxAndSignature = function (options) {
         shuffleTransaction.to(oneOutput.cashAddress, oneOutput.amountSatoshis)
     }
 
+    /* Set version 1. */
+    shuffleTransaction.setVersion(1)
+
     /* Set pre-signed transaction. */
     const preSignedTx = shuffleTransaction.toObject()
     debug('Pre-signed tx', preSignedTx)
@@ -556,7 +558,7 @@ const buildShuffleTransaction = async function (options) {
 
 /* Export module. */
 module.exports = {
-    BITBOX,
+    bitbox,
     getKeypairFromWif,
     checkSufficientFunds,
     getCoinDetails,

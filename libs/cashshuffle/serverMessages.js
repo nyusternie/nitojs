@@ -742,14 +742,14 @@ function checkPacketSignature (oneSignedPacket) {
     /* Set message. */
     const message = packet.finish().toString('base64')
 
-    debug('checkPacketSignature',
-        verificationKey,
-        signature,
-        packet,
-        pubkey,
-        address,
-        message
-    )
+    // debug('checkPacketSignature',
+    //     verificationKey,
+    //     signature,
+    //     packet,
+    //     pubkey,
+    //     address,
+    //     message
+    // )
 
     /* Initialize result. */
     let result = false

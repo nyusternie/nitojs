@@ -984,7 +984,8 @@ class ShuffleRound extends EventEmitter {
             equivCheck: _.get(prunedMessage, 'message.hash.hash')
         })
 
-        debug('Got a processEquivCheck message from', sender.verificationKey, 'with hash', sender.equivCheck)
+        debug('Got a processEquivCheck message from',
+            sender.verificationKey, 'with hash', sender.equivCheck)
 
         const allHashes = _.compact(_.map(this.players, 'equivCheck'))
 
@@ -1260,13 +1261,17 @@ class ShuffleRound extends EventEmitter {
 
             let submissionResults
 
+            debug('Broadcasting raw tx',
+                this.shuffleTx.tx.toBuffer('hex').toString('hex'))
+
             try {
                 submissionResults = await this
                     .util
                     .coin
                     .bitbox
                     .RawTransactions
-                    .sendRawTransaction(this.shuffleTx.tx.toBuffer('hex').toString('hex'))
+                    .sendRawTransaction(
+                        this.shuffleTx.tx.toBuffer('hex').toString('hex'))
             } catch (nope) {
                 debug('Error broadcasting transaction to the network:', nope)
 
