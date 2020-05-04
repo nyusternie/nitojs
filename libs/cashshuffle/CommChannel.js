@@ -2,6 +2,7 @@
 const _ = require('lodash')
 const debug = require('debug')('cashshuffle:comm')
 const EventEmitter = require('events').EventEmitter
+const moment = require('moment')
 const WebSocket = require('ws')
 
 /* Import local modules. */
@@ -309,7 +310,7 @@ class CommChannel extends EventEmitter {
         const data = JSON.stringify(writeThisToDisk, null, 2)
 
         /* Write data to disk. */
-        require('fs').writeFileSync('_failedShuffle.js', 'module.exports = ' + data)
+        require('fs').writeFileSync(`_failedShuffle-${moment().unix()}.js`, 'module.exports = ' + data)
 
         /* Quit application. */
         process.exit(0)

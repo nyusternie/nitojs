@@ -306,7 +306,8 @@ class ShuffleRound extends EventEmitter {
          */
         case 'announcementPhase':
             /* Set new phase name. */
-            newPhaseName = _.isString(message['phase']) ? message['phase'].toLowerCase() : undefined
+            newPhaseName = _.isString(
+                message['phase']) ? message['phase'].toLowerCase() : undefined
 
             /* Validate new phase name. */
             if (newPhaseName && newPhaseName === 'announcement') {
@@ -359,7 +360,9 @@ class ShuffleRound extends EventEmitter {
                 await this.announceChangeAddress()
             }
 
-            debug('message[message][address][address]', message['message']['address']['address'])
+            debug('Incoming change address',
+                'Encryption pubkey', message['message']['key']['key'],
+                'Legacy address', message['message']['address']['address'])
 
             /* Update this player with their change address. */
             _.extend(this.players[_.findIndex(this.players, { session: message['session'] })], {
@@ -405,9 +408,11 @@ class ShuffleRound extends EventEmitter {
             break
         }
         case 'finalTransactionOutputs':
-            // debug('got final transaction outputs!');
-            newPhaseName = _.isString(message['phase']) ? message['phase'].toLowerCase() : undefined
+            debug('got final transaction outputs!')
+            newPhaseName = _.isString(
+                message['phase']) ? message['phase'].toLowerCase() : undefined
 
+            /* Set new phase name. */
             this.phase = newPhaseName
 
             this.checkFinalOutputsAndDoEquivCheck(jsonMessage.packets)
@@ -663,10 +668,10 @@ class ShuffleRound extends EventEmitter {
      *        addresses. We must add one layer of encryption to our address
      *        for every subsequent player in the round. For example, if we are
      *        player 3 in a 10 player round, we must add 7 layers of
-     *        encryption, starting with player 7 then working our way forward
-     *        through player 4. Then we send all of them to player 4 as a
+     *        encryption, starting with player #10 then working our way back
+     *        to player #4. Then we send all of them to player #4 as a
      *        signed multi-packet unicast message. Unicast messages are those
-     *        that include toKey field which the server relays only the them.
+     *        that include toKey field which the server relays only to them.
      *
      * NOTE: If we are player 1, this function has been called without any
      *       parameters so there will be nothing for us to decrypt and our
@@ -731,18 +736,26 @@ class ShuffleRound extends EventEmitter {
 
             /* Retrieve decrypted string. */
             const decryptedStrings = _.reduce(arrayOfPacketObjects, (results, onePacket) => {
-                /* Initialize decryption results. */
-                let decryptionResults
-
                 try {
-                    decryptionResults = this.util.crypto.decrypt(_.get(onePacket, 'packet.message.str'), this.encryptionKeypair.privateKeyHex)
+                    /* Set decryption results. */
+                    const decryptionResults = this.util.crypto
+                        .decrypt(
+                            _.get(onePacket, 'packet.message.str'),
+                            this.encryptionKeypair.privateKeyHex
+                        )
+                    debug('Decryption results',
+                        'onePacket', onePacket,
+                        'privateKeyHex', this.encryptionKeypair.privateKeyHex,
+                        decryptionResults
+                    )
 
+                    /* Add decryption to results. */
                     results.strings.push(decryptionResults.toString('utf-8'))
                 } catch (nope) {
                     debug('Cannot decrypt')
 
                     results.errors.push({
-                        packet: onePlayer,
+                        packet: onePacket,
                         error: nope
                     })
                 }
@@ -752,6 +765,7 @@ class ShuffleRound extends EventEmitter {
                 strings: [],
                 errors: []
             })
+            debug('Decrypted strings', decryptedStrings)
 
             /* Validate decrypted string. */
             // NOTE: Blame our sender if the ciphertext cannot be decrypted.
@@ -829,16 +843,25 @@ class ShuffleRound extends EventEmitter {
 
         /* Validate if we are the last player. */
         if (me.playerNumber === lastPlayer.playerNumber) {
-            debug(`\n\nBroadcasting final shuffled output addresses ${stringsForNextPlayer}!\n\n`)
+            debug(`Broadcasting final shuffled output addresses ${stringsForNextPlayer}!`)
 
             /* Send message. */
             this.comms.sendMessage(
                 'broadcastFinalOutputAddresses',
-                this.session, me.playerNumber, shuffleArray(stringsForNextPlayer, 100),
-                'broadcast', this.ephemeralKeypair.publicKey, this.ephemeralKeypair.privateKey
+                this.session,
+                me.playerNumber,
+                shuffleArray(stringsForNextPlayer, 100),
+                'broadcast',
+                this.ephemeralKeypair.publicKey,
+                this.ephemeralKeypair.privateKey
             )
         } else {
-            // debug('Sending encrypted outputs', stringsForNextPlayer, 'to player', nextPlayer.playerNumber, '(', nextPlayer.verificationKey, ')');
+            debug('Sending encrypted outputs',
+                stringsForNextPlayer,
+                'to player',
+                nextPlayer.playerNumber,
+                '(', nextPlayer.verificationKey, ')'
+            )
 
             /* Send message. */
             this.comms.sendMessage(
@@ -855,7 +878,7 @@ class ShuffleRound extends EventEmitter {
     }
 
     /**
-     * Check Final Outpus and Do Equivocation Check
+     * Check Final Outputs and Do Equivocation Check
      *
      * This function performs processing of the "broadcast" phase message sent
      * by the final player in the round. This message announces the final
@@ -876,6 +899,7 @@ class ShuffleRound extends EventEmitter {
 
         const finalOutputAddresses = _.map(
             signedPackets, 'packet.message.str')
+        debug('Final output addresses', finalOutputAddresses)
 
         /* Make sure our address was included. If not, blame! */
         if (finalOutputAddresses.indexOf(this.shuffled.legacyAddress) < 0) {
@@ -883,11 +907,12 @@ class ShuffleRound extends EventEmitter {
 
             this.assignBlame({
                 reason: 'MISSINGOUTPUT',
-                accused: _.get(messageObject, _.get(signedPackets[0], 'packet.fromKey.key'))
+                // accused: _.get(messageObject, _.get(signedPackets[0], 'packet.fromKey.key'))
+                accused: _.get(signedPackets, _.get(signedPackets[0], 'packet.fromKey.key'))
             })
         }
 
-        debug('We got the final output addressess and ours was included!', finalOutputAddresses)
+        // debug('We got the final output addressess and ours was included!', finalOutputAddresses)
 
         // Attach the entire array of ordered output addresses to our
         // players.  Although we don't know which address belongs to which
@@ -1022,6 +1047,8 @@ class ShuffleRound extends EventEmitter {
      *     7. Set the done flag and cleanup the round.
      */
     async verifyAndSubmit (prunedMessage) {
+        debug('Pruned message', prunedMessage)
+
         /* Initialize ordered players. */
         const orderedPlayers = _.orderBy(this.players, ['playerNumber'], ['asc'])
 
@@ -1129,6 +1156,11 @@ class ShuffleRound extends EventEmitter {
         }
         debug('New signature data', newSigData)
 
+        // Assert(len(sig) >= 8 and len(sig) <= 72)
+        // Assert(sig[0] == 0x30)
+        // Assert(sig[1] == len(sig)-2) # Check length
+        // Assert(sig[2] == 0x02)
+
         /* Add new signature data to shuffle signatures. */
         this.shuffleTx.signatures.push(newSigData)
 
@@ -1192,10 +1224,12 @@ class ShuffleRound extends EventEmitter {
             if (!signer.isMe) {
                 // debug(`Applying signature to input${sigVerifyResults.inputIndex}!`);
 
-                let signedInput
+                // let signedInput
 
                 try {
-                    signedInput = this.shuffleTx.tx.inputs[sigVerifyResults.inputIndex]
+                    // signedInput = this.shuffleTx.tx.inputs[sigVerifyResults.inputIndex]
+                    //     .addSignature(this.shuffleTx.tx, sigVerifyResults.signature)
+                    this.shuffleTx.tx.inputs[sigVerifyResults.inputIndex]
                         .addSignature(this.shuffleTx.tx, sigVerifyResults.signature)
                 } catch (nope) {
                     debug('We failed to apply a signature to our transaction.  Looks like our fault', nope)

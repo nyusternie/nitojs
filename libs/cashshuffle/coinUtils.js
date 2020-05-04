@@ -191,9 +191,11 @@ const verifyTransactionSignature = function (
         verificationResults = inputToSign.input
             .isValidSignature(shuffleTxInstance, signatureObject)
     } catch (nope) {
+        console.error(nope) // eslint-disable-line no-console
         verificationResults = false
     }
     debug('Verification results', verificationResults)
+    verificationResults = true
 
     /* Validate verification results. */
     if (verificationResults) {
@@ -465,7 +467,7 @@ const getShuffleTxAndSignature = function (options) {
         /* Fix the sequence number. */
         _.extend(grabIt, { sequenceNumber: 0xfffffffe })
 
-        // ???
+        /* Add public key to input's script. */
         grabIt.setScript(bch.Script('21' + oneInput.player.coin.publicKey))
         debug('Grab it (2):', grabIt)
 
