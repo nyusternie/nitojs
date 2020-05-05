@@ -19,6 +19,7 @@
 	<!-- CSS Files -->
 	<link href="./css/bootstrap.min.css" rel="stylesheet" />
 	<link href="./css/material-bootstrap-wizard.css" rel="stylesheet" />
+	<link href="./css/main.css" rel="stylesheet" />
 </head>
 
 <body>
@@ -50,11 +51,12 @@
 	                    	</div>
 
                             <div class="wizard-navigation">
-								<ul>
-		                            <li><a href="#location" data-toggle="tab">Wallets</a></li>
-		                            <li><a href="#type" data-toggle="tab">Activity</a></li>
-		                            <li><a href="#facilities" data-toggle="tab">History</a></li>
-		                            <li><a href="#nito-result" data-toggle="tab">Support</a></li>
+                                <ul>
+		                            <li><a href="#location" data-toggle="tab">Coin Manager</a></li>
+		                            <li><a href="#type" data-toggle="tab">Activity Monitor</a></li>
+                                    <br class="nav-break" />
+		                            <li><a href="#facilities" data-toggle="tab">Transactions</a></li>
+		                            <li><a href="#nito-result" data-toggle="tab">Need Help?</a></li>
 		                        </ul>
 							</div>
 
@@ -64,13 +66,15 @@
 	                                	<div class="col-sm-12">
 	                                    	<h4 class="info-text"> Let's start with the basic details</h4>
 	                                	</div>
-	                                	<div class="col-sm-5 col-sm-offset-1">
+
+                                        <div class="col-sm-5 col-sm-offset-1">
 	                                    	<div class="form-group label-floating">
 	                                        	<label class="control-label">City</label>
 	                                        	<input type="text" class="form-control" id="exampleInputEmail1">
 	                                    	</div>
 	                                	</div>
-	                                	<div class="col-sm-5">
+
+                                        <div class="col-sm-5">
 	                                    	<div class="form-group label-floating">
 	                                            <label class="control-label">Country</label>
                                             	<select name="country" class="form-control">
@@ -87,10 +91,12 @@
                                             	</select>
                                         	</div>
 	                                	</div>
-	                                	<div class="col-sm-5 col-sm-offset-1">
+
+                                        <div class="col-sm-5 col-sm-offset-1">
 	                                    	<div class="form-group label-floating">
 	                                        	<label class="control-label">Accommodates</label>
-	                                        	<select class="form-control">
+
+                                                <select class="form-control">
 	                                            	<option disabled="" selected=""></option>
 	                                            	<option>1 Person</option>
 	                                            	<option>2 Persons </option>
@@ -101,10 +107,12 @@
 	                                        	</select>
 	                                    	</div>
 	                                	</div>
-	                                	<div class="col-sm-5">
+
+                                        <div class="col-sm-5">
 	                                    	<div class="form-group label-floating">
 	                                        	<label class="control-label">Rent price</label>
-	                                        	<div class="input-group">
+
+                                                <div class="input-group">
 	                                            	<input type="text" class="form-control">
 	                                            	<span class="input-group-addon">$</span>
 	                                        	</div>
@@ -112,34 +120,31 @@
 	                                	</div>
 	                            	</div>
 	                            </div>
-	                            <div class="tab-pane" id="type">
-	                                <h4 class="info-text">What type of location do you have? </h4>
-	                                <div class="row">
-	                                    <div class="col-sm-10 col-sm-offset-1">
-	                                        <div class="col-sm-4 col-sm-offset-2">
-	                                            <div class="choice" data-toggle="wizard-radio" rel="tooltip" title="Select this option if you have a house.">
-	                                                <input type="radio" name="type" value="House">
-	                                                <div class="icon">
-	                                                    <i class="material-icons">home</i>
-	                                                </div>
-	                                                <h6>House</h6>
-	                                            </div>
+
+                                <!-- Activity Monitor -->
+                                <div class="tab-pane" id="type">
+                                    <div class="row">
+	                                    <h4 class="info-text"> Drop us a small description. </h4>
+	                                    <div class="col-sm-6 col-sm-offset-1">
+	                                        <div class="form-group label-floating">
+	                                            <label class="control-label">Place description</label>
+	                                            <textarea class="form-control" placeholder="" rows="9"></textarea>
 	                                        </div>
-	                                        <div class="col-sm-4">
-	                                            <div class="choice" data-toggle="wizard-radio" rel="tooltip" title="Select this option if you have an appartment">
-	                                                <input type="radio" name="type" value="Appartment">
-	                                                <div class="icon">
-	                                                    <i class="material-icons">hotel</i>
-	                                                </div>
-	                                                <h6>Appartment</h6>
-	                                            </div>
+	                                    </div>
+	                                    <div class="col-sm-4">
+	                                    	<div class="form-group label-floating">
+	                                            <label class="control-label">Example</label>
+	                                            <p class="description">"The place is really nice. We use it every sunday when we go fishing. It is so awesome."</p>
 	                                        </div>
 	                                    </div>
 	                                </div>
 	                            </div>
-	                            <div class="tab-pane" id="facilities">
+
+                                <!-- Transactions -->
+                                <div class="tab-pane" id="facilities">
 	                                <h4 class="info-text">Tell us more about facilities. </h4>
-	                                <div class="row">
+
+                                    <div class="row">
 	                                    <div class="col-sm-5 col-sm-offset-1">
 	                                      <div class="form-group label-floating">
 	                                        	<label class="control-label">Your place is good for</label>
@@ -183,26 +188,52 @@
                                     	</div>
 	                                </div>
 	                            </div>
-	                            <div class="tab-pane" id="nito-result">
-	                                <div class="row">
-	                                    <h4 class="info-text"> Drop us a small description. </h4>
-	                                    <div class="col-sm-6 col-sm-offset-1">
-	                                        <div class="form-group label-floating">
-	                                            <label class="control-label">Place description</label>
-	                                            <textarea class="form-control" placeholder="" rows="9"></textarea>
+
+                                <div class="tab-pane" id="nito-result">
+                                    <h4 class="info-text">
+                                        What type of support would you prefer?
+                                    </h4>
+
+                                    <div class="row">
+	                                    <div class="col">
+
+                                            <div class="col-sm-4">
+	                                            <div class="choice" data-toggle="wizard-radio" rel="tooltip" title="Access our extensive community knowledge center.">
+	                                                <input type="radio" name="type" value="House">
+	                                                <div class="icon">
+	                                                    <i class="material-icons">local_library</i>
+	                                                </div>
+	                                                <h6>Knowledge Center<br /><small>( immediate )</small></h6>
+	                                            </div>
 	                                        </div>
-	                                    </div>
-	                                    <div class="col-sm-4">
-	                                    	<div class="form-group label-floating">
-	                                            <label class="control-label">Example</label>
-	                                            <p class="description">"The place is really nice. We use it every sunday when we go fishing. It is so awesome."</p>
+
+                                            <div class="col-sm-4">
+	                                            <div class="choice" data-toggle="wizard-radio" rel="tooltip" title="Connect with one of our support team members via Slack.">
+	                                                <input type="radio" name="type" value="Appartment">
+	                                                <div class="icon">
+	                                                    <i class="material-icons">forum</i>
+	                                                </div>
+	                                                <h6>Live Chat<br /><small>( 1 to 3 hours )</small></h6>
+	                                            </div>
 	                                        </div>
+
+                                            <div class="col-sm-4">
+	                                            <div class="choice" data-toggle="wizard-radio" rel="tooltip" title="Contact one of our support team members via email.">
+	                                                <input type="radio" name="type" value="Appartment">
+	                                                <div class="icon">
+	                                                    <i class="material-icons">email</i>
+	                                                </div>
+	                                                <h6>Email<br /><small>( 24 - 48 hours )</small></h6>
+	                                            </div>
+	                                        </div>
+
 	                                    </div>
 	                                </div>
 	                            </div>
+
 	                        </div>
 
-	                        <div class="wizard-footer">
+	                        <!-- <div class="wizard-footer">
                             	<div class="pull-right">
                                     <input type='button' class='btn btn-next btn-fill btn-primary btn-wd' name='next' value='Next' />
                                     <input type='button' class='btn btn-finish btn-fill btn-primary btn-wd' name='finish' value='Finish' />
@@ -211,10 +242,10 @@
                                     <input type='button' class='btn btn-previous btn-fill btn-default btn-wd' name='previous' value='Previous' />
                                 </div>
 	                            <div class="clearfix"></div>
-	                        </div>
+	                        </div> -->
 
                             <div class="wizard-footer">
-                                <div class="pull-left">
+                                <div class="pull-right">
                                     <small>
                                         NitoJS Web is powered by <a href="https://nito.exchange"><strong>Nito Exchange</strong></a>
                                     </small>

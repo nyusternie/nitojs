@@ -101,7 +101,10 @@ $(document).ready(function(){
                 $($wizard).find('.btn-finish').hide();
             }
 
-            button_text = navigation.find('li:nth-child(' + $current + ') a').html();
+            /* Handle break. */
+            const current = $current < 3 ? $current : $current + 1
+            // button_text = navigation.find('li:nth-child(' + $current + ') a').html();
+            button_text = navigation.find('li:nth-child(' + current + ') a').html();
 
             setTimeout(function(){
                 $('.moving-tab').text(button_text);
