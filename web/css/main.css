@@ -4,3 +4,12 @@
         display: none !important;
     }
 }
+
+.light-green {
+    color: rgba(162, 188, 124, 1.0);
+    /* color: rgba(81, 94, 62, 1.0); */
+}
+.dark-green {
+    color: rgba(62, 98, 72, 1.0);
+    /* color: rgba(31, 49, 36, 1.0); */
+}
