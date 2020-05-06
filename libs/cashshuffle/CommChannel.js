@@ -73,7 +73,7 @@ class CommChannel extends EventEmitter {
         this._wsClient.on('message', (someMessageBuffer) => {
             /* Set message. */
             const message = this.msg.decodeAndClassify(someMessageBuffer)
-            debug('Handling websocket (message):', message)
+            // debug('Handling websocket (message):', message)
 
             /* Initialize message sub-class. */
             let messageSubClass

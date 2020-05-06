@@ -337,7 +337,7 @@ class JsonWallet {
             } else {
                 // ???
                 const updatedAddress = _.extend(frozenAddress, { frozen: true })
-                debug('Frees addresses (updatedAddress):', updatedAddress)
+                debug('Freeze addresses (updatedAddress):', updatedAddress)
 
                 results.success.push(oneAddress)
             }
