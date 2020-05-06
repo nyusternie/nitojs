@@ -107,6 +107,8 @@ class ShuffleClient extends EventEmitter {
          * NOTE: Dust amount is 546 satoshis (~$0.001365)
          */
         this.serverPoolAmounts = [
+            100000000000, // 1000.0 BCH ($250,000.00)
+            10000000000, // 100.0 BCH ($25,000.00)
             1000000000, // 10.0 BCH ($2,500.00)
             100000000, // 1.0 BCH ($250.00)
             10000000, // 0.1 BCH ($25.00)

@@ -494,6 +494,7 @@ class JsonWallet {
      * NOTE: Connects to remote blockchain API(s).
      */
     async updateAddresses (updateAllAddresses) {
+        debug('Update all addresses', updateAllAddresses)
         /* Set update frequency. */
         // NOTE: If an address has been used and contains no coins,
         //       only update it once every 30 minutes
@@ -507,9 +508,11 @@ class JsonWallet {
             this.walletData.addresses, function (keepers, oneAddress) {
                 /* Set dead address flag. */
                 const addressIsDead = oneAddress.balanceSatoshis <= 0 && oneAddress.used
+                debug('Address is dead', addressIsDead)
 
                 /* Set address update flag. */
                 const deadAddressNeedsUpdating = new Date().getTime() >= oneAddress.lastUpdated + updateDeadFrequency
+                debug('Dead address needs updating', deadAddressNeedsUpdating)
 
                 /* Validate update flag. */
                 if (updateAllAddresses || !addressIsDead) {
@@ -519,6 +522,7 @@ class JsonWallet {
                         keepers.push(oneAddress)
                     }
                 }
+                debug('Address update (keepers)', keepers)
 
                 /* Return keepers. */
                 return keepers
