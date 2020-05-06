@@ -36,12 +36,12 @@ const getKeypairFromWif = function (somePrivateKeyWif) {
     /* Set cash address. */
     // coin.cashAddress = coin.publicKey.toAddress()._toStringCashAddr()
     coin.cashAddress = coin.publicKey.toAddress().toString()
-    debug('Get keypair from WIF (cashAddress)', coin.cashAddress)
+    debug('Get keypair from WIF (cashAddress):', coin.cashAddress)
 
     /* Set legacy address. */
     // coin.legacyAddress = coin.publicKey.toAddress().toString()
     coin.legacyAddress = bitbox.Address.toLegacyAddress(coin.cashAddress)
-    debug('Get keypair from WIF (legacyAddress)', coin.legacyAddress)
+    debug('Get keypair from WIF (legacyAddress):', coin.legacyAddress)
 
     /* Return coin. */
     return coin
@@ -51,7 +51,7 @@ const getKeypairFromWif = function (somePrivateKeyWif) {
  * Check Sufficient Funds
  */
 const checkSufficientFunds = function (inputs, amount) {
-    debug('amount', amount)
+    debug('Funds verification (amount):', amount)
     // Currently this is done in the `getCoinDetails` function
     // and it's called just before we add the player to the round.
     // It's also done as we're building the shuffle transaction.
@@ -160,7 +160,7 @@ const verifyTransactionSignature = function (
                 return undefined
             }
         }, undefined)
-    // debug('Input to sign', inputToSign)
+    // debug('Input to sign:', inputToSign)
 
     /* Validate input to sign. */
     if (!inputToSign) {
@@ -173,7 +173,7 @@ const verifyTransactionSignature = function (
     /* Set signature instance. */
     const signatureInstance = bch.crypto.Signature
         .fromTxFormat(Buffer.from(inputSigData.signature, 'hex'))
-    // debug('Signature instance', signatureInstance)
+    // debug('Signature instance:', signatureInstance)
 
     /* Set signature object. */
     const signatureObject = {
@@ -182,7 +182,7 @@ const verifyTransactionSignature = function (
         inputIndex: inputToSign.inputIndex,
         sigtype: signatureInstance.nhashtype
     }
-    // debug('Signature object', signatureObject)
+    // debug('Signature object:', signatureObject)
 
     /* Initialize verification results. */
     let verificationResults = false
@@ -194,7 +194,7 @@ const verifyTransactionSignature = function (
         console.error(nope) // eslint-disable-line no-console
         verificationResults = false
     }
-    // debug('Verification results', verificationResults)
+    // debug('Verification results:', verificationResults)
 
     /* Validate verification results. */
     if (verificationResults) {
@@ -245,7 +245,7 @@ const prepareShuffleInsAndOuts = async function (options) {
         /* Return player. */
         return onePlayer
     })
-    debug('Preparing to shuffle ins and outs (players)', players)
+    debug('Preparing to shuffle ins and outs (players):', players)
 
     /* Set address to fetch. */
     const addressesToFetch = _.map(players, 'coin.legacyAddress')
@@ -288,9 +288,9 @@ const prepareShuffleInsAndOuts = async function (options) {
                 }
             })
 
-            // debug('Player (coin)', onePlayer.coin)
-            // debug('Player (change)', onePlayer.change)
-            // debug('Player (finalOutputAddresses)', onePlayer.finalOutputAddresses)
+            // debug('Player (coin):', onePlayer.coin)
+            // debug('Player (change):', onePlayer.change)
+            // debug('Player (finalOutputAddresses):', onePlayer.finalOutputAddresses)
 
             throw errorToThrow
         }
@@ -420,7 +420,7 @@ const prepareShuffleInsAndOuts = async function (options) {
  * signature applied.
  */
 const getShuffleTxAndSignature = function (options) {
-    // debug('Get Shuffle Tx and Signature (options)', options)
+    // debug('Get Shuffle Tx and Signature (options):', options)
 
     /* Set inputs. */
     const inputs = options.inputs
@@ -462,18 +462,16 @@ const getShuffleTxAndSignature = function (options) {
 
             return oneInput.txid === bufferString && Number(oneInput.vout) === Number(txInput.outputIndex)
         })
-        // debug('Grab it (1):', grabIt)
 
         /* Fix the sequence number. */
         _.extend(grabIt, { sequenceNumber: 0xfffffffe })
 
         /* Add public key to input's script. */
         grabIt.setScript(bch.Script('21' + oneInput.player.coin.publicKey))
-        // debug('Grab it (2):', grabIt)
 
         /* Validate our input. */
         if (oneInput.player.isMe) {
-            // debug('My one input', oneInput)
+            // debug('My (oneInput):', oneInput)
             myInput = oneInput
         }
     }
@@ -494,7 +492,7 @@ const getShuffleTxAndSignature = function (options) {
 
     /* Set pre-signed transaction. */
     const preSignedTx = shuffleTransaction.toObject()
-    debug('Get shuffle transaction and signature (preSignedTx)', preSignedTx)
+    debug('Get shuffle transaction and signature (preSignedTx):', preSignedTx)
 
     /* Sign transaction. */
     shuffleTransaction.sign(
@@ -503,7 +501,7 @@ const getShuffleTxAndSignature = function (options) {
     /* Set signature instance. */
     const sigInstance = shuffleTransaction
         .getSignatures(myInput.player.coin.privateKeyWif)[0]
-    // debug('Signature instance', sigInstance)
+    // debug('Signature instance:', sigInstance)
 
     /* Return transaction / signature package. */
     return {
@@ -535,14 +533,14 @@ const buildShuffleTransaction = async function (options) {
         console.error('cannot prepare inputs and outputs for shuffle Transaction') // eslint-disable-line no-console
         throw nope
     }
-    debug('Build shuffle transaction (insAndOuts)', insAndOuts)
+    debug('Build shuffle transaction (insAndOuts):', insAndOuts)
 
     /* Set shuffle transaction data. */
     const shuffleTxData = await this.getShuffleTxAndSignature({
         inputs: insAndOuts.inputs,
         outputs: insAndOuts.outputs
     })
-    debug('Build shuffle transaction (shuffleTxData)', shuffleTxData)
+    debug('Build shuffle transaction (shuffleTxData):', shuffleTxData)
 
     /* Return the results. */
     return {

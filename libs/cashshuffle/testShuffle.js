@@ -63,15 +63,15 @@ const grabCoinToShuffle = async function () {
     let coin
 
     if (myWallet.addresses.length) {
-        // debug('Wallet addresses', myWallet.addresses)
-        // debug('Wallet coins', myWallet.coins)
+        // debug('Wallet addresses:', myWallet.addresses)
+        // debug('Wallet coins:', myWallet.coins)
 
         // myWallet.addresses[0].fund()
     } else {
         // myWallet.fresh.deposit()
     }
 
-    debug('Wallet coins', myWallet.coins)
+    debug('Wallet coins:', myWallet.coins)
 
     while (!coin) {
         coin = _.find(_.shuffle(myWallet.coins.slice(0, 8)), {
@@ -83,6 +83,7 @@ const grabCoinToShuffle = async function () {
         if (coin) {
             debug('Address to shuffle:', coin.cashAddress)
             myWallet.freezeAddresses(coin.cashAddress)
+
             continue
         } else {
             // debug('...')

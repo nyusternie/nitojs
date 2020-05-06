@@ -68,15 +68,16 @@ function messageToBuffers (someBase64Message) {
 
         /* Validate message payload. */
         if (messagePayload.length !== messageLength) {
-            debug('Incorrect payload size:', messagePayload.length, '!==', messageLength)
+            console.error( // eslint-disable-line no-console
+                'Incorrect payload size', messagePayload.length,
+                '!==', messageLength)
             throw new Error('message_payload')
         } else {
             /* Return message buffers. */
             return {
                 magic: messageBuffer.slice(0, 8).toString('base64'),
                 length: messageBuffer.slice(8, 12).toString('base64'),
-                // payload: messageBuffer.slice(12, ).toString('base64'), // FIXME
-                payload: messageBuffer.slice(12).toString('base64'), // FIXME
+                payload: messageBuffer.slice(12).toString('base64'),
                 buffer: messageBuffer.toString('base64')
             }
         }
@@ -120,7 +121,10 @@ function decodeAndClassify (messageBuffer) {
 
         /* Validate message payload. */
         if (messagePayload.length !== messageLength) {
-            debug('Incorrect payload size:', messagePayload.length, '!==', messageLength)
+            debug(
+                'Incorrect payload size:', messagePayload.length,
+                '!==', messageLength
+            )
             throw new Error('message_payload')
         } else {
             /* Set decoded packets. */
@@ -758,7 +762,7 @@ function checkPacketSignature (oneSignedPacket) {
         /* Set result. */
         result = new BetterMessage(message, 'base64').verify(address, signature)
     } catch (someError) {
-        debug('Error checking signature:', someError)
+        console.error('Error checking signature:', someError) // eslint-disable-line no-console
     }
 
     /* Return result. */

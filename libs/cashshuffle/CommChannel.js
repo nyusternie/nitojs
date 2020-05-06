@@ -73,22 +73,7 @@ class CommChannel extends EventEmitter {
         this._wsClient.on('message', (someMessageBuffer) => {
             /* Set message. */
             const message = this.msg.decodeAndClassify(someMessageBuffer)
-            debug('Incoming websocket message:', message)
-            if (message.packets[0].packet) {
-                debug('Message (packets[0].packet):', message.packets[0].packet)
-            }
-            if (message.full.packet) {
-                debug('Message (full.packet):', message.full.packet)
-            }
-            if (message.pruned.message.fromKey) {
-                debug('Message (pruned.message.fromKey):', message.pruned.message.fromKey)
-            }
-            if (message.pruned.message.fromKey) {
-                debug('Message (pruned.message.fromKey):', message.pruned.message.fromKey)
-            }
-            if (message.pruned.message.message) {
-                debug('Message (pruned.message.message):', message.pruned.message.message)
-            }
+            debug('Handling websocket (message):', message)
 
             /* Initialize message sub-class. */
             let messageSubClass
@@ -124,9 +109,6 @@ class CommChannel extends EventEmitter {
                         .concat(
                             [inboxEntry]), ['time'], ['desc']) : [inboxEntry]
 
-            // debug(`\n\nA New ${message.pruned.messageType} Message has arrived!\n`);
-            // debug('\n\nA New Message has arrived', require('util').inspect(message.pruned, null, 4) ,'\n');
-
             /* Initialize packet verification results. */
             const packetVerifyResults = {
                 success: [],
@@ -138,13 +120,12 @@ class CommChannel extends EventEmitter {
                 const sender = _.find(this.round.players, {
                     verificationKey: message.packets[0].packet.fromKey.key
                 })
-                debug('This round players:', this.round.players)
-                debug('Checking signature for',
-                    message.pruned.messageType.toUpperCase(),
-                    'message from',
-                    // (sender ? sender.session + ' ( ' + sender.verificationKey + ' ) ' : 'player with sessionId ' + message.pruned.session)
-                    (sender ? sender.session + ' ( ' + sender.verificationKey + ' ) ' : 'player with sessionId ' + message.pruned.message.session)
-                )
+                debug('Websocket message (this.round.players):', this.round.players)
+                // debug('Checking signature for',
+                //     message.pruned.messageType.toUpperCase(),
+                //     'message from',
+                //     (sender ? sender.session + ' ( ' + sender.verificationKey + ' ) ' : 'player with sessionId ' + message.pruned.message.session)
+                // )
             }
 
             /* Loop through ALL message packets. */
@@ -166,14 +147,15 @@ class CommChannel extends EventEmitter {
             if (!packetVerifyResults.fail.length) {
                 this.emit('serverMessage', message)
             } else {
-                debug('\n\tSignature check failed!\n')
+                console.error('Signature check failed!') // eslint-disable-line no-console
 
                 // This event will be piped right into the
                 // `assignBlame` method on the `ShuffleClient`
                 // class
                 this.emit('protocolViolation', {
                     reason: 'INVALIDSIGNATURE',
-                    accused: _.get(oneSignedPacket, 'packet.fromKey.key'),
+                    // accused: _.get(oneSignedPacket, 'packet.fromKey.key'),
+                    accused: _.get(packetVerifyResults, 'packet.fromKey.key'),
                     invalid: packetVerifyResults.fail
                 })
             }
@@ -182,7 +164,7 @@ class CommChannel extends EventEmitter {
         /* Handle a NEW Websockets connection with the CashShuffle server. */
         this._wsClient.on('open', () => {
             this._wsConnected = true
-            // debug('We are now connected to the cashshuffle server', this.serverUri);
+            // debug('We are now connected to the cashshuffle server:', this.serverUri)
 
             this.emit('connected', this._wsClient)
         })
@@ -199,7 +181,7 @@ class CommChannel extends EventEmitter {
 
         /* Handle Websockets errors. */
         this._wsClient.on('error', (someError) => {
-            debug('THERE WAS A SOCKET ERROR!', someError)
+            console.error('Socket error!', someError) // eslint-disable-line no-console
             this.emit('connectionError', someError)
         })
     }
@@ -214,9 +196,9 @@ class CommChannel extends EventEmitter {
         /* Set message parameters. */
         // const messageParams = [].slice.call(arguments, 1, ) // FIXME: Why this trailing space??
         const messageParams = [].slice.call(arguments, 1) // FIXME: Why this trailing space??
-        debug('Now sending message:', arguments,
-            'type:', messageType,
-            'params:', messageParams)
+        // debug('Now sending message:', arguments,
+        //     'type:', messageType,
+        //     'params:', messageParams)
 
         /* Initialize packet message. */
         let packedMessage = null
@@ -226,8 +208,10 @@ class CommChannel extends EventEmitter {
             try {
                 packedMessage = this.msg[messageType].apply(this, messageParams)
             } catch (nope) {
-                debug('Couldnt create', messageType, 'message using params',
-                    messageParams, '\n', nope)
+                console.error( // eslint-disable-line no-console
+                    'Couldnt create', messageType,
+                    'message using params', messageParams,
+                    '\n', nope)
                 // TODO: Throw exception?
             }
         } else {

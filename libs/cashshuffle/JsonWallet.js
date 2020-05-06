@@ -27,12 +27,12 @@ class JsonWalletAddress {
     }
 
     fund () {
-        debug(`Add funds to\n\t${this.cashAddress}\n\t( ${this.legacyAddress})\n`)
+        debug(`Add funds to: ${this.cashAddress}\n\t( ${this.legacyAddress})`)
         return qrcode.generate(this.cashAddress, { small: true })
     }
 
     sweep () {
-        debug(`Sweeping funds for\n\t${this.cashAddress}\n\t( ${this.legacyAddress})\n`)
+        debug(`Sweeping funds for: ${this.cashAddress}\n\t( ${this.legacyAddress})`)
         return qrcode.generate(this.privateKeyWif, { small: true })
     }
 }
@@ -74,7 +74,7 @@ class JsonWallet {
                     throw new Error('Transaction Parsing error')
                 }
 
-                debug('TX DATA (outputs)', data)
+                debug('Transaction socket data (outputs):', data)
 
                 const outputAddresses = []
 
@@ -91,7 +91,7 @@ class JsonWallet {
 
                 /* Validate transaction affect. */
                 if (affected.length) {
-                    debug(`\t You got new money in ${affected})\n`)
+                    debug(`You got new money in ${affected})`)
 
                     /* Wait a bit. */
                     // await delay(1000)
@@ -118,7 +118,7 @@ class JsonWallet {
                     createNewWallet = true
                 }
             } catch (nope) {
-                debug(`\tNo wallet found. \n\tCreating a fresh one at ${this.currentPath}/test_json_wallet`)
+                debug(`No wallet found. Creating a fresh one at ${this.currentPath}/test_json_wallet`)
 
                 /* Set creation flag. */
                 createNewWallet = true
@@ -138,7 +138,7 @@ class JsonWallet {
             this.masterHDNode = this.bitbox.HDNode
                 .fromSeed(this.bitbox.Mnemonic.toEntropy(this.walletData.words))
 
-            debug('test_json_wallet json wallet is loaded and ready to use')
+            debug('test_json_wallet json wallet is loaded and ready to use.')
 
             /* Set last updated. */
             this.walletData.lastUpdated = new Date().getTime()
@@ -337,7 +337,7 @@ class JsonWallet {
             } else {
                 // ???
                 const updatedAddress = _.extend(frozenAddress, { frozen: true })
-                debug('updatedAddress', updatedAddress)
+                debug('Frees addresses (updatedAddress):', updatedAddress)
 
                 results.success.push(oneAddress)
             }
@@ -374,7 +374,7 @@ class JsonWallet {
             } else {
                 // ???
                 const updatedAddress = _.extend(frozenAddress, { frozen: false })
-                debug('updatedAddress', updatedAddress)
+                debug('Unfreeze addresses (updatedAddress):', updatedAddress)
 
                 results.success.push(oneAddress)
             }
@@ -494,7 +494,7 @@ class JsonWallet {
      * NOTE: Connects to remote blockchain API(s).
      */
     async updateAddresses (updateAllAddresses) {
-        debug('Update all addresses', updateAllAddresses)
+        debug('Update addresses (updateAllAddresses):', updateAllAddresses)
         /* Set update frequency. */
         // NOTE: If an address has been used and contains no coins,
         //       only update it once every 30 minutes
@@ -508,11 +508,11 @@ class JsonWallet {
             this.walletData.addresses, function (keepers, oneAddress) {
                 /* Set dead address flag. */
                 const addressIsDead = oneAddress.balanceSatoshis <= 0 && oneAddress.used
-                debug('Address is dead', addressIsDead)
+                debug('Update addresses (addressIsDead):', addressIsDead)
 
                 /* Set address update flag. */
                 const deadAddressNeedsUpdating = new Date().getTime() >= oneAddress.lastUpdated + updateDeadFrequency
-                debug('Dead address needs updating', deadAddressNeedsUpdating)
+                debug('Update addresses (deadAddressNeedsUpdating):', deadAddressNeedsUpdating)
 
                 /* Validate update flag. */
                 if (updateAllAddresses || !addressIsDead) {
@@ -522,7 +522,7 @@ class JsonWallet {
                         keepers.push(oneAddress)
                     }
                 }
-                debug('Address update (keepers)', keepers)
+                debug('Update addresses (keepers):', keepers)
 
                 /* Return keepers. */
                 return keepers
@@ -551,7 +551,8 @@ class JsonWallet {
                 /* Add to UTXO info. */
                 _.each(someUtxos, (oneThing) => { utxoInfo.push(oneThing) })
             } catch (nope) {
-                debug(`UTXO Fetch Error: That didn't work! ${nope.response.status}: ${nope.response.statusText}\n\n`)
+                console.error( // eslint-disable-line no-console
+                    `UTXO Fetch Error: That didn't work! ${nope.response.status}: ${nope.response.statusText}`)
                 continue
             }
 
@@ -580,7 +581,7 @@ class JsonWallet {
                 /* Add details to ALL address details. */
                 _.each(someDetails, (oneThing) => { allAddressDetails.push(oneThing) })
             } catch (nope) {
-                debug(`Couldn't fetch some address details: ${nope.message}`)
+                console.error(`Couldn't fetch some address details: ${nope.message}`) // eslint-disable-line no-console
                 continue
             }
 

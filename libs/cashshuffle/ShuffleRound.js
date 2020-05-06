@@ -66,7 +66,7 @@ class ShuffleRound extends EventEmitter {
 
         /* Validate shuffled hook. */
         if (!_.isFunction(this.hooks.shuffled)) {
-            debug(`A valid shuffle address generation hook was not provided!`)
+            console.error(`A valid shuffle address generation hook was not provided!`) // eslint-disable-line no-console
             throw new Error('BAD_SHUFFLE_FN')
         }
 
@@ -77,7 +77,7 @@ class ShuffleRound extends EventEmitter {
         // NOTE: Make sure either a change generation function or change
         //       keypair object was provided. Use the keypair, if we got both.
         if (!_.isFunction(this.hooks.change)) {
-            debug(`A valid change generation hook was not provided!`)
+            console.error(`A valid change generation hook was not provided!`) // eslint-disable-line no-console
             throw new Error('BAD_CHANGE_FN')
         }
 
@@ -136,7 +136,7 @@ class ShuffleRound extends EventEmitter {
             try {
                 await this.actOnMessage(someServerMessage)
             } catch (nope) {
-                debug('Failed to act right in response to server message:', nope)
+                console.error('Failed to act right in response to server message:', nope) // eslint-disable-line no-console
                 this.writeDebugFile()
             }
         })
@@ -149,11 +149,11 @@ class ShuffleRound extends EventEmitter {
 
         /* Handle disconnection. */
         this.comms.on('disconnected', (commsDisconnectMessage) => {
-            debug('Our connection to the CashShuffle server is REKT!')
+            console.error('Our connection to the CashShuffle server is REKT!') // eslint-disable-line no-console
 
             /* Validate round completion. */
             if (this.roundComplete) {
-                debug('The shuffle Round has completed')
+                debug('The shuffle Round has completed!')
             } else {
                 /* Set success flag. */
                 this.success = false
@@ -198,13 +198,13 @@ class ShuffleRound extends EventEmitter {
                         this.ephemeralKeypair.publicKey
                     )
             } catch (nope) {
-                debug('Couldnt send registration message:', nope.message)
+                console.error('Couldnt send registration message:', nope.message) // eslint-disable-line no-console
             }
         })
 
         this.ready()
             .catch((nope) => {
-                debug('ERROR:', nope)
+                console.error('ERROR:', nope) // eslint-disable-line no-console
             })
             .then(() => {
                 //
@@ -217,7 +217,8 @@ class ShuffleRound extends EventEmitter {
      * Handle Communications Error
      */
     handleCommsError (someError) {
-        debug('Something has gone wrong with our communication channel:', someError.message)
+        /* eslint-disable-next-line no-console */
+        console.error('Something has gone wrong with our communication channel:', someError.message)
 
         /* Update round error. */
         this.roundError = {
@@ -241,7 +242,7 @@ class ShuffleRound extends EventEmitter {
         try {
             await this.comms.connect()
         } catch (nope) {
-            debug('Failure!', nope)
+            console.error('Failure!', nope) // eslint-disable-line no-console
             throw nope
         }
     }
@@ -253,8 +254,7 @@ class ShuffleRound extends EventEmitter {
      * encoded server messages.
      */
     async actOnMessage (jsonMessage) {
-        // console.log('\nACTING ON MESSAGE', jsonMessage) // eslint-disable-line no-console
-        debug('Acting on message:', jsonMessage.pruned.message)
+        debug('Act on message (jsonMessage):', jsonMessage.pruned.message)
 
         /* Set message type. */
         const messageType =
@@ -320,10 +320,10 @@ class ShuffleRound extends EventEmitter {
                 try {
                     this.broadcastTransactionInput()
                 } catch (nope) {
-                    debug('Error broadcasting broadcastTransactionInput:', nope)
+                    console.error('Error broadcasting broadcastTransactionInput:', nope) // eslint-disable-line no-console
                 }
             } else {
-                debug('Problem with server phase message')
+                console.error('Problem with server phase message') // eslint-disable-line no-console
 
                 if (_.get(jsonMessage, 'packets[0].packet.fromKey.key')) {
                     this.assignBlame({
@@ -337,7 +337,7 @@ class ShuffleRound extends EventEmitter {
             try {
                 await this.addPlayerToRound(message)
             } catch (nope) {
-                debug('Error broadcasting broadcastTransactionInput:', nope)
+                console.error('Error broadcasting broadcastTransactionInput:', nope) // eslint-disable-line no-console
             }
 
             // If we've received the message from all players (including us)
@@ -347,7 +347,7 @@ class ShuffleRound extends EventEmitter {
                 try {
                     await this.announceChangeAddress()
                 } catch (nope) {
-                    debug('Error broadcasting changeAddress:', nope)
+                    console.error('Error broadcasting changeAddress:', nope) // eslint-disable-line no-console
                     this.endShuffleRound()
                 }
             }
@@ -360,9 +360,10 @@ class ShuffleRound extends EventEmitter {
                 await this.announceChangeAddress()
             }
 
-            debug('Incoming change address',
+            debug('Act on message (incomingChangeAddress):',
                 'Encryption pubkey', message['message']['key']['key'],
-                'Legacy address', message['message']['address']['address'])
+                'Legacy address', message['message']['address']['address']
+            )
 
             /* Update this player with their change address. */
             _.extend(this.players[_.findIndex(this.players, { session: message['session'] })], {
@@ -384,7 +385,7 @@ class ShuffleRound extends EventEmitter {
                 try {
                     await this.forwardEncryptedShuffleTxOutputs(undefined, undefined)
                 } catch (nope) {
-                    debug('Error broadcasting changeAddress:', nope)
+                    console.error('Error broadcasting changeAddress:', nope) // eslint-disable-line no-console
                     this.endShuffleRound()
                 }
             }
@@ -408,7 +409,6 @@ class ShuffleRound extends EventEmitter {
             break
         }
         case 'finalTransactionOutputs':
-            debug('got final transaction outputs!')
             newPhaseName = _.isString(
                 message['phase']) ? message['phase'].toLowerCase() : undefined
 
@@ -421,7 +421,7 @@ class ShuffleRound extends EventEmitter {
             try {
                 await this.processEquivCheckMessage(message)
             } catch (nope) {
-                debug('Error processing incoming equivCheck:', nope)
+                console.error('Error processing incoming equivCheck:', nope) // eslint-disable-line no-console
             }
             break
         case 'blame':
@@ -431,7 +431,7 @@ class ShuffleRound extends EventEmitter {
             try {
                 await this.verifyAndSubmit(message)
             } catch (nope) {
-                debug('Error processing incoming output and signature:', nope)
+                console.error('Error processing incoming output and signature:', nope) // eslint-disable-line no-console
             }
             break
         // case '':
@@ -447,7 +447,7 @@ class ShuffleRound extends EventEmitter {
      * Process Websockets Error
      */
     processWsError (someError) {
-        debug('Oh goodness, something is amiss!', someError)
+        console.error('Oh goodness, something is amiss!', someError) // eslint-disable-line no-console
     }
 
     /***************************************************************************
@@ -489,7 +489,7 @@ class ShuffleRound extends EventEmitter {
                     this.ephemeralKeypair.publicKey
                 )
         } catch (nope) {
-            debug('Couldnt send broadcastTransactionInput message:', nope.message)
+            console.error('Couldnt send broadcastTransactionInput message:', nope.message) // eslint-disable-line no-console
             return this.endShuffleRound()
         }
     }
@@ -555,7 +555,7 @@ class ShuffleRound extends EventEmitter {
             coinDetails = await this.util.coin
                 .getCoinDetails(playerCoin.txid, playerCoin.vout)
         } catch (nope) {
-            debug('Cannot get coin details', nope)
+            console.error('Cannot get coin details', nope) // eslint-disable-line no-console
 
             /* Assign blame. */
             this.assignBlame({
@@ -568,7 +568,7 @@ class ShuffleRound extends EventEmitter {
         // NOTE: Check that the coin is there and big enough
         //       before adding the player.
         if (!coinDetails.amountSatoshis || this.shuffleFee + this.poolAmount > coinDetails.amountSatoshis) {
-            debug('Insufficient funds for player', coinDetails)
+            debug('Insufficient funds for player (coinDetails):', coinDetails)
 
             /* Assign blame. */
             this.assignBlame({
@@ -743,7 +743,7 @@ class ShuffleRound extends EventEmitter {
                             _.get(onePacket, 'packet.message.str'),
                             this.encryptionKeypair.privateKeyHex
                         )
-                    debug('Decryption results',
+                    debug('Forward encrypted shuffle tx outputs:',
                         'onePacket', onePacket,
                         'privateKeyHex', this.encryptionKeypair.privateKeyHex,
                         decryptionResults
@@ -752,7 +752,7 @@ class ShuffleRound extends EventEmitter {
                     /* Add decryption to results. */
                     results.strings.push(decryptionResults.toString('utf-8'))
                 } catch (nope) {
-                    debug('Cannot decrypt')
+                    console.error('Cannot decrypt') // eslint-disable-line no-console
 
                     results.errors.push({
                         packet: onePacket,
@@ -765,7 +765,7 @@ class ShuffleRound extends EventEmitter {
                 strings: [],
                 errors: []
             })
-            debug('Decrypted strings', decryptedStrings)
+            debug('Forward encrypted shuffle tx outputs (decryptedStrings):', decryptedStrings)
 
             /* Validate decrypted string. */
             // NOTE: Blame our sender if the ciphertext cannot be decrypted.
@@ -799,9 +799,13 @@ class ShuffleRound extends EventEmitter {
                                 encryptedAddressInfo.string,
                                 onePlayer.encryptionPubKey
                             )
-                        debug('Encrypted address info:', encryptedAddressInfo)
+                        debug(
+                            'Forward encrypted shuffle tx outputs (encryptedAddressInfo):',
+                            encryptedAddressInfo
+                        )
                     } catch (nope) {
-                        debug(`Cannot encrypt address for encryptionPubKey ${onePlayer.encryptionPubKey} because ${nope.message}`)
+                        /* eslint-disable-next-line no-console */
+                        console.error(`Cannot encrypt address for encryptionPubKey ${onePlayer.encryptionPubKey} because ${nope.message}`)
 
                         encryptedAddressInfo.errors.push({
                             player: onePlayer,
@@ -856,7 +860,7 @@ class ShuffleRound extends EventEmitter {
                 this.ephemeralKeypair.privateKey
             )
         } else {
-            debug('Sending encrypted outputs',
+            debug('Sending encrypted outputs:',
                 stringsForNextPlayer,
                 'to player',
                 nextPlayer.playerNumber,
@@ -899,11 +903,14 @@ class ShuffleRound extends EventEmitter {
 
         const finalOutputAddresses = _.map(
             signedPackets, 'packet.message.str')
-        debug('Final output addresses', finalOutputAddresses)
+        debug(
+            'Check final outputs and do equiv check (finalOutputAddresses):',
+            finalOutputAddresses
+        )
 
         /* Make sure our address was included. If not, blame! */
         if (finalOutputAddresses.indexOf(this.shuffled.legacyAddress) < 0) {
-            debug('Our address isnt in the final outputs!')
+            debug(`Our address isn't in the final outputs!`)
 
             this.assignBlame({
                 reason: 'MISSINGOUTPUT',
@@ -911,8 +918,6 @@ class ShuffleRound extends EventEmitter {
                 accused: _.get(signedPackets, _.get(signedPackets[0], 'packet.fromKey.key'))
             })
         }
-
-        // debug('We got the final output addressess and ours was included!', finalOutputAddresses)
 
         // Attach the entire array of ordered output addresses to our
         // players.  Although we don't know which address belongs to which
@@ -938,9 +943,6 @@ class ShuffleRound extends EventEmitter {
         this.equivHash = bch.crypto.Hash
             .sha256sha256(Buffer.from(this.equivHashPlaintext, 'utf-8'))
             .toString('base64')
-
-        debug('SHA256 (double) hashing', this.equivHashPlaintext,
-            'Results in', this.equivHash)
 
         /* Advance to the next phase. */
         this.phase = 'EQUIVOCATION_CHECK'
@@ -984,8 +986,10 @@ class ShuffleRound extends EventEmitter {
             equivCheck: _.get(prunedMessage, 'message.hash.hash')
         })
 
-        debug('Got a processEquivCheck message from',
-            sender.verificationKey, 'with hash', sender.equivCheck)
+        debug(
+            'Got a processEquivCheck message from', sender.verificationKey,
+            'with hash', sender.equivCheck
+        )
 
         const allHashes = _.compact(_.map(this.players, 'equivCheck'))
 
@@ -1000,7 +1004,7 @@ class ShuffleRound extends EventEmitter {
                     try {
                         await this.verifyAndSubmit()
                     } catch (nope) {
-                        debug('Error processing incoming output and signature:', nope)
+                        console.error('Error processing incoming output and signature:', nope) // eslint-disable-line no-console
                     }
                 }
             } else {
@@ -1048,7 +1052,7 @@ class ShuffleRound extends EventEmitter {
      *     7. Set the done flag and cleanup the round.
      */
     async verifyAndSubmit (prunedMessage) {
-        debug('Pruned message', prunedMessage)
+        debug('Verify and submit (prunedMessage):', prunedMessage)
 
         /* Initialize ordered players. */
         const orderedPlayers = _.orderBy(this.players, ['playerNumber'], ['asc'])
@@ -1100,7 +1104,7 @@ class ShuffleRound extends EventEmitter {
                     feeSatoshis: this.shuffleFee
                 })
             } catch (nope) {
-                debug('Problem building shuffle transaction:', nope)
+                console.error('Problem building shuffle transaction:', nope) // eslint-disable-line no-console
                 this.writeDebugFile()
             }
 
@@ -1155,7 +1159,7 @@ class ShuffleRound extends EventEmitter {
                     'message.signatures[0].signature.signature'
                 ), 'base64').toString('utf-8')
         }
-        debug('New signature data', newSigData)
+        debug('Verify and submit (newSigData):', newSigData)
 
         // Assert(len(sig) >= 8 and len(sig) <= 72)
         // Assert(sig[0] == 0x30)
@@ -1169,7 +1173,7 @@ class ShuffleRound extends EventEmitter {
         const signer = _.find(this.players, (onePlayer) => {
             return onePlayer.coin.txid === newSigData.prevTxId && Number(onePlayer.coin.vout) === newSigData.vout
         })
-        debug('Signer', signer)
+        debug('Verify and submit (signer):', signer)
 
         /* Validate signer. */
         if (!signer) {
@@ -1204,7 +1208,7 @@ class ShuffleRound extends EventEmitter {
                     _.get(signer, 'coin.publicKey')
                 )
         } catch (nope) {
-            debug('Error when trying to validate signature', nope)
+            console.error('Error when trying to validate signature', nope) // eslint-disable-line no-console
 
             this.assignBlame({
                 reason: 'INVALIDSIGNATURE',
@@ -1213,8 +1217,8 @@ class ShuffleRound extends EventEmitter {
 
             return
         }
-        debug('Signature verification results', sigVerifyResults)
 
+        /* Validate signature (for UTXO). */
         if (sigVerifyResults && sigVerifyResults.success) {
             debug(`Shuffle transaction signature for ${utxo} checks out!`)
 
@@ -1233,7 +1237,8 @@ class ShuffleRound extends EventEmitter {
                     this.shuffleTx.tx.inputs[sigVerifyResults.inputIndex]
                         .addSignature(this.shuffleTx.tx, sigVerifyResults.signature)
                 } catch (nope) {
-                    debug('We failed to apply a signature to our transaction.  Looks like our fault', nope)
+                    /* eslint-disable-next-line no-console */
+                    console.error('We failed to apply a signature to our transaction.  Looks like our fault', nope)
                     // TODO: throw and cleanup
                 }
             }
@@ -1252,7 +1257,7 @@ class ShuffleRound extends EventEmitter {
         try {
             txIsFullySigned = this.shuffleTx.tx.isFullySigned()
         } catch (nope) {
-            debug('Malformed shuffle transaction', nope)
+            console.error('Malformed shuffle transaction', nope) // eslint-disable-line no-console
             this.endShuffleRound()
         }
 
@@ -1261,7 +1266,7 @@ class ShuffleRound extends EventEmitter {
 
             let submissionResults
 
-            debug('Broadcasting raw tx',
+            debug('Broadcasting raw tx:',
                 this.shuffleTx.tx.toBuffer('hex').toString('hex'))
 
             try {
@@ -1273,7 +1278,7 @@ class ShuffleRound extends EventEmitter {
                     .sendRawTransaction(
                         this.shuffleTx.tx.toBuffer('hex').toString('hex'))
             } catch (nope) {
-                debug('Error broadcasting transaction to the network:', nope)
+                console.error('Error broadcasting transaction to the network:', nope) // eslint-disable-line no-console
 
                 this.endShuffleRound()
 
@@ -1307,11 +1312,11 @@ class ShuffleRound extends EventEmitter {
      * End Shuffle Round
      */
     endShuffleRound(writeDebugFileAnyway) {
-        // debug(`Shuffle has ended with success ${ this.success }\n`);
+        debug(`Shuffle has ended with success ${ this.success }`);
         this.roundComplete = true
 
         if (!this.success || writeDebugFileAnyway) {
-            debug('writing debug file')
+            debug('Writing debug file..')
             this.writeDebugFile()
         }
 
@@ -1336,7 +1341,7 @@ class ShuffleRound extends EventEmitter {
 
         /* Validate accused. */
         if (accused.isMe) {
-            debug('IM THE ONE BEING BLAMED.  HOW RUDE!')
+            debug(`I'M THE ONE BEING BLAMED. HOW RUDE!!`)
         } else {
             debug('Player', accused.verificationKey, 'is to blame!')
         }

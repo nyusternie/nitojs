@@ -23,7 +23,7 @@ class ShuffleClient extends EventEmitter {
     constructor (clientOptions) {
         super()
 
-        debug('Client options', clientOptions)
+        debug('Shuffle Client (options):', clientOptions)
 
         /* Add client options to instance. */
         for (let oneOption in clientOptions) {
@@ -45,20 +45,20 @@ class ShuffleClient extends EventEmitter {
         while (this.coins.length) {
             coinsToPopulate.push(this.coins.pop())
         }
-        debug('Coins to populate', coinsToPopulate)
+        debug('Shuffle Client (coinsToPopulate):', coinsToPopulate)
 
         /* Initialize hooks. */
         this.hooks = this.hooks || {}
 
         /* Validate change hooks. */
         if (!_.isFunction(this.hooks.change)) {
-            debug(`A valid change generation hook was not provided!`)
+            console.error(`A valid change generation hook was not provided!`) // eslint-disable-line no-console
             throw new Error('BAD_CHANGE_FN')
         }
 
         /* Validate shuffled hooks. */
         if (!_.isFunction(this.hooks.shuffled)) {
-            debug(`A valid shuffle address generation hook was not provided!`)
+            console.error(`A valid shuffle address generation hook was not provided!`) // eslint-disable-line no-console
             throw new Error('BAD_SHUFFLE_FN')
         }
 
@@ -195,7 +195,7 @@ class ShuffleClient extends EventEmitter {
      * UTXOs are at or below the dust threshold.
      */
     skipCoin (someCoin) {
-        debug('Skipping coin', someCoin)
+        debug('Skip coin (somCoin):', someCoin)
         /* Remove the coin from the pool of available coins. */
         const coinToSkip = _.remove(this.coins, someCoin)[0]
 
@@ -215,7 +215,7 @@ class ShuffleClient extends EventEmitter {
      * listeners so we know when a round has ended and needs cleanup.
      */
     async startNewRound (someCoin, poolAmount, serverUri) {
-        debug('Start new round',
+        debug('Start new round:',
             someCoin,
             poolAmount,
             serverUri
@@ -375,7 +375,7 @@ class ShuffleClient extends EventEmitter {
 
                     /* Validate server statistics. */
                     if (!(this.serverStats && this.serverStats.shuffleWebSocketPort)) {
-                        debug('Cannot find shuffle server information')
+                        console.error('Cannot find shuffle server information') // eslint-disable-line no-console
                         continue
                     }
 
@@ -396,14 +396,14 @@ class ShuffleClient extends EventEmitter {
 
                         /* Set server URI. */
                         serverUri = serverStatsUriParsed.toString()
-                        debug('Parsed Server URI', serverUri)
+                        // debug('Parsed Server URI:', serverUri)
                     }
 
                     try {
                         debug('Starting new round in:', serverUri)
                         await this.startNewRound(coinToShuffle, poolToUse, serverUri)
                     } catch (nope) {
-                        debug('Cannot shuffle coin:', nope)
+                        console.error('Cannot shuffle coin:', nope) // eslint-disable-line no-console
                         continue
                     }
                 } else {
@@ -462,7 +462,7 @@ class ShuffleClient extends EventEmitter {
 
                 this.coins.push(oneCoin)
             } catch (nope) {
-                debug('Cannot populate coin for shuffling:', nope)
+                console.error('Cannot populate coin for shuffling:', nope) // eslint-disable-line no-console
                 continue
             }
         }
@@ -479,7 +479,7 @@ class ShuffleClient extends EventEmitter {
         try {
             await this.updateServerStats(someServerUri)
         } catch (nope) {
-            debug('Error changing servers:', nope)
+            console.error('Error changing servers:', nope) // eslint-disable-line no-console
             throw nope
         }
 
@@ -504,7 +504,7 @@ class ShuffleClient extends EventEmitter {
             this.serverBackoffMs = this.serverBackoffMs ? Math.floor((this.serverBackoffMs * 3) / 2) : DELAY_IN_MS
             this.serverBackoffMs = this.serverBackoffMs <= 20000 ? this.serverBackoffMs : 20000
 
-            debug(nope.message)
+            console.error(nope.message) // eslint-disable-line no-console
             throw nope
         }
 
