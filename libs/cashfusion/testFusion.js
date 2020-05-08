@@ -47,7 +47,6 @@ for (let oneTypeName of pbTypes) {
 }
 // debug('Protocol buffer', PB)
 
-
 /**
  * Greeting
  */
@@ -71,13 +70,58 @@ const greet = function () {
 
     /* Encode message. */
     const buffer = PB.ClientMessage.encode(message).finish()
-    debug('Encoded message:', buffer.toString('hex'))
+    // debug('Encoded message:', buffer.toString('hex'))
 
     // const decoded = PB.ClientMessage.decode(buffer)
-    // debug('Decoded', decoded)
+    // debug('Decoded:', decoded)
 
     /* Return packed message. */
     return packMessage(buffer)
+}
+
+/**
+ * Register
+ */
+const register = function () {
+    console.info('\n\tRegistering tiers...\n') // eslint-disable-line no-console
+
+    // All tiers
+    const tiersOutput = [
+        10000, 12000, 15000, 18000, 22000, 27000, 33000, 39000, 47000, 56000, 68000, 82000,
+        100000, 120000, 150000, 180000, 220000, 270000, 330000, 390000, 470000, 560000, 680000, 820000,
+        1000000, 1200000, 1500000, 1800000, 2200000, 2700000, 3300000, 3900000, 4700000, 5600000, 6800000, 8200000,
+        10000000, 12000000, 15000000, 18000000, 22000000, 27000000, 33000000, 39000000, 47000000, 56000000, 68000000, 82000000
+    ]
+    // debug('Tiers output:', tiersOutput)
+
+    /* Set message. */
+    const message = PB.ClientMessage.create({
+        joinpools: PB.JoinPools.create({
+            tiers: tiersOutput,
+            tags: [PB.JoinPools.PoolTag.create({
+                id: Buffer.from('c58594f6f26f0315f459f06d4106084ae53058e3', 'hex'),
+                limit: 1
+            })]
+        })
+    })
+
+    /* Verify message. */
+    const errMsg = PB.ClientMessage.verify(message)
+    if (errMsg) {
+        // debug('Protobuf verification failed!', errMsg)
+        throw new Error(errMsg)
+    }
+
+    /* Encode message. */
+    const buffer = PB.ClientMessage.encode(message).finish()
+    // debug('Encoded message:', buffer.toString('hex'))
+
+    // const decoded = PB.ClientMessage.decode(buffer)
+    // debug('Decoded:', decoded)
+
+    /* Return packed message. */
+    return packMessage(buffer)
+
 }
 
 /**
@@ -86,7 +130,7 @@ const greet = function () {
  * Encode (pack) a message into a prototype buffer (protobuf) object.
  */
 function packMessage (_packets) {
-    debug('Packing message:', _packets)
+    // debug('Packing message:', _packets)
 
     /* Initialize message length. */
     const messageLength = Buffer.allocUnsafe(4)
@@ -97,7 +141,7 @@ function packMessage (_packets) {
     /* Set message length. */
     // NOTE: 4-bytes in big-endian (bytes order).
     messageLength.writeUIntBE(lengthDec, 0, 4)
-    debug('Message length:', messageLength)
+    // debug('Message length:', messageLength)
 
     /* Build packet. */
     const packet = Buffer.concat([
@@ -105,7 +149,7 @@ function packMessage (_packets) {
         messageLength,
         _packets
     ])
-    debug('Packet message:', packet)
+    // debug('Packet message:', packet)
 
     return packet
 
@@ -168,13 +212,50 @@ client.on('data', function (_data) {
     const decoded = PB.ServerMessage.decode(message)
     debug('Incoming data (decoded):', decoded)
 
+    /* Handle message. */
     if (decoded.serverhello) {
-        debug('ServerHello (tiers):', decoded.serverhello.tiers)
-        debug('ServerHello (numComponents):', decoded.serverhello.numComponents)
-        debug('ServerHello (componentFeerate):', decoded.serverhello.componentFeerate)
-        debug('ServerHello (minExcessFee):', decoded.serverhello.minExcessFee)
-        debug('ServerHello (maxExcessFee):', decoded.serverhello.maxExcessFee)
-        debug('ServerHello (donationAddress):', decoded.serverhello.donationAddress)
+        /* Validate data. */
+        if (!PB.ServerHello.verify(decoded.serverhello)) {
+            debug('ServerHello (tiers):', decoded.serverhello.tiers)
+            debug('ServerHello (numComponents):', decoded.serverhello.numComponents)
+            debug('ServerHello (componentFeerate):', decoded.serverhello.componentFeerate)
+            debug('ServerHello (minExcessFee):', decoded.serverhello.minExcessFee)
+            debug('ServerHello (maxExcessFee):', decoded.serverhello.maxExcessFee)
+            debug('ServerHello (donationAddress):', decoded.serverhello.donationAddress)
+
+            /* Initialize registration. */
+            const registration = register()
+            debug('Registration', registration.toString('hex'))
+
+            /* Send greeting. */
+            client.write(registration)
+
+        } else {
+            throw new Error(PB.ServerHello.verify(decoded.serverhello))
+        }
+    }
+
+    /* Handle data. */
+    if (decoded.tierstatusupdate) {
+        // console.log('DEBUG:', decoded.tierstatusupdate)
+
+        const statuses = decoded.tierstatusupdate.statuses
+        // debug('Tier statuses::', statuses)
+
+        const keys = Object.keys(statuses)
+        // debug('Tier keys:', decodeURIComponent(keys))
+
+        /* Display each key status. */
+        keys.forEach(key => {
+            debug(decodeURIComponent(key), statuses[key])
+        })
+
+        client.destroy()
+        // if (!PB.TierStatusUpdate.verify(decoded.tierstatusupdate)) {
+        //     debug('TierStatusUpdate (statuses):', decoded.tierstatusupdate.statuses)
+        // } else if (decoded.tierstatusupdate) {
+        //     throw new Error(PB.TierStatusUpdate.verify(decoded.tierstatusupdate))
+        // }
     }
 
     // Close the client socket completely
