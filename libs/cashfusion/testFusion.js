@@ -92,13 +92,14 @@ const register = function () {
         1000000, 1200000, 1500000, 1800000, 2200000, 2700000, 3300000, 3900000, 4700000, 5600000, 6800000, 8200000,
         10000000, 12000000, 15000000, 18000000, 22000000, 27000000, 33000000, 39000000, 47000000, 56000000, 68000000, 82000000
     ]
-    // debug('Tiers output:', tiersOutput)
+    debug('Tiers output:', tiersOutput.length, tiersOutput)
 
     /* Set message. */
     const message = PB.ClientMessage.create({
         joinpools: PB.JoinPools.create({
             tiers: tiersOutput,
             tags: [PB.JoinPools.PoolTag.create({
+                // FIXME: Figure out what this id/tag means??
                 id: Buffer.from('c58594f6f26f0315f459f06d4106084ae53058e3', 'hex'),
                 limit: 1
             })]
