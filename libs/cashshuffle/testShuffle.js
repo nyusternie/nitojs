@@ -7,6 +7,30 @@ const debug = require('debug')('cashshuffle:test')
 const ShuffleClient = require('./ShuffleClient.js')
 const JsonWallet = require('./JsonWallet')
 
+/**
+ * Shuffle
+ *
+ * The de-facto unbiased shuffle algorithm is the Fisher-Yates
+ * (aka Knuth) Shuffle. (see: https://github.com/coolaj86/knuth-shuffle)
+ */
+const _shuffle = function (array) {
+    var currentIndex = array.length, temporaryValue, randomIndex
+
+    // While there remain elements to shuffle...
+    while (0 !== currentIndex) {
+        // Pick a remaining element...
+        randomIndex = Math.floor(Math.random() * currentIndex)
+        currentIndex -= 1
+
+        // And swap it with the current element.
+        temporaryValue = array[currentIndex]
+        array[currentIndex] = array[randomIndex]
+        array[randomIndex] = temporaryValue
+    }
+
+    return array
+}
+
 /* Initialize Shuffle Manager. */
 const shuffleManager = {}
 
@@ -74,8 +98,7 @@ const grabCoinToShuffle = async function () {
     debug('Wallet coins:', myWallet.coins)
 
     while (!coin) {
-        coin = _.find(_.shuffle(myWallet.coins.slice(0, 8)), {
-        // coin = _.find(myWallet.coins.reverse(), {
+        coin = _.find(_shuffle(myWallet.coins.slice(0, 8)), {
             frozen: false
         })
 

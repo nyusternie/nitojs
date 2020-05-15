@@ -11,6 +11,30 @@ const coinUtils = require('./coinUtils.js')
 /* Import CommChannel (Class). */
 const CommChannel = require('./CommChannel.js')
 
+/**
+ * Shuffle
+ *
+ * The de-facto unbiased shuffle algorithm is the Fisher-Yates
+ * (aka Knuth) Shuffle. (see: https://github.com/coolaj86/knuth-shuffle)
+ */
+const _shuffle = function (array) {
+    var currentIndex = array.length, temporaryValue, randomIndex
+
+    // While there remain elements to shuffle...
+    while (0 !== currentIndex) {
+        // Pick a remaining element...
+        randomIndex = Math.floor(Math.random() * currentIndex)
+        currentIndex -= 1
+
+        // And swap it with the current element.
+        temporaryValue = array[currentIndex]
+        array[currentIndex] = array[randomIndex]
+        array[randomIndex] = temporaryValue
+    }
+
+    return array
+}
+
 /* Initialize magic number. */
 // const magic = Buffer.from('42bcc32669467873', 'hex')
 
@@ -839,10 +863,15 @@ class ShuffleRound extends EventEmitter {
             })
         }
 
-        /* Set shuffle array. */
+        /**
+         * Shuffle Array
+         */
         const shuffleArray = function (someArray, num) {
-            return (num > 0 ? shuffleArray(
-                _.shuffle(someArray), num - 1) : _.shuffle(someArray))
+            return (
+                num > 0 ?
+                shuffleArray(_shuffle(someArray), num - 1) :
+                _shuffle(someArray)
+            )
         }
 
         /* Validate if we are the last player. */
