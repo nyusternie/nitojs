@@ -357,13 +357,13 @@ class ShuffleClient extends EventEmitter {
                     }
 
                     /* Get a list of the pools in which we have an active shuffle round. */
-                    const poolsInUse = _.map(_.filter(this.rounds, { done: false }), 'poolAmount')
+                    const poolsInUse = _.filter(this.rounds, { done: false }).map(obj => obj['poolAmount'])
 
                     /* Remove any pool that we have an active round in. */
                     const poolsWeCanUse = _.difference(eligiblePools, poolsInUse)
 
                     /* Set eligible pools with players. */
-                    const eligiblePoolsWithPlayers = _.intersection(poolsWeCanUse, _.map(this.serverStats.pools, 'amount'))
+                    const eligiblePoolsWithPlayers = _.intersection(poolsWeCanUse, this.serverStats.pools.map(obj => obj['amount']))
 
                     /* Set pool to use. */
                     const poolToUse = _.max(eligiblePoolsWithPlayers.length ? eligiblePoolsWithPlayers : poolsWeCanUse)

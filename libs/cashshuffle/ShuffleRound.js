@@ -710,7 +710,7 @@ class ShuffleRound extends EventEmitter {
         if (
             _.uniq(
                 _.compact(
-                    _.map(orderedPlayers, 'encryptionPubKey')
+                    orderedPlayers.map(obj => obj['encryptionPubKey'])
                 )
             ).length !== this.players.length) {
             // debug('Waiting for the remaining encryption keys');
@@ -901,8 +901,7 @@ class ShuffleRound extends EventEmitter {
     checkFinalOutputsAndDoEquivCheck (signedPackets) {
         const me = _.find(this.players, { isMe: true })
 
-        const finalOutputAddresses = _.map(
-            signedPackets, 'packet.message.str')
+        const finalOutputAddresses = signedPackets.map(obj => obj['packet']['message']['str'])
         debug(
             'Check final outputs and do equiv check (finalOutputAddresses):',
             finalOutputAddresses
@@ -934,8 +933,7 @@ class ShuffleRound extends EventEmitter {
         this.equivHashPlaintext = '[\'' +
             finalOutputAddresses.join('\', \'') +
             '\'][\'' +
-            _.map(
-                _.orderBy(this.players, 'playerNumber'), 'encryptionPubKey'
+            _.orderBy(this.players, 'playerNumber').map(obj => obj['encryptionPubKey']
             ).join('\', \'') +
             '\']'
 
@@ -991,7 +989,7 @@ class ShuffleRound extends EventEmitter {
             'with hash', sender.equivCheck
         )
 
-        const allHashes = _.compact(_.map(this.players, 'equivCheck'))
+        const allHashes = _.compact(this.players.map(obj => obj['equivCheck']))
 
         if (allHashes.length === this.players.length) {
             // Are all the hashes the same and do they equal ours?
@@ -1291,7 +1289,7 @@ class ShuffleRound extends EventEmitter {
                 })
             }
 
-            let allOutputAddressesUsed = _.map(this.shuffleTx.tx.outputs, (oneOutput) => {
+            const allOutputAddressesUsed = this.shuffleTx.tx.outputs.map(oneOutput => {
                 return oneOutput.script.toAddress().toString()
             })
 
@@ -1302,6 +1300,7 @@ class ShuffleRound extends EventEmitter {
             })
 
             this.success = true
+
             this.endShuffleRound()
         } else {
             debug('Waiting on more signatures...')

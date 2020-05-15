@@ -229,7 +229,7 @@ const prepareShuffleInsAndOuts = async function (options) {
     let shuffleAmountSatoshis = options.shuffleAmountSatoshis
 
     /* Attach the players input address to their input. */
-    const players = _.map(options.players, function (onePlayer) {
+    const players = options.players.map((onePlayer) => {
         /* Set public key. */
         const pubKey = new PublicKey(onePlayer.coin.publicKey)
 
@@ -248,7 +248,7 @@ const prepareShuffleInsAndOuts = async function (options) {
     debug('Preparing to shuffle ins and outs (players):', players)
 
     /* Set address to fetch. */
-    const addressesToFetch = _.map(players, 'coin.legacyAddress')
+    const addressesToFetch = players.map(obj => obj['coin']['legacyAddress'])
     // debug('Address to fetch:', addressesToFetch)
 
     /* Initialize UTXO data. */

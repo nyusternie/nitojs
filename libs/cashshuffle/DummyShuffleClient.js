@@ -425,7 +425,8 @@ class ShuffleClient extends EventEmitter {
                         }
 
                         // Get a list of the pools in which we have an active shuffle round
-                        let poolsInUse = _.map( _.filter(this.rounds, { done: false }), 'poolAmount')
+                        let poolsInUse = _.filter(this.rounds, { done: false })
+                            .map(obj => ['poolAmount'])
 
                         // Remove any pool that we have an active round in
                         let poolsWeCanUse = _.difference(eligiblePools, poolsInUse)
@@ -437,7 +438,7 @@ class ShuffleClient extends EventEmitter {
                         let poolToUse
 
                         if (this.serverStats.pools && this.serverStats.pools.length) {
-                            poolToUse = _.max(_.union(poolsWeCanUse, _.map(this.serverStats.pools, 'amount')))
+                            poolToUse = _.max(_.union(poolsWeCanUse, this.serverStats.pools.map(obj => ['amount'])))
                         } else {
                             // Otherwise just pick the largest pool
                             poolToUse = _.max(poolsWeCanUse)

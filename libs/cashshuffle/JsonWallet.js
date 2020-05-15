@@ -86,7 +86,8 @@ class JsonWallet {
 
                 /* Determine transaction affect. */
                 const affected = _.intersection(
-                    _.map(this.walletData.addresses, 'legacyAddress'), outputAddresses
+                    this.walletData.addresses.map(obj => obj['legacyAddress']),
+                    outputAddresses
                 )
 
                 /* Validate transaction affect. */
@@ -179,8 +180,8 @@ class JsonWallet {
             return oneAddress.y !== 7867 && oneAddress.balanceSatoshis
         })
 
-        const unshuffledCoins = _.map(unshuffled, function (oneAddress) {
-            return _.map(oneAddress.coins, function (oneCoin) {
+        const unshuffledCoins = unshuffled.map(oneAddress => {
+            return oneAddress.coins.map(oneCoin => {
                 oneCoin.frozen = oneAddress.frozen
                 return oneCoin
             })
@@ -205,8 +206,8 @@ class JsonWallet {
         })
 
         /* Set shuffled coins. */
-        const shuffledCoins = _.map(shuffled, function (oneAddress) {
-            return _.map(oneAddress.coins, function (oneCoin) {
+        const shuffledCoins = shuffled.map(oneAddress => {
+            return oneAddress.coins.map(oneCoin => {
                 oneCoin.frozen = oneAddress.frozen
 
                 return oneCoin
@@ -233,8 +234,8 @@ class JsonWallet {
         })
 
         /* Set all coins. */
-        const coins = _.map(all, function (oneAddress) {
-            return _.map(oneAddress.coins, function (oneCoin) {
+        const coins = all.map(oneAddress => {
+            return oneAddress.coins.map(oneCoin => {
                 oneCoin.frozen = oneAddress.frozen
                 return oneCoin
             })
@@ -529,7 +530,7 @@ class JsonWallet {
             }, [])
 
         /* Set update address. */
-        const addressesToUpdate = _.map(filteredAddresses, 'cashAddress')
+        const addressesToUpdate = filteredAddresses.map(obj => obj['cashAddress'])
 
         /* Initialize UTXO info. */
         // NOTE: Will get all the utxos for each address in our wallet.
@@ -563,7 +564,7 @@ class JsonWallet {
         }
 
         /* Set ALL address. */
-        const allCashAddresses = _.map(filteredAddresses, 'cashAddress')
+        const allCashAddresses = filteredAddresses.map(obj => obj['cashAddress'])
 
         /* Initialize ALL address details. */
         const allAddressDetails = []

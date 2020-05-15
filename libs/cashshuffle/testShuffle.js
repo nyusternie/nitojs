@@ -1,14 +1,14 @@
 /* Import core modules. */
 const _ = require('lodash')
 const debug = require('debug')('cashshuffle:test')
-const repl = require('repl')
+// const repl = require('repl')
 
 /* Import local modules. */
 const ShuffleClient = require('./ShuffleClient.js')
 const JsonWallet = require('./JsonWallet')
 
-/* Initialize shuffle. */
-const shuffleIt = repl.start('cashshuffle > ')
+/* Initialize Shuffle Manager. */
+const shuffleManager = {}
 
 /**
  * Delay (Execution)
@@ -22,11 +22,11 @@ const myWallet = new JsonWallet({
 
 /* Unfreeze any frozen addresses. */
 myWallet.unfreezeAddresses(
-    _.map(myWallet.addresses, 'cashAddress')
+    myWallet.addresses.map(obj => obj['cashAddress'])
 )
 
 /* Load up our on-disk HD wallet. */
-shuffleIt.context.wallet = myWallet
+shuffleManager.wallet = myWallet
 
 // The two functions below provide us a way
 // of plugging the `ShuffleClient` into our
@@ -100,12 +100,12 @@ const grabCoinToShuffle = async function () {
  */
 const addClientToShuffle = async function (clientNumber) {
     /* Initialize client name. */
-    const clientName = `client #${clientNumber}`
+    const clientName = `client_${clientNumber}`
 
     debug(`Adding ${clientName} to the shuffle..`)
 
     /* Initialize new shuffle client. */
-    shuffleIt.context[clientName] = new ShuffleClient({
+    shuffleManager[clientName] = new ShuffleClient({
         coins: [ await grabCoinToShuffle() ],
         hooks: {
             change: newChangeAddressFromWallet,
@@ -133,7 +133,7 @@ const addClientToShuffle = async function (clientNumber) {
      * NOTE: Here you would do things like un-freeze shuffled coins,
      *       update UI's, etc.
      */
-    shuffleIt.context[clientName].on('shuffle', async (shuffleRound) => {
+    shuffleManager[clientName].on('shuffle', async (shuffleRound) => {
         debug(`Coin ${shuffleRound.coin.txid}:${shuffleRound.coin.vout} has been successfully shuffled!`)
 
         // Just a random delay to more equally distribute
@@ -150,14 +150,13 @@ const addClientToShuffle = async function (clientNumber) {
         }
 
         /* Set coins to unfreeze. */
-        const coinsToUnfreeze = _.map([
-            shuffleRound.change, shuffleRound.shuffled
-        ], 'cashAddress')
+        const coinsToUnfreeze = [shuffleRound.change, shuffleRound.shuffled]
+            .map(obj => obj['cashAddress'])
 
         /* Unfreeze coins. */
         myWallet.unfreezeAddresses(coinsToUnfreeze)
 
-        shuffleIt.context[clientName]
+        shuffleManager[clientName]
             .addUnshuffledCoins([ await grabCoinToShuffle() ])
     })
 }
