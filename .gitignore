@@ -140,6 +140,7 @@ temp/
 
 _book
 _failed*
-test_json_wallet.js
+testCoins.js
 
 NOTES
+REF

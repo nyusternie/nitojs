@@ -739,7 +739,7 @@ class ShuffleRound extends EventEmitter {
                     orderedPlayers.map(obj => obj['encryptionPubKey'])
                 )
             ).length !== this.players.length) {
-            // debug('Waiting for the remaining encryption keys');
+            debug('Waiting for the remaining encryption keys:', orderedPlayers)
             return
         }
 
