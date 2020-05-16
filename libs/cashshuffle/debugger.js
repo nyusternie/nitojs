@@ -42,7 +42,7 @@ for (let onePlayer of shuffleIt.context.round.players) {
 
     somePlayer['player' + onePlayer.playerNumber] = onePlayer
 
-    _.extend(shuffleIt.context, somePlayer)
+    Object.assign(shuffleIt.context, somePlayer)
 }
 
 shuffleIt.context.bch = bch
@@ -67,7 +67,7 @@ shuffleIt.context.tools = {
             session: decodedMessage.pruned.message.session
         })
 
-        return _.extend(decodedMessage, { sender: sender })
+        return Object.assign(decodedMessage, { sender: sender })
     },
     // Find a properly packed `Protocol Message` from
     // somewhere deep inside a base64 encoded string.

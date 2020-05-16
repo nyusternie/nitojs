@@ -349,7 +349,7 @@ class ShuffleClient extends EventEmitter {
                     if (!eligiblePools.length) {
                         this.skipCoin(coinToShuffle)
 
-                        this.emit('skipped', _.extend(coinToShuffle, {
+                        this.emit('skipped', Object.assign(coinToShuffle, {
                             error: 'dust'
                         }))
 
@@ -445,8 +445,10 @@ class ShuffleClient extends EventEmitter {
         /* Loop through ALL coins. */
         for (let oneCoin of oneOrMoreCoins) {
             if (!oneCoin.amountSatoshis || oneCoin.amountSatoshis < 10000 + this.shuffleFee) {
-                debug(`Skipping coin ${oneCoin} because it's just dust`)
-                this.skipped.push(_.extend(oneCoin, { shuffled: false, error: 'size' }))
+                debug(`Skipping coin ${JSON.stringify(oneCoin)} because it's just dust`)
+                this.skipped.push(
+                    Object.assign(oneCoin, { shuffled: false, error: 'size' })
+                )
             }
 
             try {
@@ -455,7 +457,7 @@ class ShuffleClient extends EventEmitter {
                 // be used for transaction signing and verification.
                 const keypair = coinUtils.getKeypairFromWif(oneCoin.privateKeyWif)
 
-                _.extend(oneCoin, {
+                Object.assign(oneCoin, {
                     publicKey: keypair.publicKey,
                     privateKey: keypair.privateKey
                 })
@@ -511,7 +513,7 @@ class ShuffleClient extends EventEmitter {
         /* Validate server statistics. */
         if (serverStats) {
             /* Update server statistics. */
-            _.extend(this.serverStats, serverStats.data)
+            Object.assign(this.serverStats, serverStats.data)
 
             /* Reset server back-off. */
             this.serverBackoffMs = 0

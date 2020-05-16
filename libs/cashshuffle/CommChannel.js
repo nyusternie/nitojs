@@ -89,7 +89,7 @@ class CommChannel extends EventEmitter {
             }
 
             /* Change the message type for unicast messages. */
-            _.extend(message.pruned, {
+            Object.assign(message.pruned, {
                 messageType: messageSubClass || message.pruned.messageType
             })
 
@@ -238,7 +238,7 @@ class CommChannel extends EventEmitter {
             obj[messageType] = []
 
             /* Update outbox. */
-            _.extend(this.outbox, obj)
+            Object.assign(this.outbox, obj)
         }
 
         /* Set outbox sent message flag. */

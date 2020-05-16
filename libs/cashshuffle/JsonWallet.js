@@ -23,7 +23,7 @@ process.chdir(currentPath)
  */
 class JsonWalletAddress {
     constructor (options) {
-        return _.extend(this, options)
+        return Object.assign(this, options)
     }
 
     fund () {
@@ -133,7 +133,7 @@ class JsonWallet {
                     this.bitbox.Mnemonic.wordLists()['english']
                 )
             } else {
-                _.extend(this.walletData, walletData)
+                Object.assign(this.walletData, walletData)
             }
 
             this.masterHDNode = this.bitbox.HDNode
@@ -295,7 +295,7 @@ class JsonWallet {
 
         /* Validate unused address. */
         if (unusedAddress) {
-            addressToReturn = _.extend(unusedAddress, {
+            addressToReturn = Object.assign(unusedAddress, {
                 frozen: freezeAddressOnReturn
             })
 
@@ -337,7 +337,7 @@ class JsonWallet {
                 results.fail.push(oneAddress)
             } else {
                 // ???
-                const updatedAddress = _.extend(frozenAddress, { frozen: true })
+                const updatedAddress = Object.assign(frozenAddress, { frozen: true })
                 debug('Freeze addresses (updatedAddress):', updatedAddress)
 
                 results.success.push(oneAddress)
@@ -374,7 +374,7 @@ class JsonWallet {
                 results.fail.push(oneAddress)
             } else {
                 // ???
-                const updatedAddress = _.extend(frozenAddress, { frozen: false })
+                const updatedAddress = Object.assign(frozenAddress, { frozen: false })
                 debug('Unfreeze addresses (updatedAddress):', updatedAddress)
 
                 results.success.push(oneAddress)
@@ -442,7 +442,7 @@ class JsonWallet {
             // NOTE: If additional properties were given, add this to this
             //       address before we save it.
             if (addressMeta) {
-                _.extend(addressData, addressMeta)
+                Object.assign(addressData, addressMeta)
             }
 
             /* Add address data to wallet data. */
@@ -635,7 +635,7 @@ class JsonWallet {
             }, [])
 
             /* Merge address data. */
-            _.extend(oneAddressObject, {
+            Object.assign(oneAddressObject, {
                 frozen: oneAddressObject.frozen ? oneAddressObject.frozen : false,
                 legacyAddress: oneAddressObject.legacyAddress,
                 cashAddress: oneAddressObject.cashAddress,

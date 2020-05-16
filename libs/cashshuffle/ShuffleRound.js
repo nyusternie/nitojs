@@ -186,7 +186,7 @@ class ShuffleRound extends EventEmitter {
                 this.roundComplete = true
 
                 /* Update round error. */
-                _.extend(this.roundError, {
+                Object.assign(this.roundError, {
                     shortCode: 'COMMS_DISCONNECT',
                     errorObject: new Error(commsDisconnectMessage),
                     isProtocolError: false,
@@ -390,12 +390,14 @@ class ShuffleRound extends EventEmitter {
             )
 
             /* Update this player with their change address. */
-            _.extend(this.players[_.findIndex(this.players, { session: message['session'] })], {
-                encryptionPubKey: message['message']['key']['key'],
-                change: {
-                    legacyAddress: message['message']['address']['address']
+            Object.assign(
+                this.players[_.findIndex(this.players, { session: message['session'] })], {
+                    encryptionPubKey: message['message']['key']['key'],
+                    change: {
+                        legacyAddress: message['message']['address']['address']
+                    }
                 }
-            })
+            )
 
             /**
              * If we are player 1, go ahead and send the first encrypted
@@ -562,7 +564,7 @@ class ShuffleRound extends EventEmitter {
 
         /* Validate player. */
         if (playerToAdd.isMe) {
-            _.extend(playerToAdd.coin, this.coin)
+            Object.assign(playerToAdd.coin, this.coin)
         }
 
         /* Add player. */
@@ -610,14 +612,14 @@ class ShuffleRound extends EventEmitter {
         // NOTE: If it's our message, add our coin object to
         //       the player and only update the fiscal properties.
         if (playerToAdd.isMe) {
-            _.extend(grabPlayer.coin, {
+            Object.assign(grabPlayer.coin, {
                 amount: coinDetails.amount,
                 amountSatoshis: coinDetails.amountSatoshis,
                 confirmations: coinDetails.confirmations,
                 spent: coinDetails.spent
             })
         } else {
-            _.extend(grabPlayer.coin, coinDetails)
+            Object.assign(grabPlayer.coin, coinDetails)
         }
 
         // debug(`Player ${grabPlayer.playerNumber} updated`);
@@ -953,9 +955,11 @@ class ShuffleRound extends EventEmitter {
         // important later because it effects the transaction output order
         // which has implications for it's signature.
         for (let n = this.players.length; n >= 0; n--) {
-            _.extend(this.players[ n ], {
-                finalOutputAddresses: finalOutputAddresses
-            })
+            debug('this.players[ n ]:', n, this.players[ n ])
+            if (typeof this.players[ n ] !== 'undefined') {
+                Object.assign(this.players[ n ], { finalOutputAddresses })
+            }
+
         }
 
         /* Set equivocation hash (plaintext). */
@@ -1009,9 +1013,11 @@ class ShuffleRound extends EventEmitter {
         // const lastPlayer = _.maxBy(this.players, 'playerNumber')
 
         /* Add the hash provided by the player to that player's state data. */
-        const sender = _.extend(this.players[_.findIndex(this.players, { session: prunedMessage['session'] })], {
-            equivCheck: _.get(prunedMessage, 'message.hash.hash')
-        })
+        const sender = Object.assign(
+            this.players[_.findIndex(this.players, { session: prunedMessage['session'] })], {
+                equivCheck: _.get(prunedMessage, 'message.hash.hash')
+            }
+        )
 
         debug(
             'Got a processEquivCheck message from', sender.verificationKey,
@@ -1135,7 +1141,7 @@ class ShuffleRound extends EventEmitter {
                 this.writeDebugFile()
             }
 
-            _.extend(this.shuffleTx, {
+            Object.assign(this.shuffleTx, {
                 serialized: shuffleTransaction.serialized,
                 tx: shuffleTransaction.tx,
                 inputs: shuffleTransaction.inputs,
@@ -1313,7 +1319,7 @@ class ShuffleRound extends EventEmitter {
             }
 
             if (submissionResults) {
-                _.extend(this.shuffleTx, {
+                Object.assign(this.shuffleTx, {
                     results: submissionResults
                 })
             }
@@ -1324,8 +1330,9 @@ class ShuffleRound extends EventEmitter {
 
             // Add a property so the user's wallet logic can
             // quickly tell if this change address can be reused.
-            _.extend(this.change, {
-                usedInShuffle: allOutputAddressesUsed.indexOf(this.change.legacyAddress) > -1
+            Object.assign(this.change, {
+                usedInShuffle: allOutputAddressesUsed
+                    .indexOf(this.change.legacyAddress) > -1
             })
 
             this.success = true

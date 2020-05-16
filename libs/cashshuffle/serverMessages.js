@@ -211,7 +211,7 @@ function decodeAndClassify (messageBuffer) {
         }, { required: [] })
 
         /* Update server message. */
-        _.extend(serverMessage.pruned, {
+        Object.assign(serverMessage.pruned, {
             messageType: matchingMessageType.name || 'UNKNOWN'
         })
 

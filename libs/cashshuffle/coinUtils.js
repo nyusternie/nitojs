@@ -116,7 +116,7 @@ const getCoinDetails = async function (someTxid, someVout) {
 
     /* Validate output in question. */
     if (outputInQuestion) {
-        _.extend(coinData, {
+        Object.assign(coinData, {
             amount: outputInQuestion.amount,
             amountSatoshis: Number(outputInQuestion.satoshis),
             height: outputInQuestion.height,
@@ -234,7 +234,7 @@ const prepareShuffleInsAndOuts = async function (options) {
         const pubKey = new PublicKey(onePlayer.coin.publicKey)
 
         /* Update player data. */
-        _.extend(onePlayer.coin, {
+        Object.assign(onePlayer.coin, {
             vout: Number(onePlayer.coin.vout),
             pubKey: pubKey,
             legacyAddress: bitbox.Address.toLegacyAddress(pubKey.toAddress().toString()),
@@ -281,7 +281,7 @@ const prepareShuffleInsAndOuts = async function (options) {
             const errorToThrow = new Error('VERIFY_ERROR')
 
             /* Update error. */
-            _.extend(errorToThrow, {
+            Object.assign(errorToThrow, {
                 blame: {
                     reason: 'BAD_INPUT',
                     player: onePlayer
@@ -305,7 +305,7 @@ const prepareShuffleInsAndOuts = async function (options) {
         if (!coinInQuestion) {
             let errorToThrow = new Error('VERIFY_ERROR')
 
-            _.extend(errorToThrow, {
+            Object.assign(errorToThrow, {
                 blame: {
                     reason: 'BAD_INPUT',
                     player: onePlayer
@@ -395,7 +395,9 @@ const prepareShuffleInsAndOuts = async function (options) {
     //       key then add them to the outputs array.
     for (let oneOutput of _.orderBy(changeOutputsToAdd, ['verificationKey'], ['asc'])) {
         if (oneOutput.amountSatoshis >= dustThreshold) {
-            allOutputs.push(_.extend(oneOutput, { vout: allOutputs.length }))
+            allOutputs.push(
+                Object.assign(oneOutput, { vout: allOutputs.length })
+            )
         }
     }
 
@@ -464,7 +466,7 @@ const getShuffleTxAndSignature = function (options) {
         })
 
         /* Fix the sequence number. */
-        _.extend(grabIt, { sequenceNumber: 0xfffffffe })
+        Object.assign(grabIt, { sequenceNumber: 0xfffffffe })
 
         /* Add public key to input's script. */
         grabIt.setScript(bch.Script('21' + oneInput.player.coin.publicKey))
