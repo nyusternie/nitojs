@@ -1,17 +1,9 @@
 /* Import core modules. */
-const _ = require('lodash')
 const debug = require('debug')('cashfusion:test')
 const net = require('net')
+const numeral = require('numeral')
 const path = require('path')
 const protobuf = require('protobufjs')
-// const repl = require('repl')
-
-/* Import local modules. */
-// const ShuffleClient = require('./ShuffleClient.js')
-// const JsonWallet = require('./JsonWallet')
-
-/* Initialize shuffle. */
-// const shuffleIt = repl.start('cashfusion > ')
 
 const GENESIS = '6fe28c0ab6f1b372c1a6a246ae63f74f931e8365e15a089c68d6190000000000'
 const HOST = 'cashfusion.electroncash.dk'
@@ -36,9 +28,26 @@ const pbTypes = [
     'CovertResponse'
 ]
 
+/* Initialize tiers output. */
+let tiersOutput = null
+
+/**
+ * Parse Players
+ */
+const _parsePlayers = (_tier) => {
+    if (_tier.timeRemaining) {
+        /* Set time remaining. */
+        const remaining = (_tier.timeRemaining / 60).toFixed(1) + ' mins remaining'
+
+        return `${_tier.players} of ${_tier.minPlayers} [ ${remaining} ]`
+    } else {
+        return `${_tier.players} of ${_tier.minPlayers}`
+    }
+}
+
 /* Initialize protobuf. */
 const PB = {
-    root: protobuf.loadSync(path.join(__dirname, 'fusion.proto'))
+    root: protobuf.loadSync(path.join(__dirname, 'libs', 'cashfusion', 'fusion.proto'))
 }
 
 /* Loop through ALL protobuf types. */
@@ -86,7 +95,10 @@ const register = function () {
     console.info('\n\tRegistering tiers...\n') // eslint-disable-line no-console
 
     // All tiers
-    const tiersOutput = [
+    // tiersOutput = [
+    //     10000, 12000, 15000, 18000, 22000, 27000, 33000, 39000, 47000, 56000, 68000, 82000,
+    // ]
+    tiersOutput = [
         10000, 12000, 15000, 18000, 22000, 27000, 33000, 39000, 47000, 56000, 68000, 82000,
         100000, 120000, 150000, 180000, 220000, 270000, 330000, 390000, 470000, 560000, 680000, 820000,
         1000000, 1200000, 1500000, 1800000, 2200000, 2700000, 3300000, 3900000, 4700000, 5600000, 6800000, 8200000,
@@ -247,8 +259,9 @@ client.on('data', function (_data) {
         // debug('Tier keys:', decodeURIComponent(keys))
 
         /* Display each key status. */
-        keys.forEach(key => {
-            debug(decodeURIComponent(key), statuses[key])
+        keys.forEach((key, i) => {
+            // debug(i, decodeURIComponent(key), statuses[key])
+            debug(`Tier ${numeral(tiersOutput[i]).format('0,0')} - ${_parsePlayers(statuses[key])}`)
         })
 
         client.destroy()

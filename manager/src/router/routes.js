@@ -1,15 +1,17 @@
 import DashboardLayout from '@/layout/dashboard/DashboardLayout.vue'
 
-// GeneralViews
+/* General View */
 import NotFound from '@/pages/NotFoundPage.vue'
 
-// Admin pages
 import Dashboard from '@/pages/Dashboard.vue'
-import UserProfile from '@/pages/UserProfile.vue'
+import CoinsManager from '@/pages/CoinsManager.vue'
+
+/* Statistics */
+import Stats from '@/pages/Stats.vue'
+
+/* Support Pages */
 import Notifications from '@/pages/Notifications.vue'
 import Icons from '@/pages/Icons.vue'
-import Maps from '@/pages/Maps.vue'
-import Typography from '@/pages/Typography.vue'
 import TableList from '@/pages/TableList.vue'
 
 const routes = [
@@ -18,16 +20,28 @@ const routes = [
         component: DashboardLayout,
         redirect: '/dashboard',
         children: [
+            /* Dashboard */
             {
                 path: 'dashboard',
-                name: 'dashboard',
+                name: 'Dashboard',
                 component: Dashboard
             },
+
+            /* Coins Manager */
+            {
+                path: 'coins',
+                name: 'Coins Manager',
+                component: CoinsManager
+            },
+
+            /* Statistics */
             {
                 path: 'stats',
-                name: 'stats',
-                component: UserProfile
+                name: 'Statistics',
+                component: Stats
             },
+
+            /* FOR DEVELOPMENT PURPOSES ONLY */
             {
                 path: 'notifications',
                 name: 'notifications',
@@ -37,16 +51,6 @@ const routes = [
                 path: 'icons',
                 name: 'icons',
                 component: Icons
-            },
-            {
-                path: 'maps',
-                name: 'maps',
-                component: Maps
-            },
-            {
-                path: 'typography',
-                name: 'typography',
-                component: Typography
             },
             {
                 path: 'table-list',
@@ -69,4 +73,4 @@ function view(name) {
    return res;
 };**/
 
-export default routes;
+export default routes
