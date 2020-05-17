@@ -1,0 +1,30 @@
+{
+  "name": "nitojs-manager",
+  "version": "20.5.16",
+  "license": "MIT",
+  "scripts": {
+    "build": "vue-cli-service build",
+    "e2e": "node test/e2e/runner.js",
+    "lint": "vue-cli-service lint",
+    "lint-fix": "vue-cli-service lint --fix",
+    "serve": "vue-cli-service serve"
+  },
+  "dependencies": {
+    "bootstrap": "4.5.0",
+    "chartist": "0.11.4",
+    "vue": "2.6.11",
+    "vue-clickaway": "2.2.2",
+    "vue-notifyjs": "0.4.3",
+    "vue-router": "3.1.6"
+  },
+  "devDependencies": {
+    "@vue/cli-plugin-babel": "4.3.1",
+    "@vue/cli-plugin-eslint": "4.3.1",
+    "@vue/cli-service": "4.3.1",
+    "@vue/eslint-config-prettier": "6.0.0",
+    "babel-helper-vue-jsx-merge-props": "2.0.3",
+    "node-sass": "4.14.1",
+    "sass-loader": "8.0.2",
+    "vue-template-compiler": "2.6.11"
+  }
+}
