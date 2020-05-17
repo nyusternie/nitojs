@@ -1,12 +1,14 @@
 <template>
-  <div :class="{'nav-open': $sidebar.showSidebar}">
-    <notifications></notifications>
-    <router-view></router-view>
-  </div>
+    <div :class="{'nav-open': $sidebar.showSidebar}">
+        <notifications></notifications>
+        <router-view></router-view>
+    </div>
 </template>
 
 <script>
-export default {};
+export default {
+
+}
 </script>
 
 <style lang="scss">
