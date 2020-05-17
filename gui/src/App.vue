@@ -1,28 +1,34 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-  </div>
+    <main>
+        <img alt="Vue logo" src="@/assets/logo.png">
+    </main>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+/* Import modules. */
+import Nito from '../../index'
 
 export default {
-  name: 'App',
-  components: {
-    HelloWorld
-  }
+    components: {
+        //
+    },
+    created: function () {
+        console.log('Loading Manager...')
+
+        const nito = new Nito()
+        console.log('Nito (status):', nito.status())
+
+        // FOR DEVELOPMENT PURPOSES ONLY
+        nito.on('test', (result) => {
+            console.log('TEST HANDLER (result):', result)
+        })
+
+        // FOR DEVELOPMENT PURPOSES ONLY
+        nito.test()
+    },
 }
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
+/*  */
 </style>

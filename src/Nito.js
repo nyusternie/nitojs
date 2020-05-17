@@ -1,11 +1,20 @@
 const debug = require('debug')('main')
+const EventEmitter = require('events').EventEmitter
 
 /**
  * Nito
+ *
+ * Main class for the NitoJS anonymity manager.
  */
-class Nito {
+class Nito extends EventEmitter {
     constructor() {
-        debug('Initializing module...')
+        /* Initialize NitoJS class. */
+        debug('Initializing NitoJS...')
+        super()
+    }
+
+    test() {
+        this.emit('test', 'hi there!')
     }
 
     /**
