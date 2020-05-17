@@ -1,4 +1,8 @@
-# NitoJS Manager
+# NitoJS Web
+
+![NitoJS Poster](https://nitojs.org/poster.jpg?1588709532)
+
+### https://web.nitojs.org
 
 A simple GUI to manage your coin privacy.
 

@@ -44,7 +44,7 @@ export default {
     props: {
         title: {
             type: String,
-            default: 'NitoJS Manager'
+            default: 'NitoJS Web'
         },
         backgroundColor: {
             type: String,
