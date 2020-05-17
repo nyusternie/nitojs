@@ -8,37 +8,37 @@
                 <sidebar-link to="/history" name="History" icon="ti-time" />
                 <sidebar-link to="/settings" name="Settings" icon="ti-panel" />
                 <sidebar-link to="/stats" name="Statistics" icon="ti-bar-chart" />
-
-                <sidebar-link to="/icons" name="Icons" icon="ti-pencil-alt2" />
-                <sidebar-link to="/notifications" name="Notifications" icon="ti-bell" />
             </template>
 
             <mobile-menu>
                 <li class="nav-item">
-                    <a class="nav-link">
-                        <i class="ti-panel"></i>
-                        <p>Stats</p>
+                    <a class="nav-link" href="https://causes.cash/@BCHPlease/nito-exchange-443db3869688" target="_blank">
+                        <i class="ti-heart"></i>
+                        <p>Causes Cash</p>
                     </a>
                 </li>
 
                 <drop-down class="nav-item"
-                    title="5 Notifications"
+                    :title="displayAlerts"
                     title-classes="nav-link"
                     icon="ti-bell"
                 >
-                    <a class="dropdown-item">Notification 1</a>
-                    <a class="dropdown-item">Notification 2</a>
-                    <a class="dropdown-item">Notification 3</a>
-                    <a class="dropdown-item">Notification 4</a>
-                    <a class="dropdown-item">Another notification</a>
+                    <a
+                        class="dropdown-item"
+                        href="javascript://"
+                        v-for="alert of alerts"
+                        :key="alert.id"
+                    >
+                        {{alert.title}}
+                    </a>
                 </drop-down>
 
-                <li class="nav-item">
+                <!-- <li class="nav-item">
                     <a class="nav-link">
                         <i class="ti-settings"></i>
                         <p>Settings</p>
                     </a>
-                </li>
+                </li> -->
 
                 <li class="divider"></li>
             </mobile-menu>
@@ -69,13 +69,39 @@ export default {
         DashboardContent,
         MobileMenu
     },
+    data: () => {
+        return {
+            alerts: [],
+        }
+    },
+    computed: {
+        displayAlerts() {
+            return `${this.alerts.length} Alerts`
+        }
+    },
     methods: {
         toggleSidebar() {
             if (this.$sidebar.showSidebar) {
                 this.$sidebar.displaySidebar(false)
             }
         }
-    }
+    },
+    created: function () {
+        /* Add alert. */
+        this.alerts.push({
+            id: '8542cd38-91ed-4315-9941-88c660213f8c',
+            title: 'CashShuffle completed',
+            createdAt: 123,
+        })
+
+        /* Add alert. */
+        this.alerts.push({
+            id: '894edd53-5b2a-4672-a42c-b9759bd32857',
+            title: 'Deposit received',
+            createdAt: 456,
+        })
+
+    },
 }
 </script>
 

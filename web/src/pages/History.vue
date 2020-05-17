@@ -11,7 +11,7 @@
         </div>
 
         <div class="col-12">
-            <card class="card-plain">
+            <card class="card-plain" :title="table1.title" :subTitle="table1.subTitle">
                 <div class="table-full-width table-responsive">
                     <paper-table type="hover" :title="table2.title" :sub-title="table2.subTitle" :data="table2.data"
                          :columns="table2.columns">
@@ -73,13 +73,13 @@ export default {
     data() {
         return {
             table1: {
-                title: 'Stripped Table',
-                subTitle: 'Here is a subtitle for this table',
+                title: 'Coin Activity',
+                subTitle: 'All coin deposits and transfers / withdrawals.',
                 columns: [...tableColumns],
                 data: [...tableData]
             },
             table2: {
-                title: 'Table on Plain Background',
+                title: 'CashShuffle Activity',
                 subTitle: 'Here is a subtitle for this table',
                 columns: [...tableColumns],
                 data: [...tableData]

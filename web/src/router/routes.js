@@ -3,16 +3,27 @@ import DashboardLayout from '@/layout/dashboard/DashboardLayout.vue'
 /* General View */
 import NotFound from '@/pages/NotFoundPage.vue'
 
+/* Dashboard */
 import Dashboard from '@/pages/Dashboard.vue'
+
+/* Coins Manager */
 import CoinsManager from '@/pages/CoinsManager.vue'
+
+/* CashShuffle */
+import CashShuffle from '@/pages/CashShuffle.vue'
 
 /* Statistics */
 import Stats from '@/pages/Stats.vue'
 
+/* History */
+import History from '@/pages/History.vue'
+
+/* Settings */
+import Settings from '@/pages/Settings.vue'
+
 /* Support Pages */
-import Notifications from '@/pages/Notifications.vue'
+import Blank from '@/pages/Blank.vue'
 import Icons from '@/pages/Icons.vue'
-import TableList from '@/pages/TableList.vue'
 
 const routes = [
     {
@@ -34,6 +45,13 @@ const routes = [
                 component: CoinsManager
             },
 
+            /* CashShuffle */
+            {
+                path: 'cashshuffle',
+                name: 'CashShuffle',
+                component: CashShuffle
+            },
+
             /* Statistics */
             {
                 path: 'stats',
@@ -41,21 +59,30 @@ const routes = [
                 component: Stats
             },
 
+            /* History */
+            {
+                path: 'history',
+                name: 'Transaction History',
+                component: History
+            },
+
+            /* Settings */
+            {
+                path: 'settings',
+                name: 'Settings',
+                component: Settings
+            },
+
             /* FOR DEVELOPMENT PURPOSES ONLY */
             {
-                path: 'notifications',
-                name: 'notifications',
-                component: Notifications
+                path: 'blank',
+                name: 'Blank Template',
+                component: Blank
             },
             {
                 path: 'icons',
                 name: 'icons',
                 component: Icons
-            },
-            {
-                path: 'table-list',
-                name: 'table-list',
-                component: TableList
             }
         ]
     },
