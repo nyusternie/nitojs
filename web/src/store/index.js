@@ -6,7 +6,7 @@ import Vuex from 'vuex'
 import createPersistedState from 'vuex-persistedstate'
 
 /* Import (local) modules. */
-import coins from './modules/coins'
+import purse from './modules/purse'
 import system from './modules/system'
 
 /* Initialize Vuex. */
@@ -15,7 +15,7 @@ Vue.use(Vuex)
 /* Export store. */
 export default new Vuex.Store({
     modules: {
-        coins,
+        purse,
         system,
     },
     plugins: [createPersistedState()],

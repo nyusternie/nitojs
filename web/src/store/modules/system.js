@@ -1,13 +1,7 @@
-/* Import libraries. */
-// import telr from '../../api/telr'
-
 /* Initialize state. */
 const state = {
     error: null,
     notification: null,
-
-    /* Initialize API Endpoint (constant). */
-    apiUrl: 'https://api.devops.cash/v1',
 }
 
 /* Getters. */
