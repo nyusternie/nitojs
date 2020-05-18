@@ -57,7 +57,7 @@ export default {
             const value = (_satoshis / 10000000000) * this.usd
 
             /* Return formatted value. */
-            return numeral(value).format('$0.00[00]')
+            return numeral(value).format('$0,0.00[00]')
         },
 
         /**

@@ -7,7 +7,9 @@
 
 <script>
 export default {
-
+    created: function () {
+        console.log('APPLICATION STATE', this.$store.state)
+    },
 }
 </script>
 

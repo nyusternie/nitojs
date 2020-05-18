@@ -9,8 +9,8 @@ import Dashboard from '@/pages/Dashboard.vue'
 /* Coins Manager */
 import CoinsManager from '@/pages/CoinsManager.vue'
 
-/* CashShuffle */
-import CashShuffle from '@/pages/CashShuffle.vue'
+/* Sessions */
+import Sessions from '@/pages/Sessions.vue'
 
 /* Statistics */
 import Stats from '@/pages/Stats.vue'
@@ -45,17 +45,17 @@ const routes = [
                 component: CoinsManager
             },
 
-            /* CashShuffle */
+            /* Sessions */
             {
-                path: 'cashshuffle',
-                name: 'CashShuffle',
-                component: CashShuffle
+                path: 'sessions',
+                name: 'Sessions Manager',
+                component: Sessions
             },
 
             /* Statistics */
             {
                 path: 'stats',
-                name: 'Statistics',
+                name: 'Charts & Statistics',
                 component: Stats
             },
 
@@ -69,7 +69,7 @@ const routes = [
             /* Settings */
             {
                 path: 'settings',
-                name: 'Settings',
+                name: 'App Settings',
                 component: Settings
             },
 

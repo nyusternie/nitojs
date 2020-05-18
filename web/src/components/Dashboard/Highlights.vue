@@ -42,33 +42,33 @@ export default {
                 {
                     type: 'warning',
                     icon: 'ti-money',
-                    title: 'BCH Price',
-                    value: '',
-                    footerText: 'Updated now',
-                    footerIcon: 'ti-reload'
+                    title: 'BCH / USD',
+                    value: '$0.00',
+                    footerText: '+2.7% in the last 24hrs',
+                    footerIcon: 'ti-stats-up'
                 },
                 {
                     type: 'success',
                     icon: 'ti-wallet',
-                    title: 'Revenue',
+                    title: 'Managing',
                     value: '$1,345',
-                    footerText: 'Last day',
-                    footerIcon: 'ti-calendar'
+                    footerText: 'in 4 active sesions',
+                    footerIcon: 'ti-pulse'
                 },
                 {
                     type: 'danger',
-                    icon: 'ti-pulse',
-                    title: 'Errors',
+                    icon: 'ti-check-box',
+                    title: 'Completed',
                     value: '23',
-                    footerText: 'In the last hour',
+                    footerText: 'in the last 30 days',
                     footerIcon: 'ti-timer'
                 },
                 {
                     type: 'info',
-                    icon: 'ti-twitter-alt',
-                    title: 'Followers',
-                    value: '+45',
-                    footerText: 'Updated now',
+                    icon: 'ti-signal',
+                    title: 'Online Now',
+                    value: '28+',
+                    footerText: 'updated 20 seconds ago',
                     footerIcon: 'ti-reload'
                 }
             ],
@@ -144,5 +144,8 @@ export default {
 <style>
 .numbers {
     font-size: 1.8em !important;
+}
+.icon-big {
+    /* border: 1pt solid red; */
 }
 </style>

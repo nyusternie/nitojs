@@ -3,7 +3,7 @@
         <div class="col-12">
             <card :title="table1.title" :subTitle="table1.subTitle">
                 <div slot="raw-content" class="table-responsive">
-                    <paper-table :data="table1.data" :columns="table1.columns">
+                    <paper-table type="hover" :data="table1.data" :columns="table1.columns">
 
                     </paper-table>
                 </div>
@@ -11,7 +11,7 @@
         </div>
 
         <div class="col-12">
-            <card class="card-plain" :title="table1.title" :subTitle="table1.subTitle">
+            <card class="card-plain" :title="table2.title" :subTitle="table2.subTitle">
                 <div class="table-full-width table-responsive">
                     <paper-table type="hover" :title="table2.title" :sub-title="table2.subTitle" :data="table2.data"
                          :columns="table2.columns">
@@ -73,14 +73,14 @@ export default {
     data() {
         return {
             table1: {
-                title: 'Coin Activity',
-                subTitle: 'All coin deposits and transfers / withdrawals.',
+                title: 'Session',
+                subTitle: 'List of ALL CashShuffle session activity since app setup.',
                 columns: [...tableColumns],
                 data: [...tableData]
             },
             table2: {
-                title: 'CashShuffle Activity',
-                subTitle: 'Here is a subtitle for this table',
+                title: 'Deposits & Transfers',
+                subTitle: 'List of ALL incoming and outgoing coin activity since app setup.',
                 columns: [...tableColumns],
                 data: [...tableData]
             }
