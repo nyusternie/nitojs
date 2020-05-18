@@ -1,25 +1,26 @@
 /* Initialize BITBOX. */
-const bitbox = new window.BITBOX()
+import { BITBOX } from 'bitbox-sdk'
+
+/* Initialize BITBOX. */
+const bitbox = new BITBOX()
 
 /**
- * Get (Wallet) Address
+ * Get (Purse) Address
  *
- * Returns the next avaialble "receiving" (account) address,
- * for the specified wallet type.
- *
- * TODO: Add support for ALL wallet types: BAI, BCH, DAI, NITO
+ * Returns the next avaialble "receiving" (coin) address,
+ * for the purse.
  */
 const getAddress = (state, getters) => (_wallet) => {
-    /* Validate accounts. */
-    if (!getters.getAccountsByWallet(_wallet)) {
+    /* Validate coins. */
+    if (!getters.getCoinsByPurse(_wallet)) {
         return null
     }
 
-    /* Initialize (wallet) accounts. */
-    const walletAccounts = getters.getAccountsByWallet(_wallet)
+    /* Initialize (wallet) coins. */
+    const walletCoins = getters.getCoinsByPurse(_wallet)
 
-    /* Initialize current (account) index. */
-    const currentIndex = Math.max(...Object.keys(walletAccounts))
+    /* Initialize current (coin) index. */
+    const currentIndex = Math.max(...Object.keys(walletCoins))
 
     // FIXME
     const change = 0

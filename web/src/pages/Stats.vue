@@ -36,7 +36,7 @@ export default {
                 subTitle: 'loading...',
                 columns: [
                     'Pool Id',
-                    'Minimum Satoshis',
+                    'Minimum BCH',
                     'Minimum Fiat',
                     'Current Waiting Pool'
                 ],
@@ -49,6 +49,17 @@ export default {
         //
     },
     methods: {
+        /**
+         * Format BCH
+         */
+        formatBCH: function (_satoshis) {
+            /* Set value. */
+            const value = (_satoshis / 100000000)
+
+            /* Return formatted value. */
+            return numeral(value).format('0,0.00[00]')
+        },
+
         /**
          * Format Price
          */
@@ -128,7 +139,7 @@ export default {
                 stats.forEach((pool, index) => {
                     this.pools.data.push({
                         poolid: `#${(index + 1)}`,
-                        minimumsatoshis: numeral(pool.amount).format('0,0'),
+                        minimumbch: this.formatBCH(pool.amount),
                         minimumfiat: this.formatPrice(pool.amount),
                         currentwaitingpool: `${pool.members} of 5`
                     })

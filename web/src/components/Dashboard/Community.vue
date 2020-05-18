@@ -1,19 +1,19 @@
 <template>
     <!--Charts-->
     <div class="col-12">
-        <chart-card title="Users behavior"
-            sub-title="24 Hours performance"
+        <chart-card title="BCH Community Anonymity"
+            sub-title="Last 24 hours of privacy activity"
             :chart-data="usersChart.data"
             :chart-options="usersChart.options"
         >
             <span slot="footer">
-                <i class="ti-reload"></i> Updated 3 minutes ago
+                <i class="ti-reload"></i> updated 3 minutes ago
             </span>
 
             <div slot="legend">
-                <i class="fa fa-circle text-info"></i> Open
-                <i class="fa fa-circle text-danger"></i> Click
-                <i class="fa fa-circle text-warning"></i> Click Second Time
+                <i class="fa fa-circle text-info"></i> Nito Exchange
+                <i class="fa fa-circle text-warning"></i> CashShuffle
+                <i class="fa fa-circle text-danger"></i> CashFusion
             </div>
         </chart-card>
     </div>
@@ -50,7 +50,7 @@ export default {
                     series: [
                         [287, 385, 490, 562, 594, 626, 698, 895, 952],
                         [67, 152, 193, 240, 387, 435, 535, 642, 744],
-                        [23, 113, 67, 108, 190, 239, 307, 410, 410]
+                        [23, 113, 67, 108, 190, 239, 307, 410, 410],
                     ]
                 },
                 options: {
@@ -67,44 +67,8 @@ export default {
                     showLine: true,
                     showPoint: false
                 }
-            },
-            activityChart: {
-                data: {
-                    labels: [
-                        'Jan',
-                        'Feb',
-                        'Mar',
-                        'Apr',
-                        'Mai',
-                        'Jun',
-                        'Jul',
-                        'Aug',
-                        'Sep',
-                        'Oct',
-                        'Nov',
-                        'Dec'
-                    ],
-                    series: [
-                        [542, 543, 520, 680, 653, 753, 326, 434, 568, 610, 756, 895],
-                        [230, 293, 380, 480, 503, 553, 600, 664, 698, 710, 736, 795]
-                    ]
-                },
-                options: {
-                    seriesBarDistance: 10,
-                    axisX: {
-                        showGrid: false
-                    },
-                    height: '245px'
-                }
-            },
-            preferencesChart: {
-                data: {
-                    labels: ['62%', '32%', '6%'],
-                    series: [62, 32, 6]
-                },
-                options: {}
             }
-        };
+        }
     },
     computed: {
         //

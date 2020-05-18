@@ -1,6 +1,6 @@
 <template>
     <card class="card-user">
-        <div v-if="depositAddress" slot="image" v-html="qr">
+        <div v-if="depositAddress" slot="image" v-html="qr" class="depositAddress">
             <!-- placeholder for QRCode -->
         </div>
         <div v-else slot="image">
@@ -9,12 +9,12 @@
 
         <div>
             <div class="author">
-                <img class="avatar border-white" src="@/assets/img/faces/face-2.jpg" alt="...">
+                <!-- <img class="avatar border-white" src="@/assets/img/faces/face-2.jpg" alt="..."> -->
 
-                <h4 class="title">Chet Faker
+                <h4 class="title">
                     <br>
-                    <a href="#">
-                        <small>@chetfaker</small>
+                    <a :href="explorerLink" target="_blank">
+                        <small>{{shortAddr}}</small>
                     </a>
                 </h4>
             </div>
@@ -74,6 +74,18 @@ export default {
         };
     },
     computed: {
+        shortAddr() {
+            if (this.depositAddress) {
+                return `${this.depositAddress.slice(12, 20)} ... ${this.depositAddress.slice(-8)}`
+            } else {
+                return ''
+            }
+        },
+
+        explorerLink() {
+            return `https://explorer.bitcoin.com/bch/address/${this.depositAddress}`
+        },
+
         qr() {
             /* Initialize (string) value. */
             let strValue = ''
@@ -81,8 +93,8 @@ export default {
             /* Initialize scanner parameters. */
             const params = {
                 type: 'svg',
-                width: 300,
-                height: 300,
+                width: 290,
+                height: 290,
                 color: {
                     dark: '#000',
                     light: '#fff'
@@ -133,13 +145,17 @@ export default {
     },
     created: function () {
         /* Add deposit address. */
-        this.depositAddress = 'bitcoincash:qq638hdce3q0pg370hfee7f7sgxkw6j46c9cw9sqer'
+        // this.depositAddress = 'bitcoincash:qq638hdce3q0pg370hfee7f7sgxkw6j46c9cw9sqer'
     }
 }
 </script>
 
 <style scoped>
-.card-user.image {
-    height: 250px;
+.card-user .depositAddress {
+    padding: 0 5px;
+}
+
+h4.title {
+    padding-top: 15px;
 }
 </style>

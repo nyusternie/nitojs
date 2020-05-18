@@ -3,9 +3,6 @@ import DashboardLayout from '@/layout/dashboard/DashboardLayout.vue'
 /* Dashboard */
 import Dashboard from '@/pages/Dashboard.vue'
 
-/* Coins Manager */
-import Coins from '@/pages/Coins.vue'
-
 /* Sessions */
 import Sessions from '@/pages/Sessions.vue'
 
@@ -35,38 +32,31 @@ const routes = [
                 component: Dashboard
             },
 
-            /* Coins Manager */
-            {
-                path: 'coins',
-                name: 'Coins Manager',
-                component: Coins
-            },
-
-            /* Sessions */
+            /* Sessions Manager */
             {
                 path: 'sessions',
                 name: 'Sessions Manager',
                 component: Sessions
             },
 
-            /* Statistics */
+            /* Charts & Statistics */
             {
                 path: 'stats',
                 name: 'Charts & Statistics',
                 component: Stats
             },
 
-            /* History */
+            /* Transaction History */
             {
                 path: 'history',
                 name: 'Transaction History',
                 component: History
             },
 
-            /* Settings */
+            /* Purse Settings */
             {
                 path: 'settings',
-                name: 'App Settings',
+                name: 'Purse Settings',
                 component: Settings
             },
 

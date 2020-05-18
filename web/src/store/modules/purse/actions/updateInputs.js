@@ -1,5 +1,8 @@
 /* Initialize BITBOX. */
-const bitbox = new window.BITBOX()
+import { BITBOX } from 'bitbox-sdk'
+
+/* Initialize BITBOX. */
+const bitbox = new BITBOX()
 
 /**
  * Update Inputs

@@ -3,7 +3,6 @@
         <side-bar>
             <template slot="links">
                 <sidebar-link to="/dashboard" name="Dashboard" icon="ti-blackboard" />
-                <sidebar-link to="/coins" name="Coins" icon="ti-server" />
                 <sidebar-link to="/sessions" name="Sessions" icon="ti-pulse" />
                 <sidebar-link to="/history" name="History" icon="ti-time" />
                 <sidebar-link to="/settings" name="Settings" icon="ti-panel" />

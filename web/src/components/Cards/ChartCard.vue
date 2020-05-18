@@ -16,16 +16,19 @@
 
         <div>
             <div :id="chartId" class="ct-chart"></div>
+
             <div class="footer">
                 <div class="chart-legend">
                     <slot name="legend"></slot>
                 </div>
+
                 <hr>
+
                 <div class="stats">
                     <slot name="footer"></slot>
                 </div>
-                <div class="pull-right">
-                </div>
+
+                <div class="pull-right"></div>
             </div>
         </div>
     </card>
@@ -58,7 +61,7 @@ export default {
         chartOptions: {
             type: Object,
             default: () => {
-                return {};
+                return {}
             }
         },
         chartData: {
@@ -82,11 +85,12 @@ export default {
          */
         initChart(Chartist) {
             const chartIdQuery = `#${this.chartId}`
+
             Chartist[this.chartType](
                 chartIdQuery,
                 this.chartData,
                 this.chartOptions
-            );
+            )
         },
         /***
          * Assigns a random id to the chart
@@ -94,6 +98,7 @@ export default {
         updateChartId() {
             const currentTime = new Date().getTime().toString()
             const randomInt = this.getRandomInt(0, currentTime)
+
             this.chartId = `div_${randomInt}`
         },
         getRandomInt(min, max) {
@@ -101,9 +106,11 @@ export default {
         }
     },
     mounted() {
-        this.updateChartId();
+        this.updateChartId()
+
         import('chartist').then((Chartist) => {
             let ChartistLib = Chartist.default || Chartist
+
             this.$nextTick(() => {
                 this.initChart(ChartistLib)
             })
