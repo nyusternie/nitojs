@@ -4,45 +4,40 @@
             <div class="row">
                 <div class="col-md-6">
                     <h5>Notifications Style</h5>
+
                     <div class="alert alert-info">
                         <span>This is a plain notification</span>
                     </div>
-                    <div class="alert alert-info">
-                        <button type="button" aria-hidden="true" class="close">×</button>
-                        <span>This is a notification with close button.</span>
-                    </div>
-                    <div class="alert alert-info alert-with-icon" data-notify="container">
-                        <button type="button" aria-hidden="true" class="close">×</button>
-                        <span data-notify="icon" class="ti-bell"></span>
-                        <span data-notify="message">This is a notification with close button and icon.</span>
-                    </div>
-                    <div class="alert alert-info alert-with-icon" data-notify="container">
-                        <button type="button" aria-hidden="true" class="close">×</button>
-                        <span data-notify="icon" class="ti-pie-chart"></span>
-                        <span data-notify="message">This is a notification with close button and icon and have many lines. You can see that the icon and the close button are always vertically aligned. This is a beautiful notification. So you don't have to worry about the style.</span>
-                    </div>
+
+                    <p-button round outline block @click.native="notifyVue('top', 'right')">Top Right</p-button>
+
+                    <p-button round outline block @click.native="notifyVue('bottom', 'right')">Bottom Right</p-button>
                 </div>
 
                 <div class="col-md-6">
                     <h5>Notification states</h5>
+
                     <div class="alert alert-info">
                         <button type="button" aria-hidden="true" class="close">×</button>
                         <span>
                             <b> Info - </b> This is a regular notification made with ".alert-info"
                         </span>
                     </div>
+
                     <div class="alert alert-success">
                         <button type="button" aria-hidden="true" class="close">×</button>
                         <span>
                             <b> Success - </b> This is a regular notification made with ".alert-success"
                         </span>
                     </div>
+
                     <div class="alert alert-warning">
                         <button type="button" aria-hidden="true" class="close">×</button>
                         <span>
                             <b> Warning - </b> This is a regular notification made with ".alert-warning"
                         </span>
                     </div>
+
                     <div class="alert alert-danger">
                         <button type="button" aria-hidden="true" class="close">×</button>
                         <span>
@@ -53,40 +48,22 @@
             </div>
 
             <br>
+            <hr />
             <br>
 
-            <div class="places-buttons">
-                <div class="row d-flex justify-content-center">
-                    <div>
-                        <h5>Notifications Places
-                            <p class="category">Click to view notifications</p>
-                        </h5>
-                    </div>
-                </div>
-                <div class="row d-flex justify-content-center">
-                    <div class="col-md-3">
-                        <p-button round outline block @click.native="notifyVue('top', 'left')">Top Left</p-button>
-                    </div>
-                    <div class="col-md-3">
-                        <p-button round outline block @click.native="notifyVue('top', 'center')">Top Center</p-button>
-                    </div>
-                    <div class="col-md-3">
-                        <p-button round outline block @click.native="notifyVue('top', 'right')">Top Right</p-button>
-                    </div>
-                </div>
-                <div class="row d-flex justify-content-center">
-                    <div class="col-md-3">
-                        <p-button round outline block @click.native="notifyVue('bottom', 'left')">Bottom Left</p-button>
-                    </div>
-                    <div class="col-md-3">
-                        <p-button round outline block @click.native="notifyVue('bottom', 'center')">Bottom Center</p-button>
-                    </div>
-                    <div class="col-md-3">
-                        <p-button round outline block @click.native="notifyVue('bottom', 'right')">Bottom Right</p-button>
-                    </div>
+            <p>
+                Tamen laboris laboris. Litteris e esse o aliquip te duis ex offendit nam culpa o
+                se summis voluptate exquisitaque ex duis aliquip nescius ita litteris hic fugiat
+                expetendis, senserit eruditionem ita eiusmod si sint vidisse ab occaecat. Ex
+                labore hic anim ubi aute fabulas cernantur ad ita legam possumus officia et
+                appellat an multos. Dolore an voluptate, officia iis quis laboris, quae arbitror
+                ab relinqueret, elit expetendis a vidisse ad mandaremus e cupidatat te malis
+                excepteur arbitrantur, quis sed te sunt arbitror, o incididunt comprehenderit.Et
+                ne instituendarum. Vidisse dolore elit quo cillum. Dolor tractavissent pariatur
+                tamen appellat. Fugiat id voluptate si consequat minim eiusmod, fugiat qui ubi
+                quid nescius se esse domesticarum fabulas quae nescius.
+            </p>
 
-                </div>
-            </div>
         </div>
     </card>
 </template>
@@ -119,6 +96,6 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 /*  */
 </style>

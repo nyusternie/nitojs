@@ -1,13 +1,10 @@
 import DashboardLayout from '@/layout/dashboard/DashboardLayout.vue'
 
-/* General View */
-import NotFound from '@/pages/NotFoundPage.vue'
-
 /* Dashboard */
 import Dashboard from '@/pages/Dashboard.vue'
 
 /* Coins Manager */
-import CoinsManager from '@/pages/CoinsManager.vue'
+import Coins from '@/pages/Coins.vue'
 
 /* Sessions */
 import Sessions from '@/pages/Sessions.vue'
@@ -42,7 +39,7 @@ const routes = [
             {
                 path: 'coins',
                 name: 'Coins Manager',
-                component: CoinsManager
+                component: Coins
             },
 
             /* Sessions */
@@ -87,7 +84,7 @@ const routes = [
         ]
     },
     {
-        path: '*', component: NotFound
+        path: '*', component: Dashboard
     }
 ]
 

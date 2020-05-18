@@ -10,15 +10,6 @@
                 >
                     Create a new session
                 </p-button>
-
-                <p-button
-                    round
-                    outline
-                    block
-                    @click.native="destroySession"
-                >
-                    Destroy your purse
-                </p-button>
             </div>
 
             <div class="col-md-8">
@@ -149,18 +140,11 @@ export default {
     },
     methods: {
         ...mapActions('purse', [
-            'initPurse',
-            'destroyPurse',
+            'initSession',
         ]),
 
         createSession() {
-            this.initPurse()
-
-            this.notifyVue('top', 'right', 'success', 'ti-info-alt')
-        },
-
-        destroySession() {
-            this.destroyPurse()
+            this.initSession()
 
             this.notifyVue('top', 'right', 'success', 'ti-info-alt')
         },
@@ -184,10 +168,10 @@ export default {
                 type
             })
         }
-    }
+    },
 }
 </script>
 
-<style>
+<style scoped>
 /*  */
 </style>

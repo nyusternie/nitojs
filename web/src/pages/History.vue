@@ -1,9 +1,9 @@
 <template>
     <div class="row">
         <div class="col-12">
-            <card :title="table1.title" :subTitle="table1.subTitle">
+            <card :title="sessions.title" :subTitle="sessions.subTitle">
                 <div slot="raw-content" class="table-responsive">
-                    <paper-table type="hover" :data="table1.data" :columns="table1.columns">
+                    <paper-table type="hover" :data="sessions.data" :columns="sessions.columns">
 
                     </paper-table>
                 </div>
@@ -11,15 +11,26 @@
         </div>
 
         <div class="col-12">
-            <card class="card-plain" :title="table2.title" :subTitle="table2.subTitle">
+            <card class="card-plain" :title="transactions.title" :subTitle="transactions.subTitle">
                 <div class="table-full-width table-responsive">
-                    <paper-table type="hover" :title="table2.title" :sub-title="table2.subTitle" :data="table2.data"
-                         :columns="table2.columns">
+                    <paper-table type="hover" :title="transactions.title" :sub-title="transactions.subTitle" :data="transactions.data"
+                         :columns="transactions.columns">
 
                      </paper-table>
                  </div>
              </card>
          </div>
+
+         <div class="col-12">
+             <card :title="system.title" :subTitle="system.subTitle">
+                 <div slot="raw-content" class="table-responsive">
+                     <paper-table :data="system.data" :columns="system.columns">
+
+                     </paper-table>
+                 </div>
+             </card>
+         </div>
+
      </div>
 </template>
 
@@ -72,23 +83,29 @@ export default {
     },
     data() {
         return {
-            table1: {
-                title: 'Session',
+            sessions: {
+                title: 'Sessions',
                 subTitle: 'List of ALL CashShuffle session activity since app setup.',
                 columns: [...tableColumns],
                 data: [...tableData]
             },
-            table2: {
+            transactions: {
                 title: 'Deposits & Transfers',
                 subTitle: 'List of ALL incoming and outgoing coin activity since app setup.',
                 columns: [...tableColumns],
                 data: [...tableData]
-            }
+            },
+            system: {
+                title: 'Application Events',
+                subTitle: 'List of ALL application activity since app setup.',
+                columns: [...tableColumns],
+                data: [...tableData]
+            },
         }
     }
 }
 </script>
 
-<style>
+<style scoped>
 /*  */
 </style>

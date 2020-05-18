@@ -141,7 +141,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .numbers {
     font-size: 1.8em !important;
 }
