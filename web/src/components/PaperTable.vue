@@ -2,7 +2,9 @@
     <table class="table" :class="tableClass">
         <thead>
             <slot name="columns">
-                <th v-for="column in columns" :key="column">{{column}}</th>
+                <th v-for="column in columns" :key="column">
+                    {{column}}
+                </th>
             </slot>
         </thead>
         <tbody>
@@ -10,7 +12,8 @@
                 <slot :row="item">
                     <td v-for="(column, index) in columns"
                         :key="index"
-                        v-if="hasValue(item, column)">
+                        v-if="hasValue(item, column)"
+                    >
                         {{itemValue(item, column)}}
                     </td>
                 </slot>
@@ -26,28 +29,29 @@ export default {
         data: Array,
         type: {
             type: String, // striped | hover
-            default: "striped"
+            default: 'striped'
         },
         title: {
             type: String,
-            default: ""
+            default: ''
         },
         subTitle: {
             type: String,
-            default: ""
+            default: ''
         }
     },
     computed: {
         tableClass() {
-            return `table-${this.type}`;
+            return `table-${this.type}`
         }
     },
     methods: {
         hasValue(item, column) {
-            return item[column.toLowerCase()] !== "undefined";
+            // return item[column.toLowerCase()] !== 'undefined'
+            return item[column.split(' ').join('').toLowerCase()] !== 'undefined'
         },
         itemValue(item, column) {
-            return item[column.toLowerCase()];
+            return item[column.split(' ').join('').toLowerCase()]
         }
     }
 }

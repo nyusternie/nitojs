@@ -1,16 +1,20 @@
 <template>
-  <div class="content">
-    <div class="container-fluid">
-        <transition name="fade" mode="out-in">
-          <!-- your content here -->
-          <router-view></router-view>
-        </transition>
+    <div class="content">
+        <div class="container-fluid">
+            <transition name="fade" mode="out-in">
+                <!-- your content here -->
+                <router-view></router-view>
+            </transition>
+        </div>
     </div>
-  </div>
 </template>
+
 <script>
-export default {};
+export default {
+    //
+}
 </script>
+
 <style>
 .fade-enter-active,
 .fade-leave-active {
