@@ -4,9 +4,9 @@
             <template slot="links">
                 <sidebar-link to="/dashboard" name="Dashboard" icon="ti-blackboard" />
                 <sidebar-link to="/sessions" name="Sessions" icon="ti-pulse" />
+                <sidebar-link to="/pools" name="Pools" icon="ti-layers-alt" />
                 <sidebar-link to="/history" name="History" icon="ti-time" />
                 <sidebar-link to="/settings" name="Settings" icon="ti-panel" />
-                <sidebar-link to="/stats" name="Statistics" icon="ti-bar-chart" />
             </template>
 
             <mobile-menu>

@@ -6,8 +6,8 @@ import Dashboard from '@/pages/Dashboard.vue'
 /* Sessions */
 import Sessions from '@/pages/Sessions.vue'
 
-/* Statistics */
-import Stats from '@/pages/Stats.vue'
+/* Pools */
+import Pools from '@/pages/Pools.vue'
 
 /* History */
 import History from '@/pages/History.vue'
@@ -16,6 +16,7 @@ import History from '@/pages/History.vue'
 import Settings from '@/pages/Settings.vue'
 
 /* Support Pages */
+import NotFound from '@/pages/404.vue'
 import Blank from '@/pages/Blank.vue'
 import Icons from '@/pages/Icons.vue'
 
@@ -39,11 +40,11 @@ const routes = [
                 component: Sessions
             },
 
-            /* Charts & Statistics */
+            /* Pools */
             {
-                path: 'stats',
-                name: 'Charts & Statistics',
-                component: Stats
+                path: 'pools',
+                name: 'Pools View',
+                component: Pools
             },
 
             /* Transaction History */
@@ -74,7 +75,7 @@ const routes = [
         ]
     },
     {
-        path: '*', component: Dashboard
+        path: '*', component: NotFound
     }
 ]
 
