@@ -20,8 +20,9 @@
             </div>
 
             <p class="description text-center">
-                Deposit your coins to this address.
-                <br />It will automagically generate a new address upon receipt.
+                Deposit coins to the address above
+                <br />
+                <small class="text-muted"><em>(address privacy is managed automatically)</em></small>
             </p>
         </div>
 
@@ -29,27 +30,27 @@
 
         <div class="text-center">
             <div class="row">
-                <div :class="getClasses(0)">
+                <div class="col">
                     <h5>
-                        12
+                        2
                         <br>
-                        <small>Files</small>
+                        <small>Coins</small>
                     </h5>
                 </div>
 
-                <div :class="getClasses(1)">
+                <div class="col">
                     <h5>
-                        2GB
+                        0.1337
                         <br>
-                        <small>Used</small>
+                        <small>BTC</small>
                     </h5>
                 </div>
 
-                <div :class="getClasses(2)">
+                <div class="col">
                     <h5>
-                        $5.12
+                        $33.42
                         <br>
-                        <small>Spent</small>
+                        <small>USD</small>
                     </h5>
                 </div>
             </div>
@@ -130,18 +131,6 @@ export default {
             'initSession',
         ]),
 
-        getClasses(index) {
-            const remainder = index % 3;
-
-            if (remainder === 0) {
-                return 'col-lg-3 offset-lg-1'
-            } else if (remainder === 2) {
-                return 'col-lg-4'
-            } else {
-                return 'col-lg-3'
-            }
-        },
-
         notifyVue(verticalAlign, horizontalAlign) {
             const color = Math.floor(Math.random() * 4 + 1)
 
@@ -172,5 +161,9 @@ export default {
 
 h4.title {
     padding-top: 15px;
+}
+
+h5 {
+    font-size: 1.2em;
 }
 </style>

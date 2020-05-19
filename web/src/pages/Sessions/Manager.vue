@@ -1,28 +1,30 @@
 <template>
-    <card class="card" title="Manager Details">
+    <card class="card" title="Session Manager">
         <div>
             <form @submit.prevent>
                 <div class="row">
                     <div class="col-md-5">
                         <fg-input type="text"
-                            label="Company"
+                            label="Session Title"
                             :disabled="true"
-                            placeholder="Paper dashboard"
-                            v-model="user.company"
+                            placeholder="Title"
+                            v-model="session.title"
                         ></fg-input>
                     </div>
+
                     <div class="col-md-3">
                         <fg-input type="text"
                             label="Username"
                             placeholder="Username"
-                            v-model="user.username"
+                            v-model="session.username"
                         ></fg-input>
                     </div>
+
                     <div class="col-md-4">
                         <fg-input type="email"
                             label="Username"
                             placeholder="Email"
-                            v-model="user.email"
+                            v-model="session.email"
                         ></fg-input>
                     </div>
                 </div>
@@ -32,14 +34,15 @@
                         <fg-input type="text"
                             label="First Name"
                             placeholder="First Name"
-                            v-model="user.firstName"
+                            v-model="session.firstName"
                         ></fg-input>
                     </div>
+
                     <div class="col-md-6">
                         <fg-input type="text"
                             label="Last Name"
                             placeholder="Last Name"
-                            v-model="user.lastName"
+                            v-model="session.lastName"
                         ></fg-input>
                     </div>
                 </div>
@@ -49,7 +52,7 @@
                         <fg-input type="text"
                             label="Address"
                             placeholder="Home Address"
-                            v-model="user.address"
+                            v-model="session.address"
                         ></fg-input>
                     </div>
                 </div>
@@ -59,21 +62,23 @@
                         <fg-input type="text"
                             label="City"
                             placeholder="City"
-                            v-model="user.city"
+                            v-model="session.city"
                         ></fg-input>
                     </div>
+
                     <div class="col-md-4">
                         <fg-input type="text"
                             label="Country"
                             placeholder="Country"
-                            v-model="user.country"
+                            v-model="session.country"
                         ></fg-input>
                     </div>
+
                     <div class="col-md-4">
                         <fg-input type="number"
                             label="Postal Code"
                             placeholder="ZIP Code"
-                            v-model="user.postalCode"
+                            v-model="session.postalCode"
                         ></fg-input>
                     </div>
                 </div>
@@ -81,14 +86,16 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="form-group">
-                            <label>About Me</label>
+                            <label>Session Notes</label>
+
                             <textarea rows="5" class="form-control border-input"
-                                placeholder="Here can be your description"
-                                v-model="user.aboutMe">
+                                placeholder="Add your session notes here"
+                                v-model="session.notes">
                             </textarea>
                         </div>
                     </div>
                 </div>
+
                 <div class="text-center">
                     <p-button type="info"
                         round
@@ -97,6 +104,7 @@
                         Update Profile
                     </p-button>
                 </div>
+
                 <div class="clearfix"></div>
             </form>
         </div>
@@ -118,16 +126,16 @@ export default {
                 topCenter: false
             },
 
-            user: {
-                company: "Paper Dashboard",
-                username: "michael23",
-                email: "",
-                firstName: "Chet",
-                lastName: "Faker",
-                address: "Melbourne, Australia",
-                city: "Melbourne",
-                postalCode: "",
-                aboutMe: `We must accept finite disappointment, but hold on to infinite hope.`
+            session: {
+                title: 'Session #1',
+                username: 'michael23',
+                email: '',
+                firstName: 'Chet',
+                lastName: 'Faker',
+                address: 'Melbourne, Australia',
+                city: 'Melbourne',
+                postalCode: '',
+                notes: `We must accept finite disappointment, but hold on to infinite hope.`
             }
         }
     },

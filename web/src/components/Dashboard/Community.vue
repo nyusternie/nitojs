@@ -10,10 +10,15 @@
                 <i class="ti-reload"></i> updated 3 minutes ago
             </span>
 
-            <div slot="legend">
-                <i class="fa fa-circle text-info"></i> Nito Exchange
-                <i class="fa fa-circle text-warning"></i> CashShuffle
-                <i class="fa fa-circle text-danger"></i> CashFusion
+            <div slot="legend" class="community-legend">
+                <i class="fa fa-circle text-info"></i>
+                <a href="https://nito.exchange.com" target="_blank">Nito Cloud</a>
+
+                <i class="fa fa-circle text-warning"></i>
+                <a href="https://cashshuffle.com" target="_blank">CashShuffle</a>
+
+                <i class="fa fa-circle text-danger"></i>
+                <a href="https://cashfusion.org" target="_blank">CashFusion</a>
             </div>
         </chart-card>
     </div>
@@ -80,5 +85,13 @@ export default {
 </script>
 
 <style scoped>
-/*  */
+.community-legend a {
+    color: black;
+    font-weight: 600;
+    margin-right: 20px;
+}
+
+.community-legend a:hover {
+    color: red;
+}
 </style>

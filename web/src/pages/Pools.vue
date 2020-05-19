@@ -26,6 +26,7 @@
                 <p class="mx-3">
                     CashShuffle servers are <strong>public</strong>
                     and <strong>"free"</strong> <em>(as in beer)</em>.
+                    <br class="d-none d-md-block" />
                     Please show your appreciate for their community service with
                     <i class="fa fa-heart text-danger"></i> and support that
                     <a href="https://causes.cash" target="_blank">

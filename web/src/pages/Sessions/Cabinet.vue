@@ -1,20 +1,20 @@
 <template>
-    <card class="card" :title="title">
+    <card class="card" title="Sessions Cabinet">
         <div>
             <ul class="list-unstyled team-members">
                 <li>
-                    <div class="row journal-row" v-for="member in members" :key="member.name">
+                    <div class="row journal-row" v-for="session in sessions" :key="session.name">
                         <div class="col-3">
                             <div class="avatar">
-                                <img :src="member.image" alt="Circle Image" class="rounded img-fluid">
+                                <img :src="session.image" alt="Circle Image" class="rounded img-fluid">
                             </div>
                         </div>
 
                         <div class="col-6">
-                            {{member.name}}
+                            {{session.name}}
                             <br>
-                            <span :class="getStatusClass(member.status)">
-                                <small>{{member.status}}</small>
+                            <span :class="getStatusClass(session.status)">
+                                <small>{{session.status}}</small>
                             </span>
                         </div>
 
@@ -45,16 +45,15 @@ export default {
                 topCenter: false
             },
 
-            title: 'My Journal',
-            members: [
+            sessions: [
                 {
                     image: require('@/assets/img/faces/face-1.jpg'),
-                    name: 'Session #3',
+                    name: 'Party goods',
                     status: 'Active'
                 },
                 {
                     image: require('@/assets/img/faces/face-1.jpg'),
-                    name: 'Session #2',
+                    name: 'Testing',
                     status: 'Canceled'
                 },
                 {

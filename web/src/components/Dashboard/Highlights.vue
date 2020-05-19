@@ -66,7 +66,7 @@ export default {
                 {
                     type: 'info',
                     icon: 'ti-signal',
-                    title: 'Online Now',
+                    title: 'Peers Online',
                     value: '28+',
                     footerText: 'updated 20 seconds ago',
                     footerIcon: 'ti-reload'

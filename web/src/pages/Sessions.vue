@@ -2,7 +2,7 @@
     <div class="row">
         <div class="col-xl-4 col-lg-5 col-md-6">
             <Deposit />
-            <Journal />
+            <Cabinet />
         </div>
 
         <div class="col-xl-8 col-lg-7 col-md-6">
@@ -20,8 +20,8 @@
 
                 <div class="col-md-8">
                     <p>
-                        To get started, click the "Create New Session".
-                        You will then be able to start depositing funds to the session address.
+                        To get started, click the <strong>"Create New Session"</strong> button.
+                        Then just start depositing funds to the session address.
                         Be default, shuffling will begin automatically.
                     </p>
                 </div>
@@ -39,8 +39,8 @@
 import { mapActions, mapGetters } from 'vuex'
 
 /* Import components. */
+import Cabinet from './Sessions/Cabinet'
 import Deposit from './Sessions/Deposit'
-import Journal from './Sessions/Journal'
 import Manager from './Sessions/Manager'
 
 // import NotificationTemplate from './Notifications/NotificationTemplate'
@@ -48,8 +48,8 @@ import NewSession from './Notifications/NewSession'
 
 export default {
     components: {
+        Cabinet,
         Deposit,
-        Journal,
         Manager,
     },
     data() {
