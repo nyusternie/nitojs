@@ -3,7 +3,7 @@
  */
 const getLocale = (state) => {
     /* Return locale. */
-    return state.l
+    return state.locale
 }
 
 /* Export module. */

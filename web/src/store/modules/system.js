@@ -1,59 +1,90 @@
+/* Import modules (getters). */
+import getFlags from './system/getters/getFlags'
+import getLocale from './system/getters/getLocale'
+
+/* Import modules (actions). */
+import displayError from './system/actions/displayError'
+import displayNotification from './system/actions/displayNotification'
+
+/* Import modules (mutations). */
+import setError from './system/mutations/setError'
+import setFlags from './system/mutations/setFlags'
+import setLocale from './system/mutations/setLocale'
+import setNotification from './system/mutations/setNotification'
+
 /* Initialize state. */
 const state = {
-    error: null,
-    notification: null,
+    /**
+     * Application Version
+     */
+    version: null,
+
+    /**
+     * Error Message
+     */
+    errors: null,
+
+    /**
+     * Flags
+     *
+     * 1. Dark mode
+     * 2. Unconfirmed transactions
+     */
+    flags: {
+        darkMode: false,
+        unconfirmed: true,
+    },
+
+    /**
+     * Locale
+     *
+     * Controls the localization language.
+     * (default is english)
+     */
+    locale: 'en-US',
+
+    /**
+     * Notices
+     *
+     * System notices that nag/remind the user of some important action or
+     * information; which can be permanently disabled ("Do Not Show Again")
+     * via checkbox and confirmation.
+     *
+     * NOTE: Unique 1-byte (hex) codes (up to 255) are used to reduce the size
+     *       of this storage field.
+     */
+    notices: {},
+
+    /**
+     * Notification Message
+     */
+    notifs: null,
 }
 
 /* Getters. */
 const getters = {
-    //
+    getFlags,
+    getLocale,
 }
 
 /* Actions. */
 const actions = {
-    setError ({ commit }, _error) {
-        /* Commit error message. */
-        commit('setError', _error)
-
-        /* Set automatic dismiss delay. */
-        setTimeout(() => {
-            commit('setError', null)
-        }, 3000)
-    },
-
-    setNotification ({ commit }, _notification) {
-        /* Commit notification message. */
-        commit('setNotification', _notification)
-
-        /* Set automatic dismiss delay. */
-        setTimeout(() => {
-            commit('setNotification', null)
-        }, 3000)
-    },
+    displayError,
+    displayNotification,
 }
 
 /* Mutations. */
 const mutations = {
-    /**
-     * Set Error Message
-     */
-    setError (state, _error) {
-        /* Update error message. */
-        state.error = _error
-    },
-
-    /**
-     * Set Notification
-     */
-    setNotification (state, _notification) {
-        /* Update notification message. */
-        state.notification = _notification
-    },
+    setError,
+    setFlags,
+    setLocale,
+    setNotification,
 }
 
 /* Export. */
 // NOTE: We DO NOT namespace here to allow for global use of `dispatch`.
 export default {
+    // namespaced: true,
     state,
     getters,
     actions,

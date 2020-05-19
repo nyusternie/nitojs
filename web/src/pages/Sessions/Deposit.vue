@@ -147,7 +147,10 @@ export default {
         /* Add deposit address. */
         // this.depositAddress = 'bitcoincash:qq638hdce3q0pg370hfee7f7sgxkw6j46c9cw9sqer'
 
-        const address = this.getAddress
+        // FOR DEVELOPMENT PURPOSES ONLY
+        const sessionId = 0
+
+        const address = this.getAddress(sessionId)
         console.log('DEPOSIT (address):', address)
 
     }

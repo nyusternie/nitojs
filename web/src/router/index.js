@@ -8,7 +8,7 @@ Vue.use(VueRouter)
 // configure router
 const router = new VueRouter({
     linkActiveClass: 'active',
-    mode: 'history',
+    mode: 'hash',
     routes,
     scrollBehavior(to, from, savedPosition) {
         if (savedPosition) {

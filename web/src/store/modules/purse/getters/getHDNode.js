@@ -7,14 +7,12 @@ const bitbox = new BITBOX()
 /**
  * Get HD Node
  */
-const getHDNode = (state, getters, rootState, rootGetters) => {
-    // console.log('GET HD NODE (rootGetters)', rootGetters)
-
+const getHDNode = (state, getters) => {
     /* Set master seed. */
-    const masterSeed = rootGetters['profile/getMasterSeed']
+    const masterSeed = getters.getMasterSeed
 
     /* Set locale. */
-    const locale = rootGetters['profile/getLocale']
+    const locale = getters.getLocale
 
     /**
      * Create mnemonic wordlist using BIP-39.

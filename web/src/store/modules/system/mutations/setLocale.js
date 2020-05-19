@@ -3,7 +3,7 @@
  */
 const setLocale = (state, _locale) => {
     /* Set locale. */
-    state.l = _locale
+    state.locale = _locale
 }
 
 /* Export module. */

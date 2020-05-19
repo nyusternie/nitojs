@@ -6,12 +6,12 @@ const msgpack = require('msgpack-lite')
  */
 const getFlags = (state) => {
     /* Validate state (of flags). */
-    if (!state || !state.f) {
+    if (!state || !state.flags) {
         return null
     }
 
     /* Initialize accounts. */
-    const flags = msgpack.decode(Buffer.from(state.f))
+    const flags = msgpack.decode(Buffer.from(state.flags))
 
     /* Return flags. */
     return flags
