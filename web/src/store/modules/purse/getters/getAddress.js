@@ -10,24 +10,24 @@ const bitbox = new BITBOX()
  * Returns the next avaialble "receiving" (coin) address,
  * for the purse.
  */
-const getAddress = (state, getters) => (_wallet) => {
+const getAddress = (state, getters) => (_session) => {
     /* Validate coins. */
-    if (!getters.getCoinsByPurse(_wallet)) {
+    if (!getters.getCoinsBySession(_session)) {
         return null
     }
 
-    /* Initialize (wallet) coins. */
-    const walletCoins = getters.getCoinsByPurse(_wallet)
+    /* Initialize (purse) coins. */
+    const purseCoins = getters.getCoinsBySession(_session)
 
     /* Initialize current (coin) index. */
-    const currentIndex = Math.max(...Object.keys(walletCoins))
+    const currentIndex = Math.max(...Object.keys(purseCoins))
 
     // FIXME
     const change = 0
 
     /* Set derivation path. */
-    const path = `${getters.getDerivationPath(_wallet)}/${change}/${currentIndex}`
-    // console.log('GET ADDRESS (path)', path)
+    const path = getters.getDerivationPath(_session, currentIndex)
+    console.log('GET ADDRESS (path)', path)
 
     /* Initialize HD node. */
     const hdNode = getters.getHDNode

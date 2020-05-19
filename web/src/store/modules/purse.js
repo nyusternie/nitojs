@@ -1,7 +1,7 @@
 /* Import modules (getters). */
-// import getCoins from './purse/getters/getCoins'
-// import getCoinsByWallet from './purse/getters/getCoinsByWallet'
-// import getAddress from './purse/getters/getAddress'
+import getCoins from './purse/getters/getCoins'
+// import getCoinsBySession from './purse/getters/getCoinsBySession'
+import getAddress from './purse/getters/getAddress'
 // import getAddresses from './purse/getters/getAddresses'
 // import getBalance from './purse/getters/getBalance'
 // import getChangeAddress from './purse/getters/getChangeAddress'
@@ -67,9 +67,9 @@ const state = {
 
 /* Getters. */
 const getters = {
-    // getCoins,
-    // getCoinsByWallet,
-    // getAddress,
+    getCoins,
+    // getCoinsBySession,
+    getAddress,
     // getAddresses,
     // getBalance,
     // getChangeAddress,

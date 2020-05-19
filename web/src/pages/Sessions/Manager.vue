@@ -1,5 +1,5 @@
 <template>
-    <card class="card" title="Edit Profile">
+    <card class="card" title="Manager Details">
         <div>
             <form @submit.prevent>
                 <div class="row">
@@ -104,30 +104,70 @@
 </template>
 
 <script>
+/* Initialize vuex. */
+import { mapActions, mapGetters } from 'vuex'
+
+import NotificationTemplate from '@/pages/Notifications/NotificationTemplate'
+
 export default {
     data() {
         return {
+            depositAddress: null,
+            type: ['', 'info', 'success', 'warning', 'danger'],
+            notifications: {
+                topCenter: false
+            },
+
             user: {
-                company: 'Paper Dashboard',
-                username: 'michael23',
-                email: '',
-                firstName: 'Chet',
-                lastName: 'Faker',
-                address: 'Melbourne, Australia',
-                city: 'Melbourne',
-                postalCode: '',
+                company: "Paper Dashboard",
+                username: "michael23",
+                email: "",
+                firstName: "Chet",
+                lastName: "Faker",
+                address: "Melbourne, Australia",
+                city: "Melbourne",
+                postalCode: "",
                 aboutMe: `We must accept finite disappointment, but hold on to infinite hope.`
             }
         }
     },
+    computed: {
+        ...mapGetters('purse', [
+            // 'getAddress',
+        ]),
+
+    },
     methods: {
+        ...mapActions('purse', [
+            // 'initSession',
+        ]),
+
         updateProfile() {
             alert('Your data: ' + JSON.stringify(this.user))
+        },
+
+        notifyVue(verticalAlign, horizontalAlign) {
+            const color = Math.floor(Math.random() * 4 + 1)
+
+            this.$notify({
+                component: NotificationTemplate,
+                icon: 'ti-gift',
+                horizontalAlign: horizontalAlign,
+                verticalAlign: verticalAlign,
+                type: this.type[color]
+            })
         }
+    },
+    created: function () {
+        //
     }
 }
 </script>
 
 <style scoped>
-/*  */
+.journal-row {
+    border-bottom: 1pt solid rgba(180, 180, 180, 0.2);
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+}
 </style>

@@ -2,10 +2,7 @@
     <div class="row">
         <div class="col-xl-4 col-lg-5 col-md-6">
             <Deposit />
-
-            <members-card>
-
-            </members-card>
+            <Journal />
         </div>
 
         <div class="col-xl-8 col-lg-7 col-md-6">
@@ -23,19 +20,16 @@
 
                 <div class="col-md-8">
                     <p>
-                        De quibusdam concursionibus. Nam enim graviterque, fore ad singulis, a tamen
-                        officia coniunctione, vidisse efflorescere qui litteris. Summis eiusmod ne
-                        arbitror.Ita an dolor officia. Vidisse culpa aliqua qui noster ab ut ne irure
-                        ipsum quid, summis id pariatur do labore, ad incurreret ab doctrina.
+                        To get started, click the "Create New Session".
+                        You will then be able to start depositing funds to the session address.
+                        Be default, shuffling will begin automatically.
                     </p>
                 </div>
             </div>
 
             <hr />
 
-            <edit-profile-form>
-
-            </edit-profile-form>
+            <Manager />
         </div>
     </div>
 </template>
@@ -46,19 +40,17 @@ import { mapActions, mapGetters } from 'vuex'
 
 /* Import components. */
 import Deposit from './Sessions/Deposit'
+import Journal from './Sessions/Journal'
+import Manager from './Sessions/Manager'
 
 // import NotificationTemplate from './Notifications/NotificationTemplate'
 import NewSession from './Notifications/NewSession'
 
-import EditProfileForm from './UserProfile/EditProfileForm.vue'
-import MembersCard from './UserProfile/MembersCard.vue'
-
 export default {
     components: {
         Deposit,
-
-        EditProfileForm,
-        MembersCard
+        Journal,
+        Manager,
     },
     data() {
         return {

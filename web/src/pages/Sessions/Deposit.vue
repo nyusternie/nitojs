@@ -58,6 +58,9 @@
 </template>
 
 <script>
+/* Initialize vuex. */
+import { mapActions, mapGetters } from 'vuex'
+
 /* Import components. */
 import QRCode from 'qrcode'
 
@@ -71,9 +74,13 @@ export default {
             notifications: {
                 topCenter: false
             }
-        };
+        }
     },
     computed: {
+        ...mapGetters('purse', [
+            'getAddress',
+        ]),
+
         shortAddr() {
             if (this.depositAddress) {
                 return `${this.depositAddress.slice(12, 20)} ... ${this.depositAddress.slice(-8)}`
@@ -119,6 +126,10 @@ export default {
 
     },
     methods: {
+        ...mapActions('purse', [
+            'initSession',
+        ]),
+
         getClasses(index) {
             const remainder = index % 3;
 
@@ -146,6 +157,10 @@ export default {
     created: function () {
         /* Add deposit address. */
         // this.depositAddress = 'bitcoincash:qq638hdce3q0pg370hfee7f7sgxkw6j46c9cw9sqer'
+
+        const address = this.getAddress
+        console.log('DEPOSIT (address):', address)
+
     }
 }
 </script>
