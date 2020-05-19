@@ -2,37 +2,37 @@
 const msgpack = require('msgpack-lite')
 
 /**
- * (Request) Next Account Address
+ * (Request) Next Coin Address
  * FIXME: We need a better way to detect the use of "change"
  *        addresses; so NOT to waste (un-)used accounts.
  */
-const nextAccount = ({ commit, state }, _wallet) => {
+const nextCoin = ({ commit, state }, _session) => {
     console.info('Incrementing account index...') // eslint-disable-line no-console
 
     /* Initialize accounts. */
     const accounts = msgpack.decode(Buffer.from(state.a))
 
-    /* Set accounts (from wallet pool). */
-    const walletAccounts = accounts[_wallet]
+    /* Set accounts (from session pool). */
+    const sessionCoins = accounts[_session]
 
     /* Set current (active index). */
-    const currentIndex = Math.max(...Object.keys(walletAccounts))
+    const currentIndex = Math.max(...Object.keys(sessionCoins))
 
     /* Set next account index. */
     const nextIndex = currentIndex + 1
 
     /* Add next index to active accounts (pool). */
-    walletAccounts[nextIndex] = {
+    sessionCoins[nextIndex] = {
         s: 'a',
         u: {},
     }
 
     /* Update accounts. */
-    accounts[_wallet] = walletAccounts
+    accounts[_session] = sessionCoins
 
     /* Commit (updated) accounts. */
-    commit('setAccounts', accounts)
+    commit('setCoins', accounts)
 }
 
 /* Export module. */
-export default nextAccount
+export default nextCoin

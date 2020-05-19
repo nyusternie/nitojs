@@ -12,7 +12,7 @@
                         round
                         outline
                         block
-                        @click.native="createSession"
+                        @click.native="newSession"
                     >
                         Create a new session
                     </p-button>
@@ -62,16 +62,16 @@ export default {
     },
     computed: {
         ...mapGetters('purse', [
-            // 'getReceivingAccounts',
+            'getSessions',
         ]),
     },
     methods: {
         ...mapActions('purse', [
-            'initSession',
+            'createSession',
         ]),
 
-        createSession() {
-            this.initSession()
+        newSession() {
+            this.createSession()
 
             this.notifyVue('top', 'right', 'success', 'ti-info-alt')
         },
@@ -95,6 +95,11 @@ export default {
                 type
             })
         }
+    },
+    created: function () {
+        /* Initialize sessions. */
+        const sessions = this.getSessions
+        console.log('SESSIONS:', sessions)
     },
 }
 </script>

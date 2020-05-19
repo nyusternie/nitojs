@@ -10,9 +10,9 @@ const bitbox = new BITBOX()
 const updateInputs = ({ commit, getters }, _params) => {
     console.info('Updating inputs...', _params)
 
-    /* Set wallet. */
-    const wallet = _params.wallet
-    console.log('WALLET', wallet)
+    /* Set purse. */
+    const purse = _params.purse
+    console.log('PURSE', purse)
 
     /* Set (input) action. */
     const inputAction = _params.action
@@ -22,23 +22,23 @@ const updateInputs = ({ commit, getters }, _params) => {
     const inputAddress = _params.address
     console.log('INPUT ADDRESS', inputAddress)
 
-    /* Retreive accounts. */
-    const accounts = getters.getAccounts
-    console.log('ALL ACCOUNTS', accounts)
+    /* Retreive coins. */
+    const coins = getters.getAccounts
+    console.log('ALL COINS', coins)
 
-    /* Retrieve wallet accounts. */
-    const walletAccounts = getters.getAccountsByWallet(wallet)
-    console.log('WALLET ACCOUNTS', walletAccounts)
+    /* Retrieve purse coins. */
+    const purseAccounts = getters.getAccountsByWallet(purse)
+    console.log('PURSE COINS', purseAccounts)
 
-    /* Filter "active" accounts. */
-    Object.keys(walletAccounts).forEach(index => {
-        if (walletAccounts[index].s === 'a') {
+    /* Filter "active" coins. */
+    Object.keys(purseAccounts).forEach(index => {
+        if (purseAccounts[index].s === 'a') {
             // FIXME
             const change = 0
 
             /* Set (derivation) path. */
             const path = `${getters.getDerivationPath('BCH')}/${change}/${index}`
-            console.log('ACTIVE ACCOUNT (path)', path)
+            console.log('ACTIVE COINS (path)', path)
 
             /* Initialize HD node. */
             const hdNode = getters.getHDNode
@@ -48,7 +48,7 @@ const updateInputs = ({ commit, getters }, _params) => {
 
             /* Set (active) address. */
             const activeAddress = bitbox.HDNode.toCashAddress(childNode)
-            console.log('ACTIVE ACCOUNT (address)', activeAddress)
+            console.log('ACTIVE COINS (address)', activeAddress)
 
             /* Validate (matching) input address. */
             if (inputAddress === activeAddress) {
@@ -56,7 +56,7 @@ const updateInputs = ({ commit, getters }, _params) => {
                 switch(inputAction) {
                 case 'add':
                     // FIXME: Support handling of multiple UTXOs per account.
-                    walletAccounts[index].u[0] = {
+                    purseAccounts[index].u[0] = {
                         s: 'a',
                     }
                     break
@@ -66,11 +66,11 @@ const updateInputs = ({ commit, getters }, _params) => {
         }
     })
 
-    /* Update accounts. */
-    accounts[wallet] = walletAccounts
+    /* Update coins. */
+    coins[purse] = purseAccounts
 
-    /* Commit updated accounts. */
-    commit('setAccounts', accounts)
+    /* Commit updated coins. */
+    commit('setAccounts', coins)
 }
 
 /* Export module. */

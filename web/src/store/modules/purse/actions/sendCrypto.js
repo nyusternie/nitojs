@@ -38,13 +38,13 @@ const sendCrypto = async ({ dispatch, getters }, _params) => {
         /* Initialize HD node. */
         const hdNode = getters.getHDNode
 
-        /* Set accounts. */
-        const accounts = getters.getAddresses('BCH')
-        console.log('ALL ACTIVE ACCOUNTS', accounts)
+        /* Set coins. */
+        const coins = getters.getAddresses('BCH')
+        console.log('ALL ACTIVE COINS', coins)
 
         /* Set addresses. */
-        const addresses = accounts.map(account => account.address)
-        console.log('ALL ACTIVE ACCOUNT ADDRESES', addresses)
+        const addresses = coins.map(coins => coins.address)
+        console.log('ALL ACTIVE COIN ADDRESES', addresses)
 
         /* Retrieve unspent transaction outputs. */
         const unspents = await bitbox.Address.utxo(addresses)
@@ -53,13 +53,13 @@ const sendCrypto = async ({ dispatch, getters }, _params) => {
         /* Initialize available inputs. */
         const availableInputs = []
 
-        /* Initialize account indexes. */
-        const accountIndexes = []
+        /* Initialize coins indexes. */
+        const coinsIndexes = []
 
         /* Add ALL (available) unspents. */
         unspents.forEach(unspent => {
             /* Validate UXTO(s). */
-            // FIXME: Add support for multiple unspents per account address.
+            // FIXME: Add support for multiple unspents per coins address.
             if (unspent.utxos.length > 0) {
                 /* Set address. */
                 const address = unspent.cashAddress
@@ -71,13 +71,13 @@ const sendCrypto = async ({ dispatch, getters }, _params) => {
                 const change = 0
 
                 /* Find unspent index. */
-                accounts.forEach(account => {
-                    if (account.address === address) {
-                        path = `${getters.getDerivationPath('BCH')}/${change}/${account.index}`
+                coins.forEach(coins => {
+                    if (coins.address === address) {
+                        path = `${getters.getDerivationPath('BCH')}/${change}/${coins.index}`
                         console.log(`FOUND PATH FOR ${address} - ${path}`)
 
-                        /* Add account index. */
-                        accountIndexes.push(account.index)
+                        /* Add coins index. */
+                        coinsIndexes.push(coins.index)
                     }
                 })
 
@@ -268,10 +268,10 @@ const sendCrypto = async ({ dispatch, getters }, _params) => {
                     }
 
                     /* Increment receiving wallet (index). */
-                    // FIXME: Verify that a change account was used.
+                    // FIXME: Verify that a change coins was used.
                     dispatch('updateAccounts', {
                         action: 'disable',
-                        indexes: accountIndexes,
+                        indexes: coinsIndexes,
                         wallet: 'BCH',
                     })
 

@@ -11,19 +11,17 @@ const bitbox = new BITBOX()
  * for the purse.
  */
 const getAddress = (state, getters) => (_session) => {
-    /* Validate coins. */
-    if (!getters.getCoinsBySession(_session)) {
+    /* Validate sessions. */
+    if (!getters.getSessions) {
         return null
     }
 
-    /* Initialize (purse) coins. */
-    const purseCoins = getters.getCoinsBySession(_session)
+    /* Initialize sessions. */
+    const sessions = getters.getSessions
 
     /* Initialize current (coin) index. */
-    const currentIndex = Math.max(...Object.keys(purseCoins))
-
-    // FIXME
-    const change = 0
+    // FIXME: Needs to query coins.
+    const currentIndex = Math.max(...Object.keys(sessions))
 
     /* Set derivation path. */
     const path = getters.getDerivationPath(_session, currentIndex)
@@ -37,7 +35,7 @@ const getAddress = (state, getters) => (_session) => {
 
     /* Set (receiving) address. */
     const address = bitbox.HDNode.toCashAddress(childNode)
-    // console.log('GET ADDRESS (receiving address)', address)
+    console.log('GET ADDRESS (receiving address)', address)
 
     /* Return address. */
     return address

@@ -9,10 +9,13 @@ const destroyPurse = (state) => {
     state.coins = null
 
     // FOR DEVELOPMENT PURPOSES ONLY
-    delete state.purse
+    // delete state.purses
 
     /* Reset master seed. */
     state.masterSeed = null
+
+    /* Reset sessions. */
+    state.sessions = null
 }
 
 /* Export module. */

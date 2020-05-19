@@ -8,24 +8,24 @@ import getDerivationPath from './purse/getters/getDerivationPath'
 import getDustAmount from './purse/getters/getDustAmount'
 import getHDNode from './purse/getters/getHDNode'
 // import getHistory from './purse/getters/getHistory'
+import getMasterSeed from './purse/getters/getMasterSeed'
+import getSessions from './purse/getters/getSessions'
 // import getSignedInput from './purse/getters/getSignedInput'
 
 /* Import modules (actions). */
-// import activateAccounts from './purse/actions/activateAccounts'
-// import activateInputs from './purse/actions/activateInputs'
-// import addImportedSeed from './purse/actions/addImportedSeed'
-// import createWallet from './purse/actions/createWallet'
+import createSession from './purse/actions/createSession'
 import destroyPurse from './purse/actions/destroyPurse'
 import initPurse from './purse/actions/initPurse'
-// import nextAccount from './purse/actions/nextAccount'
+// import nextCoin from './purse/actions/nextCoin'
 // import sendCrypto from './purse/actions/sendCrypto'
-// import updateAccounts from './purse/actions/updateAccounts'
+// import updateCoin from './purse/actions/updateCoin'
 // import updateInputs from './purse/actions/updateInputs'
 
 /* Import modules (mutations). */
 import setCoins from './purse/mutations/setCoins'
 import setEmptyPurse from './purse/mutations/setEmptyPurse'
 import setMasterSeed from './purse/mutations/setMasterSeed'
+import setSessions from './purse/mutations/setSessions'
 
 /* Initialize state. */
 const state = {
@@ -52,7 +52,7 @@ const state = {
     masterSeed: null,
 
     /**
-     * Purses (aka Wallets)
+     * Sessions
      *
      * Every new session is created on a separate derivation path.
      * The `purse` chain is equivalent to the `account` chain.
@@ -61,7 +61,7 @@ const state = {
      *     m/44'/145'/<purse>'/0/<index>
      * to allow for convenience and portability to desktop and mobile wallets.
      */
-    purses: null,
+    sessions: null,
 }
 
 /* Getters. */
@@ -75,20 +75,19 @@ const getters = {
     getDustAmount,
     getHDNode,
     // getHistory,
+    getMasterSeed,
+    getSessions,
     // getSignedInput,
 }
 
 /* Actions. */
 const actions = {
-    // activateAccounts,
-    // activateInputs,
-    // addImportedSeed,
-    // createWallet,
+    createSession,
     destroyPurse,
     initPurse,
-    // nextAccount,
+    // nextCoin,
     // sendCrypto,
-    // updateAccounts,
+    // updateCoin,
     // updateInputs,
 }
 
@@ -97,6 +96,7 @@ const mutations = {
     setCoins,
     setEmptyPurse,
     setMasterSeed,
+    setSessions,
 }
 
 /* Export. */

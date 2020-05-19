@@ -60,7 +60,7 @@
 
 <script>
 /* Initialize vuex. */
-import { mapActions, mapGetters } from 'vuex'
+import { mapGetters } from 'vuex'
 
 /* Import components. */
 import QRCode from 'qrcode'
@@ -127,10 +127,6 @@ export default {
 
     },
     methods: {
-        ...mapActions('purse', [
-            'initSession',
-        ]),
-
         notifyVue(verticalAlign, horizontalAlign) {
             const color = Math.floor(Math.random() * 4 + 1)
 
