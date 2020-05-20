@@ -1,7 +1,18 @@
 <template>
     <card class="card-user">
-        <div v-if="depositAddress" slot="image" v-html="qr" class="depositAddress">
-            <!-- placeholder for QRCode -->
+        <div v-if="depositAddress" class="depositAddress">
+            <div
+                slot="image"
+                v-html="qr"
+                class="qr"
+                @click="setClipboard"
+            >
+                <!-- placeholder for QRCode -->
+            </div>
+
+            <div class="clipboard-note" @click="setClipboard">
+                click to copy to your clipboard
+            </div>
         </div>
         <div v-else slot="image">
             <img src="@/assets/img/qr-placeholder.jpg" alt="...">
@@ -14,7 +25,10 @@
                 <h4 class="title">
                     <br>
                     <a :href="explorerLink" target="_blank">
-                        <small>{{shortAddr}}</small>
+                        <small>
+                            {{shortAddr}}
+                            <i class="fa fa-external-link ml-1"></i>
+                        </small>
                     </a>
                 </h4>
             </div>
@@ -60,21 +74,17 @@
 
 <script>
 /* Initialize vuex. */
-import { mapGetters } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 
 /* Import components. */
 import QRCode from 'qrcode'
 
-import NotificationTemplate from '@/pages/Notifications/NotificationTemplate'
+import CopiedToClipboard from '@/pages/Notifications/CopiedToClipboard'
 
 export default {
     data() {
         return {
             depositAddress: null,
-            type: ['', 'info', 'success', 'warning', 'danger'],
-            notifications: {
-                topCenter: false
-            }
         }
     },
     computed: {
@@ -127,35 +137,95 @@ export default {
 
     },
     methods: {
-        notifyVue(verticalAlign, horizontalAlign) {
-            const color = Math.floor(Math.random() * 4 + 1)
+        ...mapActions('blockchain', [
+            'closeConn',
+            'openConn',
+        ]),
 
-            this.$notify({
-                component: NotificationTemplate,
-                icon: 'ti-gift',
-                horizontalAlign: horizontalAlign,
-                verticalAlign: verticalAlign,
-                type: this.type[color]
-            })
-        }
+        /**
+         * Set Clipboard
+         */
+        setClipboard() {
+            try {
+                const textArea = document.createElement('textarea')
+                textArea.value = this.depositAddress
+                document.body.appendChild(textArea)
+
+                if (navigator.userAgent.match(/ipad|iphone/i)) {
+                    const range = document.createRange()
+                    range.selectNodeContents(textArea)
+
+                    const selection = window.getSelection()
+                    selection.removeAllRanges()
+                    selection.addRange(range)
+
+                    textArea.setSelectionRange(0, 999999)
+                } else {
+                    textArea.select()
+                }
+
+                document.execCommand('copy')
+                document.body.removeChild(textArea)
+
+                this.$notify({
+                    component: CopiedToClipboard,
+                    icon: 'ti-info-alt',
+                    horizontalAlign: 'right',
+                    verticalAlign: 'top',
+                    type: 'success'
+                })
+
+                return true
+            } catch (err) {
+                console.error(err) // eslint-disable-line no-console
+
+                /* Bugsnag alert. */
+                throw new Error(err)
+            }
+        },
     },
     created: function () {
-        /* Add deposit address. */
-        // this.depositAddress = 'bitcoincash:qq638hdce3q0pg370hfee7f7sgxkw6j46c9cw9sqer'
+        /* Initialize connection. */
+        // NOTE: Open socket connection to the blockchain.
+        // this.openConn()
 
         // FOR DEVELOPMENT PURPOSES ONLY
         const sessionId = 0
 
         const address = this.getAddress(sessionId)
-        console.log('DEPOSIT (address):', address)
+        // console.log('DEPOSIT (address):', address)
 
+        /* Set deposit address. */
+        this.depositAddress = address
+
+    },
+    beforeDestroy() {
+        /* Wait 60 seconds, then close the real-time blockchain connection. */
+        // setTimeout(() => {
+            this.closeConn()
+        // }, 60000)
     }
 }
 </script>
 
 <style scoped>
 .card-user .depositAddress {
-    padding: 0 5px;
+    /* padding: 0 5px; */
+    /* border: 1pt solid red; */
+    cursor: pointer;
+    text-align: center;
+}
+.card-user .depositAddress .qr {
+    margin-top: -15px;
+    margin-left: -10px;
+}
+.card-user .depositAddress .clipboard-note {
+    margin-top: -15px;
+    color: rgba(255, 90, 90, 0.5);
+}
+.card-user .depositAddress .clipboard-note:hover {
+    margin-top: -15px;
+    color: rgba(255, 90, 90, 1.0);
 }
 
 h4.title {

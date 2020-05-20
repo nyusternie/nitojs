@@ -25,7 +25,7 @@ const getAddress = (state, getters) => (_session) => {
 
     /* Set derivation path. */
     const path = getters.getDerivationPath(_session, currentIndex)
-    console.log('GET ADDRESS (path)', path)
+    // console.log('GET ADDRESS (path)', path)
 
     /* Initialize HD node. */
     const hdNode = getters.getHDNode
@@ -35,7 +35,7 @@ const getAddress = (state, getters) => (_session) => {
 
     /* Set (receiving) address. */
     const address = bitbox.HDNode.toCashAddress(childNode)
-    console.log('GET ADDRESS (receiving address)', address)
+    // console.log('GET ADDRESS (receiving address)', address)
 
     /* Return address. */
     return address
