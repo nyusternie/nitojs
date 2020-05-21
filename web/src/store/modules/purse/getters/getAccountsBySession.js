@@ -27,8 +27,11 @@ const getAccounts = (state, getters) => (_sessionId) => {
         /* Initialize HD node. */
         const hdNode = getters.getHDNode
 
+        /* Set chain. */
+        const chain = 0 // receiving account
+
         /* Set derivation path. */
-        const path = getters.getDerivationPath(_sessionId, index)
+        const path = getters.getDerivationPath(_sessionId, chain, index)
         // console.log('GET ACCOUNTS (path)', path)
 
         /* Initialize child node. */

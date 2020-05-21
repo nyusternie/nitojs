@@ -23,19 +23,27 @@ const pbTypes = [
 ]
 
 /* Initialize protobuf. */
-const PB = {
-    root: protobuf.loadSync(path.join(__dirname, 'shuffle.proto'))
-}
+// const PB = {
+//     root: protobuf.loadSync(path.join(__dirname, 'shuffle.proto'))
+// }
+let PB = {}
+protobuf.load(path.join(__dirname, 'shuffle.proto'), (err, root) => {
+    if (err) return console.error(err) // eslint-disable-line no-console
 
-/* Loop through ALL protobuf types. */
-for (let oneTypeName of pbTypes) {
-    PB[oneTypeName] = PB.root.lookupType(oneTypeName)
-}
+    /* Set root. */
+    PB.root = root
 
-/* Loop through ALL protobuf classes. */
-for (let oneClassName of pbEnums) {
-    PB[oneClassName] = PB.root.lookupEnum(oneClassName)
-}
+    /* Loop through ALL protobuf types. */
+    for (let oneTypeName of pbTypes) {
+        PB[oneTypeName] = PB.root.lookupType(oneTypeName)
+    }
+
+    /* Loop through ALL protobuf classes. */
+    for (let oneClassName of pbEnums) {
+        PB[oneClassName] = PB.root.lookupEnum(oneClassName)
+    }
+
+})
 
 /**
  * Message to Buffers

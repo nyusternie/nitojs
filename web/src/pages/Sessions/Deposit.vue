@@ -337,10 +337,16 @@ export default {
     cursor: pointer;
     text-align: center;
 }
+
 .card-user .depositAccount .qr {
     margin-top: -15px;
-    margin-left: -10px;
 }
+@media (min-width: 768px) {
+    .card-user .depositAccount .qr {
+        margin-left: -10px;
+    }
+}
+
 .card-user .depositAccount .clipboard-note {
     margin-top: -15px;
     color: rgba(255, 90, 90, 0.5);

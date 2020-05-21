@@ -24,8 +24,11 @@ const getAccount = (state, getters) => (_session) => {
     const currentIndex = Math.max(...Object.keys(sessions))
     // console.log('GET ACCOUNT (currentIndex):', currentIndex)
 
+    /* Set chain. */
+    const chain = 0 // receiving account
+
     /* Set derivation path. */
-    const path = getters.getDerivationPath(_session, currentIndex)
+    const path = getters.getDerivationPath(_session, chain, currentIndex)
     // console.log('GET ACCOUNT (path)', path)
 
     /* Initialize HD node. */

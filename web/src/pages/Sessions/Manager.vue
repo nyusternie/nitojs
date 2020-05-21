@@ -99,9 +99,9 @@
                 <div class="text-center">
                     <p-button type="info"
                         round
-                        @click.native.prevent="updateProfile"
+                        @click.native="startShuffle"
                     >
-                        Update Profile
+                        Start Shuffle
                     </p-button>
                 </div>
 
@@ -112,6 +112,9 @@
 </template>
 
 <script>
+/* Import modules. */
+import { BITBOX } from 'bitbox-sdk'
+
 /* Initialize vuex. */
 import { mapActions, mapGetters } from 'vuex'
 
@@ -120,6 +123,8 @@ import NotificationTemplate from '@/pages/Notifications/NotificationTemplate'
 export default {
     data() {
         return {
+            bitbox: null,
+
             depositAddress: null,
             type: ['', 'info', 'success', 'warning', 'danger'],
             notifications: {
@@ -141,7 +146,9 @@ export default {
     },
     computed: {
         ...mapGetters('purse', [
-            // 'getAddress',
+            'getCoinsBySession',
+            'getDerivationPath',
+            'getHDNode',
         ]),
 
     },
@@ -150,8 +157,113 @@ export default {
             // 'initSession',
         ]),
 
-        updateProfile() {
-            alert('Your data: ' + JSON.stringify(this.user))
+        /**
+         * Initialize BITBOX
+         */
+        initBitbox() {
+            console.info('Initializing BITBOX..')
+
+            try {
+                /* Initialize BITBOX. */
+                this.bitbox = new BITBOX()
+            } catch (err) {
+                console.error(err)
+            }
+        },
+
+        /**
+         * Change Account
+         */
+        change(_sessionId) {
+            /* Set chain. */
+            const chain = 1 // change account
+
+            const index = 0
+
+            /* Set derivation path. */
+            const path = this.getDerivationPath(_sessionId, chain, index)
+            console.log('MANAGER (path)', path)
+
+            /* Initialize HD node. */
+            const hdNode = this.getHDNode
+
+            /* Initialize child node. */
+            const childNode = hdNode.derivePath(path)
+
+            /* Set (change) account. */
+            const account = this.bitbox.HDNode.toCashAddress(childNode)
+            console.log('MANAGER (change account)', account)
+
+            return {
+                cashAddress: account,
+                legacyAddress: this.bitbox.Address.toLegacyAddress(account),
+            }
+        },
+
+        /**
+         * Target Account
+         */
+        target(_sessionId) {
+            /* Set chain. */
+            const chain = 7867 // Nito Cash account
+
+            const index = 0
+
+            /* Set derivation path. */
+            const path = this.getDerivationPath(_sessionId, chain, index)
+            console.log('MANAGER (path)', path)
+
+            /* Initialize HD node. */
+            const hdNode = this.getHDNode
+
+            /* Initialize child node. */
+            const childNode = hdNode.derivePath(path)
+
+            /* Set (receiving) account. */
+            const account = this.bitbox.HDNode.toCashAddress(childNode)
+            console.log('MANAGER (nito cash account)', account)
+
+            return {
+                cashAddress: account,
+                legacyAddress: this.bitbox.Address.toLegacyAddress(account),
+            }
+        },
+
+        startShuffle() {
+            /* Import local modules. */
+            const ShuffleClient = require('../../../../libs/cashshuffle/ShuffleClient.js')
+            console.log('MANAGER (client):', ShuffleClient)
+
+            const sessionId = 0
+
+            const coins = this.getCoinsBySession(sessionId)
+            console.log('MANAGER (coins):', coins)
+
+            const coin = coins[Object.keys(coins)[0]]
+            console.log('MANAGER (coin):', JSON.stringify(coin, null, 4))
+
+            console.log('MANAGER (target):', this.target(sessionId))
+            console.log('MANAGER (change):', this.change(sessionId))
+
+            /* Initialize new shuffle client. */
+            // shuffleManager = new ShuffleClient({
+            //     coins: [ coin ],
+            //     hooks: {
+            //         change: this.change, // NOTE: This is a function.
+            //         shuffled: this.target, // NOTE: This is a function.
+            //     },
+            //     protocolVersion: 300,
+            //     maxShuffleRounds: 1,
+            //     // Disable automatically joining shuffle rounds
+            //     // once a connection with the server is established
+            //     disableAutoShuffle: false,
+            //     serverStatsUri: 'https://shuffle.servo.cash:8080/stats'
+            // })
+            //
+            // shuffleManager.on('shuffle', async (shuffleRound) => {
+            //     console.log(`Coin ${shuffleRound.coin.txid}:${shuffleRound.coin.vout} has been successfully shuffled!`)
+            // })
+
         },
 
         notifyVue(verticalAlign, horizontalAlign) {
@@ -167,7 +279,9 @@ export default {
         }
     },
     created: function () {
-        //
+        /* Initialize BITBOX. */
+        this.initBitbox()
+
     }
 }
 </script>

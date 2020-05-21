@@ -11,9 +11,9 @@
  * The `address_index` allows for an unlimited number of addresses to be
  * generated for each session.
  */
-const getDerivationPath = () => (_sessionId, _index) => {
+const getDerivationPath = () => (_sessionId, _chain, _index) => {
     /* Return (hardened) derivation path. */
-    return `m/44'/145'/${_sessionId}'/0/${_index}`
+    return `m/44'/145'/${_sessionId}'/${_chain}/${_index}`
 }
 
 /* Export module. */
