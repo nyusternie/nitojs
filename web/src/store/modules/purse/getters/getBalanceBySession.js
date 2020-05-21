@@ -23,6 +23,10 @@ const getBalanceBySession = (
     /* Initialize search accounts. */
     const searchAccts = []
 
+    /* Initialize counted accounts. */
+    // FIXME: We are seeing duplicate counts.
+    const countedAccts = []
+
     const coins = getters.getCoinsBySession(_sessionId)
     // console.log('GET BALANCE BY SESSION (coins)', coins)
 
@@ -44,16 +48,32 @@ const getBalanceBySession = (
 
         /* Retrieve (ALL) account(s) details. */
         const addrDetails = await bitbox.Address.details(searchAccts)
-        // console.log('ALL ACCOUNTS DETAILS', JSON.stringify(addrDetails, null, 4))
+        console.log('ALL ACCOUNTS DETAILS', JSON.stringify(addrDetails, null, 4))
 
         /* Validate (use of) unconfirmed transactions. */
         if (rootGetters['getFlags'] && rootGetters['getFlags'].unconfirmed) {
             addrDetails.forEach((address) => {
+                /* Handlle duplicate counts. */
+                // NOTE: Is this the best way to handle this??
+                if (countedAccts.includes(address.cashAddress)) {
+                    return
+                } else {
+                    countedAccts.push(address.cashAddress)
+                }
+
                 /* Both confirmed and unconfirmed. */
                 balance += (address.balanceSat + address.unconfirmedBalanceSat)
             })
         } else {
             addrDetails.forEach((address) => {
+                /* Handlle duplicate counts. */
+                // NOTE: Is this the best way to handle this??
+                if (countedAccts.includes(address.cashAddress)) {
+                    return
+                } else {
+                    countedAccts.push(address.cashAddress)
+                }
+
                 /* Confirmed ONLY. */
                 balance += address.balanceSat
             })

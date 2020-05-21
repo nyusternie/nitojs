@@ -8,6 +8,10 @@ const addCoin = ({ commit, getters }, _pkg) => {
     const sessionId = _pkg.sessionId
     // console.log('ADD NEW COIN (sessionid):', sessionId)
 
+    /* Set chain id. */
+    const chainId = _pkg.chainId
+    // console.log('ADD NEW COIN (chainid):', chainId)
+
     /* Set coin. */
     const coin = _pkg.coin
     // console.log('ADD NEW COIN (coin):', coin)
@@ -22,10 +26,23 @@ const addCoin = ({ commit, getters }, _pkg) => {
     }
 
     /* Add coin to session. */
-    sessions[sessionId].coins[coin.txid] = coin
+    sessions[sessionId].coins[`${coin.txid}:${coin.vout}`] = coin
 
     /* Increment deposit account. */
-    sessions[sessionId].accounts.deposit++
+    switch(chainId) {
+    case 0:
+        sessions[sessionId].accounts.deposit++
+        break
+    case 1:
+        sessions[sessionId].accounts.change++
+        break
+    case 7867:
+        sessions[sessionId].accounts.nito++
+        break
+    case 7888:
+        sessions[sessionId].accounts.xchg++
+        break
+    }
 
     /* Commit updated sessions. */
     commit('setSessions', sessions)

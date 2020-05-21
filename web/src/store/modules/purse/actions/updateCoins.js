@@ -13,7 +13,7 @@ const updateCoins = async ({ dispatch, getters }) => {
 
     /* Retrieve accounts. */
     const accounts = getters.getAccountsBySession(sessionId)
-    // console.log('UPDATE COINS (accounts)', accounts)
+    console.log('UPDATE COINS (accounts)', accounts)
 
     /* Validate accounts. */
     if (!accounts) {
@@ -64,13 +64,20 @@ const updateCoins = async ({ dispatch, getters }) => {
                 // console.log('UPDATE COINS (cashAddrs)', cashAddrs)
 
                 /* Initialize WIF. */
+                let chainId = null
+
+                /* Initialize WIF. */
                 let wif = null
 
                 /* Find the WIF. */
                 for (let i = 0; i < accounts.length; i++) {
                     if (accounts[i].address === searchAddr) {
+                        /* Set chain id. */
+                        chainId = accounts[i].chainId
+
                         /* Set WIF. */
                         wif = accounts[i].wif
+
                         break
                     }
                 }
@@ -93,10 +100,11 @@ const updateCoins = async ({ dispatch, getters }) => {
                     // console.log('COINS', coins)
 
                     /* Validate new coin. */
-                    if (coins && !coins[coin.txid]) {
+                    if (coins && !coins[`${coin.txid}:${coin.vout}`]) {
                         /* Create coin package. */
                         const pkg = {
                             sessionId,
+                            chainId,
                             coin,
                         }
 

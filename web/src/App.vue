@@ -17,9 +17,13 @@ export default {
     },
     created: function () {
         console.log('APPLICATION STATE', this.$store.state)
-
-        /* Update coins. */
-        this.updateCoins()
+    },
+    mounted: function () {
+        setTimeout(() => {
+            /* Update coins. */
+            // FIXME: Why is this blocking the entire initial UI setup??
+            this.updateCoins()
+        }, 3000)
     },
 }
 </script>

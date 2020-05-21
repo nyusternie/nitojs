@@ -140,12 +140,13 @@ export default {
             let value = 0
 
             /* Initialize unit. */
-            let unit = ''
+            let unit = 'BCH'
 
             /* Validate balance. */
             if (this.balance && this.balance.value) {
                 /* Set value. */
-                value = this.balance.rounded
+                // value = this.balance.rounded
+                value = this.balance.value
 
                 /* Set unit. */
                 unit = this.balance.unit

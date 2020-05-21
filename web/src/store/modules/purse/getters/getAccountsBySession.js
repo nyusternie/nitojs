@@ -4,10 +4,44 @@ import { BITBOX } from 'bitbox-sdk'
 /* Initialize BITBOX. */
 const bitbox = new BITBOX()
 
+/* Initialize accounts. */
+const accounts = []
+
+/**
+ * Load Accounts
+ */
+const loadAccounts = (_getters, _sessionId, _chainId, _acctIdx) => {
+    /* Initialize HD node. */
+    const hdNode = _getters.getHDNode
+
+    /* Set derivation path. */
+    const path = _getters.getDerivationPath(_sessionId, _chainId, _acctIdx)
+    // console.log('GET ACCOUNTS (path)', path)
+
+    /* Initialize child node. */
+    const childNode = hdNode.derivePath(path)
+
+    /* Set WIF. */
+    const wif = bitbox.HDNode.toWIF(childNode)
+
+    /* Set account (address). */
+    const address = bitbox.HDNode.toCashAddress(childNode)
+    // console.log('GET ACCOUNTS (address)', address)
+
+    /* Add to all receiving (pool). */
+    accounts.push({
+        sessionId: _sessionId,
+        chainId: _chainId,
+        address,
+        wif,
+    })
+
+}
+
 /**
  * Get ALL Session Accounts
  *
- * Returns (account and index) for ALL (in-use) session accounts.
+ * Returns account (address, index, WIF) for ALL (in-use) sessions.
  */
 const getAccounts = (state, getters) => (_sessionId) => {
     /* Validate sessions. */
@@ -17,40 +51,32 @@ const getAccounts = (state, getters) => (_sessionId) => {
 
     /* Initialize sessions. */
     const sessions = getters.getSessions
-    // console.log('GET ACCOUNTS (sessions):', sessions)
+    console.log('GET ACCOUNTS (sessions):', sessions)
 
-    /* Initialize accounts. */
-    const accounts = []
+    /* Set session. */
+    const session = sessions[_sessionId]
+    console.log('GET ACCOUNTS (session):', session)
 
-    /* Add all active receiving account (accounts) to pool. */
-    Object.keys(sessions).forEach(index => {
-        /* Initialize HD node. */
-        const hdNode = getters.getHDNode
+    /* Loop through ALL (deposit) indexes (inclusive). */
+    for (let i = 0; i <= session.accounts.deposit; i++) {
+        loadAccounts(getters, _sessionId, 0, i)
+    }
 
-        /* Set chain. */
-        const chain = 0 // receiving account
+    /* Loop through ALL (change) indexes (inclusive). */
+    for (let i = 0; i <= session.accounts.change; i++) {
+        loadAccounts(getters, _sessionId, 1, i)
+    }
 
-        /* Set derivation path. */
-        const path = getters.getDerivationPath(_sessionId, chain, index)
-        // console.log('GET ACCOUNTS (path)', path)
+    /* Loop through ALL (Nito Cash) indexes (inclusive). */
+    for (let i = 0; i <= session.accounts.nito; i++) {
+        loadAccounts(getters, _sessionId, 7867, i)
+    }
 
-        /* Initialize child node. */
-        const childNode = hdNode.derivePath(path)
-
-        /* Set WIF. */
-        const wif = bitbox.HDNode.toWIF(childNode)
-
-        /* Set account (address). */
-        const address = bitbox.HDNode.toCashAddress(childNode)
-        // console.log('GET ACCOUNTS (address)', address)
-
-        /* Add to all receiving (pool). */
-        accounts.push({
-            address,
-            index,
-            wif,
-        })
-    })
+    /* Loop through ALL (Nito Xchg) indexes (inclusive). */
+    for (let i = 0; i <= session.accounts.xchg; i++) {
+        loadAccounts(getters, _sessionId, 7888, i)
+    }
+    console.log('GET ACCOUNTS (accounts):', accounts)
 
     /* Return accounts. */
     return accounts
