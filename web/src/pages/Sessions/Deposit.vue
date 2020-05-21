@@ -46,7 +46,7 @@
             <div class="row">
                 <div class="col">
                     <h5>
-                        2
+                        {{numCoins}}
                         <br>
                         <small>Coins</small>
                     </h5>
@@ -54,17 +54,19 @@
 
                 <div class="col">
                     <h5>
-                        0.1337
+                        {{crypto.value}}
                         <br>
-                        <small>BTC</small>
+                        <small class="text-uppercase">
+                            {{crypto.unit}}
+                        </small>
                     </h5>
                 </div>
 
                 <div class="col">
                     <h5>
-                        $33.42
+                        {{fiat.value}}
                         <br>
-                        <small>USD</small>
+                        <small>{{fiat.unit}}</small>
                     </h5>
                 </div>
             </div>
@@ -88,6 +90,9 @@ export default {
     data() {
         return {
             bitbox: null,
+
+            balance: null,
+            coins: null,
             depositAccount: null,
         }
     },
@@ -99,6 +104,7 @@ export default {
         ...mapGetters('purse', [
             'getAccountBySession',
             'getBalanceBySession',
+            'getCoinsBySession',
         ]),
 
         shortAccount() {
@@ -119,6 +125,60 @@ export default {
 
         explorerLink() {
             return `https://explorer.bitcoin.com/bch/address/${this.depositAccount}`
+        },
+
+        numCoins() {
+            if (this.coins) {
+                return Object.keys(this.coins).length
+            } else {
+                return 0
+            }
+        },
+
+        crypto() {
+            /* Initialize value. */
+            let value = 0
+
+            /* Initialize unit. */
+            let unit = ''
+
+            /* Validate balance. */
+            if (this.balance && this.balance.value) {
+                /* Set value. */
+                value = this.balance.rounded
+
+                /* Set unit. */
+                unit = this.balance.unit
+            }
+
+            /* Return fiat. */
+            return {
+                value,
+                unit
+            }
+        },
+
+        fiat() {
+            /* Initialize value. */
+            let value = 0
+
+            /* Initialize unit. */
+            let unit = ''
+
+            /* Validate balance. */
+            if (this.balance && this.balance.fiat) {
+                /* Set value. */
+                value = this.balance.fiat.split(' ')[0]
+
+                /* Set unit. */
+                unit = this.balance.fiat.split(' ')[1]
+            }
+
+            /* Return fiat. */
+            return {
+                value,
+                unit
+            }
         },
 
         qr() {
@@ -252,7 +312,11 @@ export default {
 
         /* Retreive session balance. */
         this.balance = await this.getBalanceBySession(sessionId, 'USD')
-        console.log('DEPOSIT (balance):', this.balance)
+        // console.log('DEPOSIT (balance):', this.balance)
+
+        /* Retreive session balance. */
+        this.coins = await this.getCoinsBySession(sessionId)
+        // console.log('DEPOSIT (coins):', this.coins)
 
         // this.watchForDeposit()
 

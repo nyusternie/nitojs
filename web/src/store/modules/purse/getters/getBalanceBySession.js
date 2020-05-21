@@ -24,31 +24,17 @@ const getBalanceBySession = (
     const searchAccts = []
 
     const coins = getters.getCoinsBySession(_sessionId)
-    console.log('GET BALANCE BY SESSION (coins)', coins)
-    return 0
+    // console.log('GET BALANCE BY SESSION (coins)', coins)
 
     /* Add all active receiving account (searchAccts) to pool. */
-    Object.keys().forEach((txid, index) => {
-        /* Initialize HD node. */
-        const hdNode = getters.getHDNode
-
-        /* Set derivation path. */
-        const path = getters.getDerivationPath(_sessionId, index)
-        console.log('GET BALANCE BY SESSION (path)', path)
-
-        /* Initialize child node. */
-        const childNode = hdNode.derivePath(path)
-
-        const address = bitbox.HDNode.toCashAddress(childNode)
-        console.log('GET BALANCE BY SESSION (receiving address)', address)
-
+    Object.keys(coins).forEach(txid => {
         /* Add to all receiving (pool). */
-        searchAccts.push(address)
+        searchAccts.push(coins[txid].cashAddress)
     })
-    console.log('GET BALANCE BY SESSION (all accounts)', searchAccts)
+    // console.log('GET BALANCE BY SESSION (all accounts)', searchAccts)
 
     /* Validate search accounts. */
-    if (!searchAccts) {
+    if (!searchAccts && searchAccts.length) {
         return 0
     }
 
@@ -57,17 +43,17 @@ const getBalanceBySession = (
         let balance = 0
 
         /* Retrieve (ALL) account(s) details. */
-        const details = await bitbox.Address.details(addresses)
-        // console.log('ALL ACCOUNTS DETAILS', JSON.stringify(details, null, 4))
+        const addrDetails = await bitbox.Address.details(searchAccts)
+        // console.log('ALL ACCOUNTS DETAILS', JSON.stringify(addrDetails, null, 4))
 
         /* Validate (use of) unconfirmed transactions. */
         if (rootGetters['getFlags'] && rootGetters['getFlags'].unconfirmed) {
-            details.forEach((address) => {
+            addrDetails.forEach((address) => {
                 /* Both confirmed and unconfirmed. */
                 balance += (address.balanceSat + address.unconfirmedBalanceSat)
             })
         } else {
-            details.forEach((address) => {
+            addrDetails.forEach((address) => {
                 /* Confirmed ONLY. */
                 balance += address.balanceSat
             })

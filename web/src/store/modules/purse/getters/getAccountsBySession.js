@@ -17,7 +17,7 @@ const getAccounts = (state, getters) => (_sessionId) => {
 
     /* Initialize sessions. */
     const sessions = getters.getSessions
-    console.log('GET ACCOUNTS (sessions):', sessions)
+    // console.log('GET ACCOUNTS (sessions):', sessions)
 
     /* Initialize accounts. */
     const accounts = []
@@ -29,7 +29,7 @@ const getAccounts = (state, getters) => (_sessionId) => {
 
         /* Set derivation path. */
         const path = getters.getDerivationPath(_sessionId, index)
-        console.log('GET ACCOUNTS (path)', path)
+        // console.log('GET ACCOUNTS (path)', path)
 
         /* Initialize child node. */
         const childNode = hdNode.derivePath(path)
@@ -39,7 +39,7 @@ const getAccounts = (state, getters) => (_sessionId) => {
 
         /* Set account (address). */
         const address = bitbox.HDNode.toCashAddress(childNode)
-        console.log('GET ACCOUNTS (address)', address)
+        // console.log('GET ACCOUNTS (address)', address)
 
         /* Add to all receiving (pool). */
         accounts.push({

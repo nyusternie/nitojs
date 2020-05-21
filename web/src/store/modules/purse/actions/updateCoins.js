@@ -13,7 +13,7 @@ const updateCoins = async ({ dispatch, getters }) => {
 
     /* Retrieve accounts. */
     const accounts = getters.getAccountsBySession(sessionId)
-    console.log('UPDATE COINS (accounts)', accounts)
+    // console.log('UPDATE COINS (accounts)', accounts)
 
     /* Validate accounts. */
     if (!accounts) {
@@ -87,10 +87,10 @@ const updateCoins = async ({ dispatch, getters }) => {
                         cashAddress: searchAddr,
                         legacyAddress: bitbox.Address.toLegacyAddress(searchAddr),
                     }
-                    console.log('UPDATE COINS (coin)', coin)
+                    // console.log('UPDATE COINS (coin)', coin)
 
                     const coins = getters.getCoinsBySession(sessionId)
-                    console.log('COINS', coins)
+                    // console.log('COINS', coins)
 
                     /* Validate new coin. */
                     if (coins && !coins[coin.txid]) {
