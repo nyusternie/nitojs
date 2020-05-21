@@ -9,6 +9,7 @@ import createPersistedState from 'vuex-persistedstate'
 import blockchain from './modules/blockchain'
 import purse from './modules/purse'
 import system from './modules/system'
+import utils from './modules/utils'
 
 /* Initialize Vuex. */
 Vue.use(Vuex)
@@ -19,6 +20,7 @@ export default new Vuex.Store({
         blockchain,
         purse,
         system,
+        utils,
     },
     plugins: [createPersistedState()],
     strict: process.env.NODE_ENV !== 'production'

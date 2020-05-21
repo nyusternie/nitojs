@@ -6,9 +6,20 @@
 </template>
 
 <script>
+/* Initialize vuex. */
+import { mapActions } from 'vuex'
+
 export default {
+    methods: {
+        ...mapActions('purse', [
+            'updateCoins',
+        ]),
+    },
     created: function () {
         console.log('APPLICATION STATE', this.$store.state)
+
+        /* Update coins. */
+        this.updateCoins()
     },
 }
 </script>

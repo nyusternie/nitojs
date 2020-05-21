@@ -7,9 +7,7 @@ const bitbox = new BITBOX()
 /**
 * Get Ticker
 */
-const getTicker = () => async (_wallet, _currency) => {
-    // console.log('GET TICKER', _wallet, _currency)
-
+const getTicker = () => async (_currency) => {
     try {
         /* Retrieve ticker price. */
         // NOTE: Returns promise.

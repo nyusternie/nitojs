@@ -14,7 +14,7 @@
                     block
                     @click.native="createPurse"
                 >
-                    Create a new session
+                    Create a NEW purse
                 </p-button>
 
                 <p-button

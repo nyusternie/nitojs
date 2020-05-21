@@ -26,10 +26,29 @@ const createSession = ({ commit, getters }) => {
             }
         } else {
             /**
-             * (Purse) Coins Model
+             * Accounts Model
              *
-             * (s) Status code
-             * (u) Unspent transaction outputs (UTXOs)
+             * Manages the indexes of accounts (addresses) and their respective
+             * derivation paths.
+             *
+             * Deposit   : m/44'/145'/<session>'/0/<index>
+             * Change    : m/44'/145'/<session>'/1/<index>
+             * Nito Cash : m/44'/145'/<session>'/7867/<index>
+             * Nito Xchg : m/44'/145'/<session>'/7888/<index>
+             *
+             * NOTE: Change is considered "toxic waste", and will be
+             *       discarded (read. donated to Causes Cash) once it reaches
+             *       below the lowest threshold for shuffles & fusions.
+             */
+            const accountsModel = {
+                deposit: 0,
+                change: 0,
+                nito: 0,
+                xchg: 0,
+            }
+
+            /**
+             * Session Model
              *
              * Status codes:
              *     (a) Active: Session address is ready to receive OR spend funds.
@@ -38,13 +57,19 @@ const createSession = ({ commit, getters }) => {
              *                 currently being held in reserve for a later use.
              *                 (eg. CashShuffle, CashFusion, ANYONECANPAY, etc)
              *
-             * NOTE: Unspent transaction outputs (UTXOs) are objects containing the
-             *       status (code) of ALL inputs held by the session.
+             * Coins are (UTXO) objects containing:
+             *     - txid
+             *     - vout
+             *     - amountSatoshis
+             *     - privateKeyWif
+             *     - cashAddress
+             *     - legacyAddress
              */
             sessionsModel = {
                 0: {
                     status: 'active',
-                    coins: {},
+                    accounts: accountsModel,
+                    coins: {}
                 }
             }
         }

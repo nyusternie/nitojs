@@ -4,19 +4,26 @@
  * Returns UTXOs for ALL (in-use) session coins.
  */
 const getCoinsBySession = (state, getters) => (_sessionId) => {
-    /* Validate coins. */
-    if (!getters.getCoins) {
+    // console.log('GET COINS BY SESSION (sessionid)', _sessionId)
+    /* Validate sessions. */
+    if (!getters.getSessions) {
         return null
     }
 
-    /* Initialize coins. */
-    const coins = getters.getCoins
+    /* Initialize sessions. */
+    const sessions = getters.getSessions
+    // console.log('GET COINS BY SESSION (sessions)', sessions)
+
+    /* Validate session. */
+    if (!sessions[_sessionId]) {
+        return null
+    }
 
     /* Initialize (session) coins. */
-    const sessionCoins = coins[_sessionId]
+    const coins = sessions[_sessionId].coins
 
     /* Return (session) coins. */
-    return sessionCoins
+    return coins
 }
 
 /* Export module. */

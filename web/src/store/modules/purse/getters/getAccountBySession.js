@@ -5,12 +5,11 @@ import { BITBOX } from 'bitbox-sdk'
 const bitbox = new BITBOX()
 
 /**
- * Get (Purse) Address
+ * Get Session Account
  *
- * Returns the next avaialble "receiving" (coin) address,
- * for the purse.
+ * Returns the next avaialble "receiving" account, for the session.
  */
-const getAddress = (state, getters) => (_session) => {
+const getAccount = (state, getters) => (_session) => {
     /* Validate sessions. */
     if (!getters.getSessions) {
         return null
@@ -18,14 +17,16 @@ const getAddress = (state, getters) => (_session) => {
 
     /* Initialize sessions. */
     const sessions = getters.getSessions
+    // console.log('GET ACCOUNT (sessions):', sessions)
 
     /* Initialize current (coin) index. */
     // FIXME: Needs to query coins.
     const currentIndex = Math.max(...Object.keys(sessions))
+    // console.log('GET ACCOUNT (currentIndex):', currentIndex)
 
     /* Set derivation path. */
     const path = getters.getDerivationPath(_session, currentIndex)
-    // console.log('GET ADDRESS (path)', path)
+    // console.log('GET ACCOUNT (path)', path)
 
     /* Initialize HD node. */
     const hdNode = getters.getHDNode
@@ -33,13 +34,13 @@ const getAddress = (state, getters) => (_session) => {
     /* Initialize child node. */
     const childNode = hdNode.derivePath(path)
 
-    /* Set (receiving) address. */
-    const address = bitbox.HDNode.toCashAddress(childNode)
-    // console.log('GET ADDRESS (receiving address)', address)
+    /* Set (receiving) account. */
+    const account = bitbox.HDNode.toCashAddress(childNode)
+    // console.log('GET ACCOUNT (receiving account)', account)
 
-    /* Return address. */
-    return address
+    /* Return account. */
+    return account
 }
 
 /* Export module. */
-export default getAddress
+export default getAccount

@@ -1,8 +1,8 @@
 /* Import modules (getters). */
-import getAddress from './purse/getters/getAddress'
-import getAddresses from './purse/getters/getAddresses'
+import getAccountBySession from './purse/getters/getAccountBySession'
+import getAccountsBySession from './purse/getters/getAccountsBySession'
 import getBalance from './purse/getters/getBalance'
-import getCoins from './purse/getters/getCoins'
+import getBalanceBySession from './purse/getters/getBalanceBySession'
 import getCoinsBySession from './purse/getters/getCoinsBySession'
 import getDerivationPath from './purse/getters/getDerivationPath'
 import getDustAmount from './purse/getters/getDustAmount'
@@ -13,37 +13,21 @@ import getSessions from './purse/getters/getSessions'
 // import getSignedInput from './purse/getters/getSignedInput'
 
 /* Import modules (actions). */
+import addCoin from './purse/actions/addCoin'
 import createSession from './purse/actions/createSession'
 import destroyPurse from './purse/actions/destroyPurse'
 import initPurse from './purse/actions/initPurse'
 // import nextCoin from './purse/actions/nextCoin'
 // import sendCrypto from './purse/actions/sendCrypto'
-// import updateCoin from './purse/actions/updateCoin'
-// import updateInputs from './purse/actions/updateInputs'
+import updateCoins from './purse/actions/updateCoins'
 
 /* Import modules (mutations). */
-import setCoins from './purse/mutations/setCoins'
 import setEmptyPurse from './purse/mutations/setEmptyPurse'
 import setMasterSeed from './purse/mutations/setMasterSeed'
 import setSessions from './purse/mutations/setSessions'
 
 /* Initialize state. */
 const state = {
-    /**
-     * Coins
-     *
-     * These are individual UTXOs used for CashShuffle inputs.
-     *
-     * A standard BCH derivation path is used,
-     *     m/44'/145'/<purse>'/0/<index>
-     * to allow for convenience and portability to desktop and mobile wallets.
-     *
-     * The <index> is used to generate a sufficient number of addresses,
-     * needed to perform a high number of shuffles, eventually leading down
-     * to the unspendable "dust" amount (aka "toxic waste").
-     */
-    coins: null,
-
     /**
      * Master Seed
      *
@@ -55,10 +39,10 @@ const state = {
      * Sessions
      *
      * Every new session is created on a separate derivation path.
-     * The `purse` chain is equivalent to the `account` chain.
+     * The `session` chain is equivalent to the `account` chain.
      *
      * A standard BCH derivation path is used,
-     *     m/44'/145'/<purse>'/0/<index>
+     *     m/44'/145'/<session>'/0/<index>
      * to allow for convenience and portability to desktop and mobile wallets.
      */
     sessions: null,
@@ -66,11 +50,11 @@ const state = {
 
 /* Getters. */
 const getters = {
-    getCoins,
-    getCoinsBySession,
-    getAddress,
-    getAddresses,
+    getAccountBySession,
+    getAccountsBySession,
     getBalance,
+    getBalanceBySession,
+    getCoinsBySession,
     getDerivationPath,
     getDustAmount,
     getHDNode,
@@ -82,18 +66,17 @@ const getters = {
 
 /* Actions. */
 const actions = {
+    addCoin,
     createSession,
     destroyPurse,
     initPurse,
     // nextCoin,
     // sendCrypto,
-    // updateCoin,
-    // updateInputs,
+    updateCoins,
 }
 
 /* Mutations. */
 const mutations = {
-    setCoins,
     setEmptyPurse,
     setMasterSeed,
     setSessions,

@@ -30,7 +30,7 @@ const getConn = () => (_callback, _action) => {
         conn = new bitbox.Socket({ callback, wsURL })
     }
 
-    if (_action === 'close') {
+    if (_action === 'close' && conn) {
         /* Close connection. */
         conn.close(callback)
     }

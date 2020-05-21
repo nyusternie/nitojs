@@ -5,44 +5,52 @@ import { BITBOX } from 'bitbox-sdk'
 const bitbox = new BITBOX()
 
 /**
-* Get (Total Wallet) Balance
+* Get Balance by Session
 *
-* Retrieves the current (total) wallet balance.
+* Retrieves the current (total) session balance.
 *
 * NOTE: Optional (market price) parameter is used to calculate fiat value,
 *       and return a "formatted" value package.
 */
-const getBalance = (state, getters, rootState, rootGetters) => async (_currency) => {
-    /* Validate coins. */
-    if (!getters.getCoins) {
+const getBalanceBySession = (
+    state, getters, rootState, rootGetters
+) => async (_sessionId, _currency) => {
+    /* Validate (session) accounts. */
+    if (!getters.getCoinsBySession(_sessionId)) {
         return null
     }
 
-    /* Initialize account addresses. */
-    const addresses = []
+    /* Initialize search accounts. */
+    const searchAccts = []
 
-    /* Add all active receiving account (addresses) to pool. */
-    Object.keys(getters.getCoins(_wallet)).forEach(index => {
+    const coins = getters.getCoinsBySession(_sessionId)
+    console.log('GET BALANCE BY SESSION (coins)', coins)
+    return 0
+
+    /* Add all active receiving account (searchAccts) to pool. */
+    Object.keys().forEach((txid, index) => {
         /* Initialize HD node. */
         const hdNode = getters.getHDNode
 
-        // FIXME
-        const change = 0
-
         /* Set derivation path. */
-        const path = `${getters.getDerivationPath(_wallet)}/${change}/${index}`
-        // console.log('GET BALANCE (path)', path)
+        const path = getters.getDerivationPath(_sessionId, index)
+        console.log('GET BALANCE BY SESSION (path)', path)
 
         /* Initialize child node. */
         const childNode = hdNode.derivePath(path)
 
         const address = bitbox.HDNode.toCashAddress(childNode)
-        // console.log('GET WALLET BALANCE (receiving address)', address)
+        console.log('GET BALANCE BY SESSION (receiving address)', address)
 
         /* Add to all receiving (pool). */
-        addresses.push(address)
+        searchAccts.push(address)
     })
-    console.log('GET WALLET BALANCE (all accounts)', addresses)
+    console.log('GET BALANCE BY SESSION (all accounts)', searchAccts)
+
+    /* Validate search accounts. */
+    if (!searchAccts) {
+        return 0
+    }
 
     try {
         /* Initialize balance. */
@@ -53,7 +61,7 @@ const getBalance = (state, getters, rootState, rootGetters) => async (_currency)
         // console.log('ALL ACCOUNTS DETAILS', JSON.stringify(details, null, 4))
 
         /* Validate (use of) unconfirmed transactions. */
-        if (rootGetters['profile/getFlags'] && rootGetters['profile/getFlags'].ut) {
+        if (rootGetters['getFlags'] && rootGetters['getFlags'].unconfirmed) {
             details.forEach((address) => {
                 /* Both confirmed and unconfirmed. */
                 balance += (address.balanceSat + address.unconfirmedBalanceSat)
@@ -67,7 +75,7 @@ const getBalance = (state, getters, rootState, rootGetters) => async (_currency)
 
         /* Retrieve market price. */
         const marketPrice =
-            await rootGetters['blockchain/getTicker'](_wallet, _currency)
+            await rootGetters['blockchain/getTicker'](_currency)
         console.info(`Market price (${_currency})`, marketPrice) // eslint-disable-line no-console
 
         /* Validate market price. */
@@ -92,4 +100,4 @@ const getBalance = (state, getters, rootState, rootGetters) => async (_currency)
 }
 
 /* Export module. */
-export default getBalance
+export default getBalanceBySession
