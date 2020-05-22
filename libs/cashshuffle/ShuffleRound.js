@@ -279,7 +279,8 @@ class ShuffleRound extends EventEmitter {
      */
     async actOnMessage (jsonMessage) {
         if (typeof window !== 'undefined') {
-            console.log('Act on message (jsonMessage):', jsonMessage.pruned.message)
+            /* eslint-disable-next-line no-console */
+            // console.log('Act on message (jsonMessage):', jsonMessage.pruned.message)
         } else {
             debug('Act on message (jsonMessage):', jsonMessage.pruned.message)
         }

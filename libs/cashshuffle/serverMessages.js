@@ -431,9 +431,7 @@ function forwardEncryptedOutputs (
         })
 
         /* Set message. */
-        const msg = PB.Packet
-            .encode(message.packet)
-            .finish()
+        const msg = Buffer.from(PB.Packet.encode(message.packet).finish())
             .toString('base64')
 
         /* Set signature. */
@@ -441,9 +439,7 @@ function forwardEncryptedOutputs (
             .sign(bch.PrivateKey(myVerificationPrivKey))
 
         /* Set message signature. */
-        message.signature = PB.Signature.create({
-            signature: signature
-        })
+        message.signature = PB.Signature.create({ signature })
 
         /* Add message to signed messages. */
         signedMessages.push(message)
@@ -524,16 +520,15 @@ function broadcastSignatureAndUtxo (
     }))
 
     /* Set message. */
-    const msg = PB.Packet.encode(message.packet).finish().toString('base64')
+    const msg = Buffer.from(PB.Packet.encode(message.packet).finish())
+        .toString('base64')
 
     /* Set signature. */
     const signature = new BetterMessage(msg, 'base64')
         .sign(bch.PrivateKey(myVerificationPrivKey))
 
     /* Set message signature. */
-    message.signature = PB.Signature.create({
-        signature: signature
-    })
+    message.signature = PB.Signature.create({ signature })
 
     /* Return packed message. */
     return packMessage(message)
@@ -598,16 +593,15 @@ function broadcastEquivCheck (
     })
 
     /* Set message. */
-    const msg = PB.Packet.encode(message.packet).finish().toString('base64')
+    const msg = Buffer.from(PB.Packet.encode(message.packet).finish())
+        .toString('base64')
 
     /* Set signature. */
     const signature = new BetterMessage(msg, 'base64')
         .sign(bch.PrivateKey(myVerificationPrivKey))
 
     /* Set message signature. */
-    message.signature = PB.Signature.create({
-        signature: signature
-    })
+    message.signature = PB.Signature.create({ signature })
 
     /* Return packed message. */
     return packMessage(message)
@@ -650,16 +644,15 @@ function broadcastFinalOutputAddresses (
         })
 
         /* Set message. */
-        const msg = PB.Packet.encode(message.packet).finish().toString('base64')
+        const msg = Buffer.from(PB.Packet.encode(message.packet).finish())
+            .toString('base64')
 
         /* Set signature. */
         const signature = new BetterMessage(msg, 'base64')
             .sign(bch.PrivateKey(myVerificationPrivKey))
 
         /* Set message signature. */
-        message.signature = PB.Signature.create({
-            signature: signature
-        })
+        message.signature = PB.Signature.create({ signature })
 
         /* Add message to signed messages. */
         signedMessages.push(message)
@@ -715,7 +708,8 @@ function changeAddressAnnounce (
     })
 
     /* Set message. */
-    const msg = PB.Packet.encode(message.packet).finish().toString('base64')
+    const msg = Buffer.from(PB.Packet.encode(message.packet).finish())
+        .toString('base64')
 
     /* Set signature. */
     const signature = new BetterMessage(msg, 'base64')
@@ -770,7 +764,7 @@ function checkPacketSignature (oneSignedPacket) {
     const verificationKey = oneSignedPacket.packet.fromKey.key
 
     /* Set signature. */
-    const signature = oneSignedPacket.signature.signature.toString('base64')
+    const signature = Buffer.from(oneSignedPacket.signature.signature).toString('base64')
 
     /* Set packet. */
     const packet = PB.Packet.encode(oneSignedPacket.packet)
@@ -782,9 +776,10 @@ function checkPacketSignature (oneSignedPacket) {
     const address = pubkey.toAddress().toString()
 
     /* Set message. */
-    const message = packet.finish().toString('base64')
+    const message = Buffer.from(packet.finish()).toString('base64')
 
     // debug('checkPacketSignature',
+    //     oneSignedPacket,
     //     verificationKey,
     //     signature,
     //     packet,
@@ -899,7 +894,8 @@ function blameMessage (
     }))
 
     /* Set message. */
-    const msg = PB.Packet.encode(blameMessage.packet).finish().toString('base64')
+    const msg = Buffer.from(PB.Packet.encode(blameMessage.packet).finish())
+        .toString('base64')
 
     /* Set blame message signature. */
     blameMessage.signature = PB.Signature.create({

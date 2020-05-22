@@ -7,13 +7,6 @@ const debug = require('debug')('cashshuffle:utils')
 const BITBOX = require('bitbox-sdk').BITBOX
 const bitbox = new BITBOX()
 
-/* Import local modules. */
-// const Message = require('./BetterMessage.js')
-
-// const Transaction = bch.Transaction
-// const Address = bch.Address
-// const Script = bch.Script
-// const crypto = bch.crypto
 const PublicKey = bch.PublicKey
 const PrivateKey = bch.PrivateKey
 
@@ -34,12 +27,10 @@ const getKeypairFromWif = function (somePrivateKeyWif) {
     coin.publicKey = coin.privateKey.toPublicKey()
 
     /* Set cash address. */
-    // coin.cashAddress = coin.publicKey.toAddress()._toStringCashAddr()
     coin.cashAddress = coin.publicKey.toAddress().toString()
     debug('Get keypair from WIF (cashAddress):', coin.cashAddress)
 
     /* Set legacy address. */
-    // coin.legacyAddress = coin.publicKey.toAddress().toString()
     coin.legacyAddress = bitbox.Address.toLegacyAddress(coin.cashAddress)
     debug('Get keypair from WIF (legacyAddress):', coin.legacyAddress)
 

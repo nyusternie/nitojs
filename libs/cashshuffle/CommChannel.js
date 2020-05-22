@@ -77,7 +77,6 @@ class CommChannel extends EventEmitter {
         // this._wsClient.on('message', (someMessageBuffer) => {
         this._wsClient.addEventListener('message', async (someMessageBuffer) => {
             /* Set message. */
-            console.log('Handling websocket (someMessageBuffer):', someMessageBuffer)
             const message = await this.msg.decodeAndClassify(someMessageBuffer)
             // debug('Handling websocket (message):', message)
 

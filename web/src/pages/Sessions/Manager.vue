@@ -260,8 +260,8 @@ export default {
                 // Disable automatically joining shuffle rounds
                 // once a connection with the server is established
                 disableAutoShuffle: false,
-                // serverStatsUri: 'https://shuffle.servo.cash:8080/stats'
-                serverStatsUri: 'https://cashshuffle.c3-soft.com:9999/stats'
+                serverStatsUri: 'https://shuffle.servo.cash:8080/stats'
+                // serverStatsUri: 'https://cashshuffle.c3-soft.com:9999/stats'
             })
 
             shuffleManager.on('shuffle', async (shuffleRound) => {
