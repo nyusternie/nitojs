@@ -23,11 +23,16 @@ const pbTypes = [
 ]
 
 /* Initialize protobuf. */
-// const PB = {
-//     root: protobuf.loadSync(path.join(__dirname, 'shuffle.proto'))
-// }
+// NOTE: Problem loading from local file, so copied to web root. See issue:
+//       https://github.com/protobufjs/protobuf.js/issues/1023#issuecomment-629165262
 let PB = {}
-protobuf.load(path.join(__dirname, 'shuffle.proto'), (err, root) => {
+let protoFile = null
+if (typeof window !== 'undefined') {
+    protoFile = 'shuffle.proto'
+} else {
+    protoFile = path.join(__dirname, 'shuffle.proto')
+}
+protobuf.load(protoFile, (err, root) => {
     if (err) return console.error(err) // eslint-disable-line no-console
 
     /* Set root. */
@@ -68,7 +73,7 @@ function messageToBuffers (someBase64Message) {
         let messageLength = messageBuffer.slice(8, 12)
 
         /* Set message length. */
-        messageLength = messageLength.readUInt32BE()
+        messageLength = messageLength.readUInt32BE(0)
 
         /* Set message payload. */
         // const messagePayload = messageBuffer.slice(12, ) // FIXME: Why do we have a trailing space??
@@ -92,140 +97,165 @@ function messageToBuffers (someBase64Message) {
     }
 }
 
+const handleMessageBuffer = (messageBuffer) => {
+    /* Validate message buffer. */
+    if (messageBuffer.length < 12) {
+        throw new Error('bad_length')
+    }
+
+    /* Set message magic (bytes). */
+    const messageMagic = messageBuffer.slice(0, 8)
+
+    /* Validate message magic (bytes). */
+    if (messageMagic.toString('hex') !== magic.toString('hex')) {
+        throw new Error('message_magic')
+    }
+
+    /* Initialize message length. */
+    let messageLength = messageBuffer.slice(8, 12)
+
+    /* Set message length. */
+    messageLength = messageLength.readUInt32BE(0)
+
+    /* Set message payload. */
+    const messagePayload = messageBuffer.slice(12)
+
+    /* Build server message. */
+    const serverMessage = {
+        packets: [],
+        full: undefined,
+        pruned: undefined,
+        components: messageToBuffers(messageBuffer)
+    }
+
+    /* Validate message payload. */
+    if (messagePayload.length !== messageLength) {
+        debug(
+            'Incorrect payload size:', messagePayload.length,
+            '!==', messageLength
+        )
+        throw new Error('message_payload')
+    } else {
+        /* Set decoded packets. */
+        const decodedPackets = PB.Packets.decode(messagePayload)
+
+        /* Loop through ALL decoded packets. */
+        for (let onePacket of decodedPackets.packet) {
+            serverMessage.packets.push(onePacket)
+        }
+
+        /* Set (full) server message. */
+        serverMessage.full = decodedPackets.toJSON()
+
+        /* Set (pruned) server message. */
+        serverMessage.pruned = {
+            message: _.get(serverMessage.full, 'packet[0].packet'),
+            signature: _.get(serverMessage.full, 'packet[0].signature.signature')
+        }
+    }
+
+    /* Validate (pruned) server message. */
+    if (!serverMessage.pruned.message) {
+        throw new Error('message_parsing')
+    }
+
+    /* Initialize message types. */
+    // TODO: Pick more intuitive and more consistent message names.
+    let messageTypes = [
+        { name: 'playerCount', required: ['number'] },
+        { name: 'serverGreeting', required: ['number', 'session'] },
+        { name: 'announcementPhase', required: ['number', 'phase'] },
+        { name: 'incomingVerificationKeys', required: ['session', 'fromKey.key', 'message.inputs'] },
+        { name: 'incomingChangeAddress', required: ['session', 'number', 'fromKey.key', 'message.address.address', 'message.key.key', 'phase'] },
+
+        /**
+         * This message name will be changed before the `serverMessage`
+         * event is emitted by the `CommChannel` class.
+         *
+         * We set the final message name there because that's where we
+         * have access to round state data and the purpose of the message
+         * (which should inform the name) changes based on the state of the
+         * round.
+         *
+         * Yep, this is yet another hack to deal with the fact that there
+         * is no support for a unique `messageName` field on the protocol
+         * messages.
+         */
+        { name: '_unicast', required: ['number', 'session', 'fromKey.key', 'toKey.key', 'message.str'] },
+        { name: 'incomingEquivCheck', required: ['number', 'session', 'phase', 'fromKey.key', 'message.hash.hash'] },
+        { name: 'incomingInputAndSig', required: ['number', 'session', 'phase', 'fromKey.key', 'message.signatures'] },
+        { name: 'finalTransactionOutputs', required: ['session', 'number', 'phase', 'fromKey.key', 'message.str'] },
+        { name: 'blame', required: ['number', 'session', 'fromKey.key', 'message.blame', 'phase'] }
+    ]
+
+    // Order the message types so that the most
+    // specific descriptions are seen first by
+    // the function that attempts to find a match.
+    messageTypes = _.orderBy(
+        messageTypes,
+        function (ot) {
+            return ot.required.length
+        },
+        ['desc']
+    )
+
+    /* Set matching message type. */
+    const matchingMessageType = _.reduce(messageTypes, function (winner, oneObject) {
+        /* Set required parameter values. */
+        const requiredParamValues = _.at(serverMessage.pruned.message, oneObject.required)
+
+        /* Validate required parameter values. */
+        // NOTE: If none of the required parameters are missing,
+        //       consider this object a match.
+        const isMatch = oneObject.required.length === _.compact(requiredParamValues).length
+
+        /* Validate match. */
+        // NOTE: If our match has more matching params than
+        //       our previous match, use this one instead
+        if (isMatch && winner.required.length < requiredParamValues.length) {
+            return oneObject
+        } else {
+            return winner
+        }
+    }, { required: [] })
+
+    /* Update server message. */
+    Object.assign(serverMessage.pruned, {
+        messageType: matchingMessageType.name || 'UNKNOWN'
+    })
+
+    /* Return server message. */
+    return serverMessage
+}
+
 /**
  * Decode and Classify
  *
  * TODO: Clean this up so it better handles multi-packet messages.
  */
 function decodeAndClassify (messageBuffer) {
-    if (messageBuffer.length < 12) {
-        throw new Error('bad_length')
-    } else {
-        /* Set message magic (bytes). */
-        const messageMagic = messageBuffer.slice(0, 8)
+    return new Promise(function (resolve, reject) {
+        /* Validate and parse message data. */
+        if (messageBuffer && messageBuffer.data && messageBuffer.data instanceof Blob) {
+            /* Initialize file reader. */
+            const reader = new FileReader()
 
-        /* Validate message magic (bytes). */
-        if (messageMagic.toString('hex') !== magic.toString('hex')) {
-            throw new Error('message_magic')
-        }
+            /* Handle onload. */
+            reader.onload = () => {
+                /* Handle message buffer. */
+                resolve(handleMessageBuffer(Buffer.from(reader.result)))
+            }
 
-        /* Initialize message length. */
-        let messageLength = messageBuffer.slice(8, 12)
+            /* Handle onerror. */
+            reader.onerror = reject
 
-        /* Set message length. */
-        messageLength = messageLength.readUInt32BE()
-
-        /* Set message payload. */
-        // const messagePayload = messageBuffer.slice(12, ) // FIXME
-        const messagePayload = messageBuffer.slice(12) // FIXME
-
-        /* Build server message. */
-        const serverMessage = {
-            packets: [],
-            full: undefined,
-            pruned: undefined,
-            components: messageToBuffers(messageBuffer)
-        }
-
-        /* Validate message payload. */
-        if (messagePayload.length !== messageLength) {
-            debug(
-                'Incorrect payload size:', messagePayload.length,
-                '!==', messageLength
-            )
-            throw new Error('message_payload')
+            /* Read data as buffer. */
+            reader.readAsArrayBuffer(messageBuffer.data)
         } else {
-            /* Set decoded packets. */
-            const decodedPackets = PB.Packets.decode(messagePayload)
-
-            /* Loop through ALL decoded packets. */
-            for (let onePacket of decodedPackets.packet) {
-                serverMessage.packets.push(onePacket)
-            }
-
-            /* Set (full) server message. */
-            serverMessage.full = decodedPackets.toJSON()
-
-            /* Set (pruned) server message. */
-            serverMessage.pruned = {
-                message: _.get(serverMessage.full, 'packet[0].packet'),
-                signature: _.get(serverMessage.full, 'packet[0].signature.signature')
-            }
+            /* Handle message buffer. */
+            resolve(handleMessageBuffer(messageBuffer))
         }
-
-        /* Validate (pruned) server message. */
-        if (!serverMessage.pruned.message) {
-            throw new Error('message_parsing')
-        }
-
-        /* Initialize message types. */
-        // TODO: Pick more intuitive and more consistent message names.
-        let messageTypes = [
-            { name: 'playerCount', required: ['number'] },
-            { name: 'serverGreeting', required: ['number', 'session'] },
-            { name: 'announcementPhase', required: ['number', 'phase'] },
-            { name: 'incomingVerificationKeys', required: ['session', 'fromKey.key', 'message.inputs'] },
-            { name: 'incomingChangeAddress', required: ['session', 'number', 'fromKey.key', 'message.address.address', 'message.key.key', 'phase'] },
-
-            /**
-             * This message name will be changed before the `serverMessage`
-             * event is emitted by the `CommChannel` class.
-             *
-             * We set the final message name there because that's where we
-             * have access to round state data and the purpose of the message
-             * (which should inform the name) changes based on the state of the
-             * round.
-             *
-             * Yep, this is yet another hack to deal with the fact that there
-             * is no support for a unique `messageName` field on the protocol
-             * messages.
-             */
-            { name: '_unicast', required: ['number', 'session', 'fromKey.key', 'toKey.key', 'message.str'] },
-            { name: 'incomingEquivCheck', required: ['number', 'session', 'phase', 'fromKey.key', 'message.hash.hash'] },
-            { name: 'incomingInputAndSig', required: ['number', 'session', 'phase', 'fromKey.key', 'message.signatures'] },
-            { name: 'finalTransactionOutputs', required: ['session', 'number', 'phase', 'fromKey.key', 'message.str'] },
-            { name: 'blame', required: ['number', 'session', 'fromKey.key', 'message.blame', 'phase'] }
-        ]
-
-        // Order the message types so that the most
-        // specific descriptions are seen first by
-        // the function that attempts to find a match.
-        messageTypes = _.orderBy(
-            messageTypes,
-            function (ot) {
-                return ot.required.length
-            },
-            ['desc']
-        )
-
-        /* Set matching message type. */
-        const matchingMessageType = _.reduce(messageTypes, function (winner, oneObject) {
-            /* Set required parameter values. */
-            const requiredParamValues = _.at(serverMessage.pruned.message, oneObject.required)
-
-            /* Validate required parameter values. */
-            // NOTE: If none of the required parameters are missing,
-            //       consider this object a match.
-            const isMatch = oneObject.required.length === _.compact(requiredParamValues).length
-
-            /* Validate match. */
-            // NOTE: If our match has more matching params than
-            //       our previous match, use this one instead
-            if (isMatch && winner.required.length < requiredParamValues.length) {
-                return oneObject
-            } else {
-                return winner
-            }
-        }, { required: [] })
-
-        /* Update server message. */
-        Object.assign(serverMessage.pruned, {
-            messageType: matchingMessageType.name || 'UNKNOWN'
-        })
-
-        /* Return server message. */
-        return serverMessage
-    }
+    })
 }
 
 /**
@@ -710,7 +740,7 @@ function packMessage (oneOrMorePackets) {
     const packets = PB.Packets.create({ packet: oneOrMorePackets })
 
     /* Set message buffer. */
-    const messageBuffer = PB.Packets.encode(packets).finish()
+    const messageBuffer = Buffer.from(PB.Packets.encode(packets).finish())
 
     /* Initialize length suffix. */
     const lengthSuffix = Buffer.alloc(4)

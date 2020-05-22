@@ -13,7 +13,7 @@ const updateCoins = async ({ dispatch, getters }) => {
 
     /* Retrieve accounts. */
     const accounts = getters.getAccountsBySession(sessionId)
-    console.log('UPDATE COINS (accounts)', accounts)
+    // console.log('UPDATE COINS (accounts)', accounts)
 
     /* Validate accounts. */
     if (!accounts) {

@@ -65,14 +65,20 @@ class CommChannel extends EventEmitter {
         // TODO: This and all communication functionality will be moved to
         //       a separate class. The `Round` should only touch messages
         //       after they have been parsed, validated, and classified.
-        this._wsClient = new WebSocket(this.serverUri, {
-            origin: 'http://localhost'
-        })
+        if (typeof window !== 'undefined') {
+            this._wsClient = new window.WebSocket(this.serverUri)
+        } else {
+            this._wsClient = new WebSocket(this.serverUri, {
+                origin: 'http://localhost'
+            })
+        }
 
         /* Handle incoming message from CashShuffle server. */
-        this._wsClient.on('message', (someMessageBuffer) => {
+        // this._wsClient.on('message', (someMessageBuffer) => {
+        this._wsClient.addEventListener('message', async (someMessageBuffer) => {
             /* Set message. */
-            const message = this.msg.decodeAndClassify(someMessageBuffer)
+            console.log('Handling websocket (someMessageBuffer):', someMessageBuffer)
+            const message = await this.msg.decodeAndClassify(someMessageBuffer)
             // debug('Handling websocket (message):', message)
 
             /* Initialize message sub-class. */
@@ -162,7 +168,9 @@ class CommChannel extends EventEmitter {
         })
 
         /* Handle a NEW Websockets connection with the CashShuffle server. */
-        this._wsClient.on('open', () => {
+        // this._wsClient.on('open', () => {
+        this._wsClient.addEventListener('open', () => {
+        // this._wsClient.onopen = () => {
             this._wsConnected = true
             // debug('We are now connected to the cashshuffle server:', this.serverUri)
 
@@ -170,7 +178,8 @@ class CommChannel extends EventEmitter {
         })
 
         /* Handle closing the Websockets connection. */
-        this._wsClient.on('close', (details) => {
+        // this._wsClient.on('close', (details) => {
+        this._wsClient.addEventListener('close', (details) => {
             if (!this.round.roundComplete) {
                 // FIXME: Should we attempt to automatically reconnect
                 //        and restart the process??
@@ -180,7 +189,8 @@ class CommChannel extends EventEmitter {
         })
 
         /* Handle Websockets errors. */
-        this._wsClient.on('error', (someError) => {
+        // this._wsClient.on('error', (someError) => {
+        this._wsClient.addEventListener('error', (someError) => {
             console.error('Socket error!', someError) // eslint-disable-line no-console
             this.emit('connectionError', someError)
         })
@@ -293,8 +303,15 @@ class CommChannel extends EventEmitter {
         /* Set data. */
         const data = JSON.stringify(writeThisToDisk, null, 2)
 
-        /* Write data to disk. */
-        require('fs').writeFileSync(`_failedShuffle-${moment().unix()}.js`, 'module.exports = ' + data)
+        if (typeof window !== 'undefined') {
+            console.error(data) // eslint-disable-line no-console
+        } else {
+            /* Write data to disk. */
+            require('fs').writeFileSync(
+                `_failedShuffle-${moment().unix()}.js`,
+                'module.exports = ' + data
+            )
+        }
 
         /* Quit application. */
         process.exit(0)

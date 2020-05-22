@@ -48,7 +48,7 @@ const getBalanceBySession = (
 
         /* Retrieve (ALL) account(s) details. */
         const addrDetails = await bitbox.Address.details(searchAccts)
-        console.log('ALL ACCOUNTS DETAILS', JSON.stringify(addrDetails, null, 4))
+        // console.log('ALL ACCOUNTS DETAILS', JSON.stringify(addrDetails, null, 4))
 
         /* Validate (use of) unconfirmed transactions. */
         if (rootGetters['getFlags'] && rootGetters['getFlags'].unconfirmed) {

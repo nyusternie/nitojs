@@ -132,6 +132,7 @@ export default {
             },
 
             session: {
+                id: 0,
                 title: 'Session #1',
                 username: 'michael23',
                 email: '',
@@ -174,14 +175,15 @@ export default {
         /**
          * Change Account
          */
-        change(_sessionId) {
+        change() {
             /* Set chain. */
             const chain = 1 // change account
 
-            const index = 0
+            /* Set account index. */
+            const acctIndex = 0
 
             /* Set derivation path. */
-            const path = this.getDerivationPath(_sessionId, chain, index)
+            const path = this.getDerivationPath(this.session.id, chain, acctIndex)
             console.log('MANAGER (path)', path)
 
             /* Initialize HD node. */
@@ -203,14 +205,15 @@ export default {
         /**
          * Target Account
          */
-        target(_sessionId) {
+        target() {
             /* Set chain. */
             const chain = 7867 // Nito Cash account
 
-            const index = 0
+            /* Set account index. */
+            const acctIndex = 0
 
             /* Set derivation path. */
-            const path = this.getDerivationPath(_sessionId, chain, index)
+            const path = this.getDerivationPath(this.session.id, chain, acctIndex)
             console.log('MANAGER (path)', path)
 
             /* Initialize HD node. */
@@ -234,35 +237,36 @@ export default {
             const ShuffleClient = require('../../../../libs/cashshuffle/ShuffleClient.js')
             console.log('MANAGER (client):', ShuffleClient)
 
-            const sessionId = 0
+            this.session.id = 0 // FOR DEVELOPMENT PURPOSES ONLY
 
-            const coins = this.getCoinsBySession(sessionId)
+            const coins = this.getCoinsBySession(this.session.id)
             console.log('MANAGER (coins):', coins)
 
             const coin = coins[Object.keys(coins)[0]]
             console.log('MANAGER (coin):', JSON.stringify(coin, null, 4))
 
-            console.log('MANAGER (target):', this.target(sessionId))
-            console.log('MANAGER (change):', this.change(sessionId))
+            console.log('MANAGER (target):', this.target())
+            console.log('MANAGER (change):', this.change())
 
-            /* Initialize new shuffle client. */
-            // shuffleManager = new ShuffleClient({
-            //     coins: [ coin ],
-            //     hooks: {
-            //         change: this.change, // NOTE: This is a function.
-            //         shuffled: this.target, // NOTE: This is a function.
-            //     },
-            //     protocolVersion: 300,
-            //     maxShuffleRounds: 1,
-            //     // Disable automatically joining shuffle rounds
-            //     // once a connection with the server is established
-            //     disableAutoShuffle: false,
-            //     serverStatsUri: 'https://shuffle.servo.cash:8080/stats'
-            // })
-            //
-            // shuffleManager.on('shuffle', async (shuffleRound) => {
-            //     console.log(`Coin ${shuffleRound.coin.txid}:${shuffleRound.coin.vout} has been successfully shuffled!`)
-            // })
+            /* Initialize new shuffle manager. */
+            const shuffleManager = new ShuffleClient({
+                coins: [ coin ],
+                hooks: {
+                    change: this.change, // NOTE: This is a function.
+                    shuffled: this.target, // NOTE: This is a function.
+                },
+                protocolVersion: 300,
+                maxShuffleRounds: 1,
+                // Disable automatically joining shuffle rounds
+                // once a connection with the server is established
+                disableAutoShuffle: false,
+                // serverStatsUri: 'https://shuffle.servo.cash:8080/stats'
+                serverStatsUri: 'https://cashshuffle.c3-soft.com:9999/stats'
+            })
+
+            shuffleManager.on('shuffle', async (shuffleRound) => {
+                console.log(`Coin ${shuffleRound.coin.txid}:${shuffleRound.coin.vout} has been successfully shuffled!`)
+            })
 
         },
 

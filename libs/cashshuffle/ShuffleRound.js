@@ -278,7 +278,11 @@ class ShuffleRound extends EventEmitter {
      * encoded server messages.
      */
     async actOnMessage (jsonMessage) {
-        debug('Act on message (jsonMessage):', jsonMessage.pruned.message)
+        if (typeof window !== 'undefined') {
+            console.log('Act on message (jsonMessage):', jsonMessage.pruned.message)
+        } else {
+            debug('Act on message (jsonMessage):', jsonMessage.pruned.message)
+        }
 
         /* Set message type. */
         const messageType =

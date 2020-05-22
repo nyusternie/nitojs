@@ -16,13 +16,13 @@ export default {
         ]),
     },
     created: function () {
-        console.log('APPLICATION STATE', this.$store.state)
+        // console.log('APPLICATION STATE', this.$store.state)
     },
     mounted: function () {
         setTimeout(() => {
             /* Update coins. */
             // FIXME: Why is this blocking the entire initial UI setup??
-            this.updateCoins()
+            // this.updateCoins()
         }, 3000)
     },
 }

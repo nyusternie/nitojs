@@ -3,7 +3,7 @@ const _ = require('lodash')
 const axios = require('axios')
 const debug = require('debug')('cashshuffle:client')
 const EventEmitter = require('events').EventEmitter
-const URL = require('url').URL
+const URL = require('url')
 
 const ShuffleRound = require('./ShuffleRound.js')
 const coinUtils = require('./coinUtils.js')
@@ -385,7 +385,7 @@ class ShuffleClient extends EventEmitter {
                     /* Validate server URI. */
                     if (!serverUri) {
                         /* Set parsed server statistics. */
-                        const serverStatsUriParsed = new URL(this.serverStatsUri)
+                        const serverStatsUriParsed = URL.parse(this.serverStatsUri)
 
                         /* Update server statistics. */
                         Object.assign(serverStatsUriParsed, {
@@ -395,7 +395,7 @@ class ShuffleClient extends EventEmitter {
                         })
 
                         /* Set server URI. */
-                        serverUri = serverStatsUriParsed.toString()
+                        serverUri = `${serverStatsUriParsed.protocol}//${serverStatsUriParsed.hostname}:${serverStatsUriParsed.port}`
                         // debug('Parsed Server URI:', serverUri)
                     }
 
