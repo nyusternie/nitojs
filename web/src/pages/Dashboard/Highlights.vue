@@ -47,25 +47,25 @@ export default {
                 },
                 {
                     type: 'success',
-                    icon: 'ti-wallet',
-                    title: 'Managing',
+                    icon: 'ti-server',
+                    title: 'My Purse',
                     value: '$1,345',
                     footerText: 'in 4 active sesions',
                     footerIcon: 'ti-pulse'
                 },
                 {
                     type: 'danger',
-                    icon: 'ti-check-box',
-                    title: 'Completed',
+                    icon: 'ti-pulse',
+                    title: 'My Sessions',
                     value: '23',
-                    footerText: 'in the last 30 days',
+                    footerText: 'since May 15, 2020',
                     footerIcon: 'ti-timer'
                 },
                 {
                     type: 'info',
                     icon: 'ti-signal',
                     title: 'Peers Online',
-                    value: '28+',
+                    value: '28',
                     footerText: 'updated 20 seconds ago',
                     footerIcon: 'ti-reload'
                 }

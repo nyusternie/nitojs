@@ -11,10 +11,11 @@
 </template>
 
 <script>
-import Activity from '@/components/Dashboard/Activity'
-import Community from '@/components/Dashboard/Community'
-import Highlights from '@/components/Dashboard/Highlights'
-import Pools from '@/components/Dashboard/Pools'
+/* Import components. */
+import Activity from './Dashboard/Activity'
+import Community from './Dashboard/Community'
+import Highlights from './Dashboard/Highlights'
+import Pools from './Dashboard/Pools'
 
 export default {
     components: {

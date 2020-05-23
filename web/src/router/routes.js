@@ -54,10 +54,10 @@ const routes = [
                 component: History
             },
 
-            /* Purse Settings */
+            /* Settings */
             {
                 path: 'settings',
-                name: 'Purse Settings',
+                name: 'Settings',
                 component: Settings
             },
 

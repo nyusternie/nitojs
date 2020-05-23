@@ -7,6 +7,14 @@
                 <sidebar-link to="/pools" name="Pools" icon="ti-layers-alt" />
                 <sidebar-link to="/history" name="History" icon="ti-time" />
                 <sidebar-link to="/settings" name="Settings" icon="ti-panel" />
+
+                <div class="nav-item nito-xchg">
+                    <a href="https://nito.exchange" target="_blank" class="nav-link">
+                        <i class="ti-control-shuffle"></i>
+                        <p>Try Nito Exchange</p>
+
+                    </a>
+                </div>
             </template>
 
             <mobile-menu>
@@ -31,13 +39,6 @@
                         {{alert.title}}
                     </a>
                 </drop-down>
-
-                <!-- <li class="nav-item">
-                    <a class="nav-link">
-                        <i class="ti-settings"></i>
-                        <p>Settings</p>
-                    </a>
-                </li> -->
 
                 <li class="divider"></li>
             </mobile-menu>
@@ -105,5 +106,10 @@ export default {
 </script>
 
 <style lang="scss">
-//
+.nito-xchg {
+    margin-top: 40px;
+    border-top: 1pt solid rgba(220, 220, 220, 0.3);
+
+    cursor: pointer;
+}
 </style>

@@ -1,35 +1,42 @@
 <template>
     <div class="row">
         <div class="col-xl-4 col-lg-5 col-md-6">
-            <user-card>
-
-            </user-card>
+            <App />
         </div>
 
         <div class="col-xl-8 col-lg-7 col-md-6">
-            <div class="col-md-4">
-                <p-button
-                    round
-                    outline
-                    block
-                    @click.native="createPurse"
-                >
-                    Create a NEW purse
-                </p-button>
+            <div class="row">
+                <div class="col-md-4">
+                    <p-button
+                        round
+                        outline
+                        block
+                        @click.native="createPurse"
+                    >
+                        Create a NEW purse
+                    </p-button>
 
-                <p-button
-                    round
-                    outline
-                    block
-                    @click.native="removePurse"
-                >
-                    Destroy your purse
-                </p-button>
+                    <p-button
+                        round
+                        block
+                        @click.native="removePurse"
+                    >
+                        Destroy your purse
+                    </p-button>
+                </div>
+
+                <div class="col-md-8">
+                    <p>
+                        To get started, click the <strong>"Create New Session"</strong> button.
+                        Then just start depositing funds to the session address.
+                        Be default, shuffling will begin automatically.
+                    </p>
+                </div>
             </div>
 
-            <edit-profile-form>
+            <hr />
 
-            </edit-profile-form>
+            <Purse />
         </div>
     </div>
 </template>
@@ -41,13 +48,13 @@ import { mapActions, mapGetters } from 'vuex'
 // import NotificationTemplate from './Notifications/NotificationTemplate'
 import NewSession from './Notifications/NewSession'
 
-import EditProfileForm from './UserProfile/EditProfileForm.vue'
-import UserCard from './UserProfile/UserCard.vue'
+import Purse from './Settings/Purse.vue'
+import App from './Settings/App.vue'
 
 export default {
     components: {
-        EditProfileForm,
-        UserCard,
+        Purse,
+        App,
     },
     computed: {
         ...mapGetters('purse', [
