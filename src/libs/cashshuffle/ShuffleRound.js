@@ -205,6 +205,7 @@ class ShuffleRound extends EventEmitter {
 
             /* Set round phase. */
             this.phase = 'registration'
+            this.emit('phase', 'registration')
 
             try {
                 // console.log(
@@ -280,7 +281,7 @@ class ShuffleRound extends EventEmitter {
     async actOnMessage (jsonMessage) {
         if (typeof window !== 'undefined') {
             /* eslint-disable-next-line no-console */
-            // console.log('Act on message (jsonMessage):', jsonMessage.pruned.message)
+            console.log('Act on message (jsonMessage):', jsonMessage.pruned.message)
         } else {
             debug('Act on message (jsonMessage):', jsonMessage.pruned.message)
         }
@@ -342,6 +343,7 @@ class ShuffleRound extends EventEmitter {
             if (newPhaseName && newPhaseName === 'announcement') {
                 /* Set phase. */
                 this.phase = 'announcement'
+                this.emit('phase', 'announcement')
 
                 /* Set number of players. */
                 this.numberOfPlayers = Number(message['number'])
@@ -412,6 +414,7 @@ class ShuffleRound extends EventEmitter {
              */
             if (_.get(_.minBy(this.players, 'playerNumber'), 'playerNumber') === this.myPlayerNumber) {
                 this.phase = 'shuffle'
+                this.emit('phase', 'shuffle')
 
                 try {
                     await this.forwardEncryptedShuffleTxOutputs(undefined, undefined)
@@ -435,6 +438,7 @@ class ShuffleRound extends EventEmitter {
 
             if (this.phase === 'announcement' && newPhaseName === 'shuffle') {
                 this.phase = 'shuffle'
+                this.emit('phase', 'shuffle')
                 this.forwardEncryptedShuffleTxOutputs(jsonMessage.packets, sentBy)
             }
             break
@@ -445,6 +449,7 @@ class ShuffleRound extends EventEmitter {
 
             /* Set new phase name. */
             this.phase = newPhaseName
+            this.emit('phase', newPhaseName)
 
             this.checkFinalOutputsAndDoEquivCheck(jsonMessage.packets)
             break
@@ -982,6 +987,7 @@ class ShuffleRound extends EventEmitter {
 
         /* Advance to the next phase. */
         this.phase = 'EQUIVOCATION_CHECK'
+        this.emit('phase', 'EQUIVOCATION_CHECK')
 
         /* Now broadcast the results of our "equivocation check". */
         this.comms.sendMessage(
@@ -1037,6 +1043,7 @@ class ShuffleRound extends EventEmitter {
                 debug('Everyone passes the EQUIVOCATION_CHECK!')
 
                 this.phase = 'VERIFICATION_AND_SUBMISSION'
+                this.emit('phase', 'VERIFICATION_AND_SUBMISSION')
 
                 if (me.playerNumber === firstPlayer.playerNumber) {
                     try {
@@ -1363,7 +1370,8 @@ class ShuffleRound extends EventEmitter {
         // Close this round's connection to the server
         this.comms._wsClient.close()
 
-        this.emit('shuffle', this)
+        const msg = `Coin ${this.coin.txid}:${this.coin.vout} has been successfully shuffled!`
+        this.emit('notice', msg)
     }
 
     /**

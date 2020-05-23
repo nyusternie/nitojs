@@ -3,9 +3,19 @@ const _ = require('lodash')
 const bch = require('bitcore-lib-cash')
 const debug = require('debug')('cashshuffle:utils')
 
-/* Import BITBOX. */
-const BITBOX = require('bitbox-sdk').BITBOX
-const bitbox = new BITBOX()
+/* Initialize BITBOX. */
+let bitbox = null
+
+/* Set BITBOX. */
+if (typeof window !== 'undefined') {
+    bitbox = new window.BITBOX()
+} else {
+    /* Import BITBOX. */
+    const BITBOX = require('bitbox-sdk').BITBOX
+
+    bitbox = new BITBOX()
+}
+
 
 const PublicKey = bch.PublicKey
 const PrivateKey = bch.PrivateKey

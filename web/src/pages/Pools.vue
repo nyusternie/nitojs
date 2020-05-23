@@ -51,7 +51,6 @@
 
 <script>
 /* Import modules. */
-import { BITBOX } from 'bitbox-sdk'
 import numeral from 'numeral'
 import superagent from 'superagent'
 
@@ -181,7 +180,8 @@ export default {
 
             try {
                 /* Initialize BITBOX. */
-                this.bitbox = new BITBOX()
+                // this.bitbox = new BITBOX()
+                this.bitbox = new window.BITBOX()
             } catch (err) {
                 console.error(err)
             }

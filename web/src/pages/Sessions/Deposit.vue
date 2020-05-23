@@ -78,9 +78,6 @@
 /* Initialize vuex. */
 import { mapActions, mapGetters } from 'vuex'
 
-/* Import modules. */
-import { BITBOX } from 'bitbox-sdk'
-
 /* Import components. */
 import QRCode from 'qrcode'
 
@@ -228,7 +225,8 @@ export default {
 
             try {
                 /* Initialize BITBOX. */
-                this.bitbox = new BITBOX()
+                // this.bitbox = new BITBOX()
+                this.bitbox = new window.BITBOX()
             } catch (err) {
                 console.error(err)
             }

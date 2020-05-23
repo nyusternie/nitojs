@@ -241,6 +241,13 @@ class ShuffleClient extends EventEmitter {
         /* Handle when a shuffle round ends, successfully or not. */
         newShuffleRound.on('shuffle', this.cleanupCompletedRound.bind(this))
 
+        /* Handle phase messages. */
+        // NOTE: Pass any phase messages from our shuffleround instances
+        //       to any listeners on the shuffleClass instance.
+        newShuffleRound.on('phase', (someShuffleRoundMessage) => {
+            this.emit('phase', someShuffleRoundMessage)
+        })
+
         /* Handle debugging messages. */
         // NOTE: Pass any debug messages from our shuffleround instances
         //       to any listeners on the shuffleClass instance.
@@ -292,7 +299,8 @@ class ShuffleClient extends EventEmitter {
             // }
 
             /* Emit an event on the `ShuffleClient` class. */
-            this.emit('shuffle', shuffleRoundObject)
+            const msg = `Coin ${shuffleRoundObject.coin.txid}:${shuffleRoundObject.coin.vout} has been successfully shuffled!`
+            this.emit('notice', msg)
         } else {
             // Handle cleanup for when our round ends due to a
             // protocol violation or an exception is thrown.

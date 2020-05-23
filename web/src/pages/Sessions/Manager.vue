@@ -30,55 +30,11 @@
                 </div>
 
                 <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-md-8">
                         <fg-input type="text"
-                            label="First Name"
-                            placeholder="First Name"
-                            v-model="session.firstName"
-                        ></fg-input>
-                    </div>
-
-                    <div class="col-md-6">
-                        <fg-input type="text"
-                            label="Last Name"
-                            placeholder="Last Name"
-                            v-model="session.lastName"
-                        ></fg-input>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-md-12">
-                        <fg-input type="text"
-                            label="Address"
-                            placeholder="Home Address"
-                            v-model="session.address"
-                        ></fg-input>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-md-4">
-                        <fg-input type="text"
-                            label="City"
-                            placeholder="City"
-                            v-model="session.city"
-                        ></fg-input>
-                    </div>
-
-                    <div class="col-md-4">
-                        <fg-input type="text"
-                            label="Country"
-                            placeholder="Country"
-                            v-model="session.country"
-                        ></fg-input>
-                    </div>
-
-                    <div class="col-md-4">
-                        <fg-input type="number"
-                            label="Postal Code"
-                            placeholder="ZIP Code"
-                            v-model="session.postalCode"
+                            label="Current Phase"
+                            placeholder="loading, please wait..."
+                            v-model="phase"
                         ></fg-input>
                     </div>
                 </div>
@@ -113,7 +69,7 @@
 
 <script>
 /* Import modules. */
-import { BITBOX } from 'bitbox-sdk'
+const Nito = require('../../../../src/Nito.js')
 
 /* Initialize vuex. */
 import { mapActions, mapGetters } from 'vuex'
@@ -130,6 +86,10 @@ export default {
             notifications: {
                 topCenter: false
             },
+
+            nito: null,
+            phase: null,
+            notice: null,
 
             session: {
                 id: 0,
@@ -150,6 +110,7 @@ export default {
             'getCoinsBySession',
             'getDerivationPath',
             'getHDNode',
+            'getSessions',
         ]),
 
     },
@@ -166,7 +127,8 @@ export default {
 
             try {
                 /* Initialize BITBOX. */
-                this.bitbox = new BITBOX()
+                // this.bitbox = new BITBOX()
+                this.bitbox = new window.BITBOX()
             } catch (err) {
                 console.error(err)
             }
@@ -179,8 +141,16 @@ export default {
             /* Set chain. */
             const chain = 1 // change account
 
+            /* Set sessions. */
+            const sessions = this.getSessions
+            // console.log('TARGET (sessions):', sessions)
+
+            /* Set accounts. */
+            const accounts = sessions[this.session.id].accounts
+            // console.log('TARGET (accounts):', accounts)
+
             /* Set account index. */
-            const acctIndex = 0
+            const acctIndex = accounts.change
 
             /* Set derivation path. */
             const path = this.getDerivationPath(this.session.id, chain, acctIndex)
@@ -209,8 +179,16 @@ export default {
             /* Set chain. */
             const chain = 7867 // Nito Cash account
 
+            /* Set sessions. */
+            const sessions = this.getSessions
+            // console.log('TARGET (sessions):', sessions)
+
+            /* Set accounts. */
+            const accounts = sessions[this.session.id].accounts
+            // console.log('TARGET (accounts):', accounts)
+
             /* Set account index. */
-            const acctIndex = 0
+            const acctIndex = accounts.nito
 
             /* Set derivation path. */
             const path = this.getDerivationPath(this.session.id, chain, acctIndex)
@@ -233,10 +211,6 @@ export default {
         },
 
         startShuffle() {
-            /* Import local modules. */
-            const ShuffleClient = require('../../../../libs/cashshuffle/ShuffleClient.js')
-            console.log('MANAGER (client):', ShuffleClient)
-
             this.session.id = 0 // FOR DEVELOPMENT PURPOSES ONLY
 
             const coins = this.getCoinsBySession(this.session.id)
@@ -248,25 +222,26 @@ export default {
             console.log('MANAGER (target):', this.target())
             console.log('MANAGER (change):', this.change())
 
-            /* Initialize new shuffle manager. */
-            const shuffleManager = new ShuffleClient({
-                coins: [ coin ],
-                hooks: {
-                    change: this.change, // NOTE: This is a function.
-                    shuffled: this.target, // NOTE: This is a function.
-                },
-                protocolVersion: 300,
-                maxShuffleRounds: 1,
-                // Disable automatically joining shuffle rounds
-                // once a connection with the server is established
-                disableAutoShuffle: false,
-                serverStatsUri: 'https://shuffle.servo.cash:8080/stats'
-                // serverStatsUri: 'https://cashshuffle.c3-soft.com:9999/stats'
+            /* Initialize Nito. */
+            const nito = new Nito()
+
+            /* Handle Nito phases. */
+            nito.on('phase', async (_phase) => {
+                /* Set phase. */
+                this.phase = _phase
             })
 
-            shuffleManager.on('shuffle', async (shuffleRound) => {
-                console.log(`Coin ${shuffleRound.coin.txid}:${shuffleRound.coin.vout} has been successfully shuffled!`)
+            /* Handle Nito notices. */
+            nito.on('notice', async (_notice) => {
+                /* Set notice. */
+                this.notice = _notice
             })
+
+            /* Start shuffle manager. */
+            nito.startShuffleManager(coin, this.change, this.target)
+        },
+
+        stopShuffle() {
 
         },
 

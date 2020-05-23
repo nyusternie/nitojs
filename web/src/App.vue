@@ -22,7 +22,7 @@ export default {
         setTimeout(() => {
             /* Update coins. */
             // FIXME: Why is this blocking the entire initial UI setup??
-            // this.updateCoins()
+            this.updateCoins()
         }, 3000)
     },
 }

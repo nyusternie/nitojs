@@ -1,8 +1,5 @@
 /* Initialize BITBOX. */
-import { BITBOX } from 'bitbox-sdk'
-
-/* Initialize BITBOX. */
-const bitbox = new BITBOX()
+const bitbox = new window.BITBOX()
 
 /* Set websocket endpoint. */
 // const wsURL = 'https://ws.bitcoin.com'
