@@ -5,29 +5,6 @@
         </div>
 
         <div class="col-xl-8 col-lg-7 col-md-6">
-            <div class="row">
-                <div class="col-md-4">
-                    <p-button
-                        round
-                        outline
-                        block
-                        @click.native="resync"
-                    >
-                        Re-sync My Purse
-                    </p-button>
-                </div>
-
-                <div class="col-md-8">
-                    <p>
-                        If you ever become out of sync with the network,
-                        simply click the <strong>"Re-sync My Purse"</strong> button.
-                        Your coins will be refreshed with the latest blockchain.
-                    </p>
-                </div>
-            </div>
-
-            <hr />
-
             <Purse />
         </div>
     </div>
@@ -55,20 +32,8 @@ export default {
     },
     methods: {
         ...mapActions('purse', [
-            'rebuildPurse',
-            'updateCoins',
+            //
         ]),
-
-        /**
-         * Resync Purse
-         */
-        resync() {
-            /* Update coins. */
-            // FIXME: Why is this blocking the entire initial UI setup??
-            this.updateCoins()
-
-            this.notifyVue('top', 'right', 'success', 'ti-info-alt')
-        },
 
         notifyVue(verticalAlign, horizontalAlign, type=null, icon=null) {
             if (!type) {
