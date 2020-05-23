@@ -11,25 +11,17 @@
                         round
                         outline
                         block
-                        @click.native="createPurse"
+                        @click.native="resync"
                     >
-                        Create a NEW purse
-                    </p-button>
-
-                    <p-button
-                        round
-                        block
-                        @click.native="removePurse"
-                    >
-                        Destroy your purse
+                        Re-sync My Purse
                     </p-button>
                 </div>
 
                 <div class="col-md-8">
                     <p>
-                        To get started, click the <strong>"Create New Session"</strong> button.
-                        Then just start depositing funds to the session address.
-                        Be default, shuffling will begin automatically.
+                        If you ever become out of sync with the network,
+                        simply click the <strong>"Re-sync My Purse"</strong> button.
+                        Your coins will be refreshed with the latest blockchain.
                     </p>
                 </div>
             </div>
@@ -63,18 +55,17 @@ export default {
     },
     methods: {
         ...mapActions('purse', [
-            'initPurse',
-            'destroyPurse',
+            'rebuildPurse',
+            'updateCoins',
         ]),
 
-        createPurse() {
-            this.initPurse()
-
-            this.notifyVue('top', 'right', 'success', 'ti-info-alt')
-        },
-
-        removePurse() {
-            this.destroyPurse()
+        /**
+         * Resync Purse
+         */
+        resync() {
+            /* Update coins. */
+            // FIXME: Why is this blocking the entire initial UI setup??
+            this.updateCoins()
 
             this.notifyVue('top', 'right', 'success', 'ti-info-alt')
         },

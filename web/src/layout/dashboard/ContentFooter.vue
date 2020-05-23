@@ -16,6 +16,12 @@
                     </li>
 
                     <li>
+                        <a href="https://docs.nitojs.org" target="_blank">
+                            Docs
+                        </a>
+                    </li>
+
+                    <li>
                         <a href="https://gitlab.com/bchplease/nitojs" target="_blank">
                             Source
                         </a>

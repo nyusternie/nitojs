@@ -52,7 +52,7 @@
                     </div>
                 </div>
 
-                <div class="text-center mr-3">
+                <div class="text-center mx-3">
                     <p-button type="info"
                         round
                         @click.native="startShuffle"
@@ -60,7 +60,7 @@
                         Start Shuffle
                     </p-button>
 
-                    <p-button type="danger ml-3"
+                    <p-button type="danger mx-3"
                         round
                         @click.native="stopShuffle"
                     >

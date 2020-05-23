@@ -41,11 +41,18 @@
                     </div>
                 </div>
                 <div class="text-center">
-                    <p-button type="info"
+                    <p-button type="info" class="mx-3"
                         round
                         @click.native.prevent="updatePurse"
                     >
                         Update Purse
+                    </p-button>
+
+                    <p-button type="danger" class="mx-3"
+                        round
+                        @click.native="rebuild"
+                    >
+                        Re-build My Purse
                     </p-button>
                 </div>
                 <div class="clearfix"></div>
@@ -55,6 +62,9 @@
 </template>
 
 <script>
+/* Initialize vuex. */
+import { mapActions } from 'vuex'
+
 export default {
     data() {
         return {
@@ -67,9 +77,22 @@ export default {
         }
     },
     methods: {
+        ...mapActions('purse', [
+            'rebuildPurse',
+        ]),
+
+        /**
+         * Rebuild (Purse)
+         */
+        rebuild() {
+            this.rebuildPurse()
+
+            // this.notifyVue('top', 'right', 'success', 'ti-info-alt')
+        },
+
         updatePurse() {
             alert('Your data: ' + JSON.stringify(this.user))
-        }
+        },
     }
 }
 </script>

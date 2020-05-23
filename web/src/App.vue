@@ -12,18 +12,15 @@ import { mapActions } from 'vuex'
 export default {
     methods: {
         ...mapActions('purse', [
-            'updateCoins',
+            'initPurse',
         ]),
     },
     created: function () {
         // console.log('APPLICATION STATE', this.$store.state)
+        this.initPurse()
     },
     mounted: function () {
-        setTimeout(() => {
-            /* Update coins. */
-            // FIXME: Why is this blocking the entire initial UI setup??
-            this.updateCoins()
-        }, 3000)
+        // 
     },
 }
 </script>

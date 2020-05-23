@@ -6,38 +6,21 @@
 
         <div>
             <h3><i class="fa fa-check-square mr-2"></i> Unconfirmed Txs</h3>
-            <h3><i class="fa fa-square mr-2"></i> Dark Mode</h3>
         </div>
+
+        <p class="setting-tip">
+            Instantly display your FULL balance, before coins are confirmed in a block.
+        </p>
 
         <hr>
 
-        <div class="text-center">
-            <div class="row">
-                <div class="col">
-                    <h5>
-                        {{details[0].title}}
-                        <br>
-                        <small>{{details[0].subtitle}}</small>
-                    </h5>
-                </div>
-
-                <div class="col">
-                    <h5>
-                        {{details[1].title}}
-                        <br>
-                        <small>{{details[1].subtitle}}</small>
-                    </h5>
-                </div>
-
-                <div class="col">
-                    <h5>
-                        {{details[2].title}}
-                        <br>
-                        <small>{{details[2].subtitle}}</small>
-                    </h5>
-                </div>
-            </div>
+        <div>
+            <h3><i class="fa fa-square mr-2"></i> Dark Mode</h3>
         </div>
+
+        <p class="setting-tip">
+            Adapts the fore/back-ground themes for reduced stress on the eyes.
+        </p>
     </card>
 </template>
 
@@ -62,11 +45,14 @@ export default {
         }
     },
     methods: {
-        // 
+        //
     }
 }
 </script>
 
 <style scoped>
-/*  */
+.setting-tip {
+    margin-left: 40px;
+    font-size: 0.9em;
+}
 </style>
