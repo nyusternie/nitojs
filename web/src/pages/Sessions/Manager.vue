@@ -34,7 +34,7 @@
                         <fg-input type="text"
                             label="Current Phase"
                             placeholder="loading, please wait..."
-                            v-model="phase"
+                            v-model="session.phase"
                         ></fg-input>
                     </div>
                 </div>
@@ -42,22 +42,29 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="form-group">
-                            <label>Session Notes</label>
+                            <label>Session Updates</label>
 
                             <textarea rows="5" class="form-control border-input"
-                                placeholder="Add your session notes here"
-                                v-model="session.notes">
+                                placeholder="Waiting for real-time updates..."
+                                v-model="notesDisplay">
                             </textarea>
                         </div>
                     </div>
                 </div>
 
-                <div class="text-center">
+                <div class="text-center mr-3">
                     <p-button type="info"
                         round
                         @click.native="startShuffle"
                     >
                         Start Shuffle
+                    </p-button>
+
+                    <p-button type="danger ml-3"
+                        round
+                        @click.native="stopShuffle"
+                    >
+                        Stop Shuffle
                     </p-button>
                 </div>
 
@@ -80,6 +87,8 @@ export default {
     data() {
         return {
             bitbox: null,
+            nito: null,
+            shuffleManager: null,
 
             depositAddress: null,
             type: ['', 'info', 'success', 'warning', 'danger'],
@@ -87,21 +96,12 @@ export default {
                 topCenter: false
             },
 
-            nito: null,
-            phase: null,
-            notice: null,
-
             session: {
                 id: 0,
                 title: 'Session #1',
                 username: 'michael23',
-                email: '',
-                firstName: 'Chet',
-                lastName: 'Faker',
-                address: 'Melbourne, Australia',
-                city: 'Melbourne',
-                postalCode: '',
-                notes: `We must accept finite disappointment, but hold on to infinite hope.`
+                phase: null,
+                notices: [],
             }
         }
     },
@@ -112,6 +112,21 @@ export default {
             'getHDNode',
             'getSessions',
         ]),
+
+        notesDisplay() {
+            /* Map note details. */
+            const notes = this.session.notices.map((_note) => {
+                return `${_note.number} members waiting...\n`
+                // if (_note.session) {
+                //     return `${_note.number} members waiting on [${_note.session}]\n`
+                // } else {
+                //     return `${_note.number} members waiting...\n`
+                // }
+            })
+
+            /* Return (reversed) notes. */
+            return notes.reverse()
+        }
 
     },
     methods: {
@@ -223,26 +238,31 @@ export default {
             console.log('MANAGER (change):', this.change())
 
             /* Initialize Nito. */
-            const nito = new Nito()
+            this.nito = new Nito()
 
             /* Handle Nito phases. */
-            nito.on('phase', async (_phase) => {
-                /* Set phase. */
-                this.phase = _phase
+            this.nito.on('phase', async (_phase) => {
+                /* Set session phase. */
+                this.session.phase = _phase
             })
 
             /* Handle Nito notices. */
-            nito.on('notice', async (_notice) => {
-                /* Set notice. */
-                this.notice = _notice
+            this.nito.on('notice', async (_notice) => {
+                /* Set session notice. */
+                this.session.notices.push(_notice)
             })
 
             /* Start shuffle manager. */
-            nito.startShuffleManager(coin, this.change, this.target)
+            this.shuffleManager = this.nito
+                .getShuffleManager(coin, this.change, this.target, false)
         },
 
         stopShuffle() {
-
+            /* Validate shuffle manager. */
+            if (this.shuffleManager) {
+                /* Stop shuffle. */
+                this.shuffleManager.stop()
+            }
         },
 
         notifyVue(verticalAlign, horizontalAlign) {

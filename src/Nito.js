@@ -80,7 +80,7 @@ class Nito extends EventEmitter {
      *    2. Change (address) generator function.
      *    3. Target (address) generator function.
      */
-    startShuffleManager(_coin, _changeFunc, _targetFunc) {
+    getShuffleManager(_coin, _changeFunc, _targetFunc, _disableAutoShuffle=false) {
         this.shuffleManager = new this.shuffleClient({
             coins: [ _coin ],
 
@@ -95,25 +95,25 @@ class Nito extends EventEmitter {
 
             // Disable automatically joining shuffle rounds
             // once a connection with the server is established
-            disableAutoShuffle: false,
+            disableAutoShuffle: _disableAutoShuffle,
 
             serverStatsUri: 'https://shuffle.servo.cash:8080/stats'
             // serverStatsUri: 'https://cashshuffle.c3-soft.com:9999/stats'
         })
 
         /* Handle phase change messages. */
-        this.shuffleManager.on('phase', async (_phase) => {
+        this.shuffleManager.on('phase', (_phase) => {
             this.emit('phase', _phase)
         })
 
         /* Handle notices. */
-        this.shuffleManager.on('notice', async (_notice) => {
+        this.shuffleManager.on('notice', (_notice) => {
             /* Emit notice. */
             this.emit('notice', _notice)
         })
 
         /* Return shuffle manager. */
-        // return this.shuffleManager
+        return this.shuffleManager
     }
 
 

@@ -285,6 +285,7 @@ class ShuffleRound extends EventEmitter {
         } else {
             debug('Act on message (jsonMessage):', jsonMessage.pruned.message)
         }
+        this.emit('notice', jsonMessage.pruned.message)
 
         /* Set message type. */
         const messageType =
@@ -1372,6 +1373,7 @@ class ShuffleRound extends EventEmitter {
 
         const msg = `Coin ${this.coin.txid}:${this.coin.vout} has been successfully shuffled!`
         this.emit('notice', msg)
+        this.emit('shuffle')
     }
 
     /**
