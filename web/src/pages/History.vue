@@ -1,81 +1,48 @@
 <template>
     <div class="row">
         <div class="col-12">
-            <card :title="sessions.title" :subTitle="sessions.subTitle">
+            <card :title="sessionsTable.title" :subTitle="sessionsTable.subTitle">
                 <div slot="raw-content" class="table-responsive">
-                    <paper-table type="hover" :data="sessions.data" :columns="sessions.columns">
-
-                    </paper-table>
+                    <paper-table
+                        type="hover"
+                        :data="sessionsTable.data"
+                        :columns="sessionsTable.columns"
+                    />
                 </div>
             </card>
         </div>
 
         <div class="col-12">
-            <card class="card-plain" :title="transactions.title" :subTitle="transactions.subTitle">
+            <card class="card-plain" :title="txsTable.title" :subTitle="txsTable.subTitle">
                 <div class="table-full-width table-responsive">
-                    <paper-table type="hover" :title="transactions.title" :sub-title="transactions.subTitle" :data="transactions.data"
-                         :columns="transactions.columns">
-
-                     </paper-table>
+                    <paper-table
+                        type="hover"
+                        :data="txsTable.data"
+                        :columns="txsTable.columns"
+                    />
                  </div>
-             </card>
-         </div>
+            </card>
+        </div>
 
-         <div class="col-12">
-             <card :title="system.title" :subTitle="system.subTitle">
-                 <div slot="raw-content" class="table-responsive">
-                     <paper-table :data="system.data" :columns="system.columns">
+        <div class="col-12">
+            <card :title="sysTable.title" :subTitle="sysTable.subTitle">
+                <div slot="raw-content" class="table-responsive">
+                    <paper-table
+                        :data="sysTable.data"
+                        :columns="sysTable.columns"
+                    />
+                </div>
+            </card>
+        </div>
 
-                     </paper-table>
-                 </div>
-             </card>
-         </div>
-
-     </div>
+    </div>
 </template>
 
 <script>
+/* Initialize vuex. */
+import { mapActions, mapGetters } from 'vuex'
+
 import { PaperTable } from '@/components'
-
-const tableColumns = ['Id', 'Name', 'Salary', 'Country', 'City']
-
-const tableData = [
-    {
-        id: 1,
-        name: 'Dakota Rice',
-        salary: '$36.738',
-        country: 'Niger',
-        city: 'Oud-Turnhout'
-    },
-    {
-        id: 2,
-        name: 'Minerva Hooper',
-        salary: '$23,789',
-        country: 'Curaçao',
-        city: 'Sinaai-Waas'
-    },
-    {
-        id: 3,
-        name: 'Sage Rodriguez',
-        salary: '$56,142',
-        country: 'Netherlands',
-        city: 'Baileux'
-    },
-    {
-        id: 4,
-        name: 'Philip Chaney',
-        salary: '$38,735',
-        country: 'Korea, South',
-        city: 'Overland Park'
-    },
-    {
-        id: 5,
-        name: 'Doris Greene',
-        salary: '$63,542',
-        country: 'Malawi',
-        city: 'Feldkirchen in Kärnten'
-    }
-]
 
 export default {
     components: {
@@ -83,26 +50,157 @@ export default {
     },
     data() {
         return {
-            sessions: {
+            //
+        }
+    },
+    computed: {
+        ...mapGetters('purse', [
+            'getActiveSessionId',
+            'getSessions',
+        ]),
+
+        sessionsTable() {
+            const tableData = {
                 title: 'Sessions',
                 subTitle: 'List of ALL CashShuffle session activity since app setup.',
-                columns: [...tableColumns],
-                data: [...tableData]
-            },
-            transactions: {
+                columns: ['Id', 'Name', 'Current Value', 'Num Coins', 'Status'],
+                data: []
+            }
+
+            Object.keys(this.getSessions).forEach(sessionId => {
+                console.log(sessionId, this.getSessions[sessionId])
+
+                const session = this.getSessions[sessionId]
+
+                const id = parseInt(sessionId) + 1
+
+                const name = 'Session #1'
+
+                const currentvalue = '$36.7381'
+
+                const numcoins = Object.keys(session.coins).length
+
+                const status = 'ACTIVE'
+
+                const sessionData = {
+                    id,
+                    name,
+                    currentvalue,
+                    numcoins,
+                    status
+                }
+
+                tableData.data.push(sessionData)
+            })
+            console.log('TABLE DATA:', tableData)
+            return tableData
+        },
+
+        txsTable() {
+            const tableData = {
                 title: 'Deposits & Transfers',
                 subTitle: 'List of ALL incoming and outgoing coin activity since app setup.',
-                columns: [...tableColumns],
-                data: [...tableData]
-            },
-            system: {
+                columns: ['Type', 'Tx Value', 'Session', 'Confirmations', 'Time'],
+                data: []
+            }
+
+            Object.keys(this.getSessions).forEach(sessionId => {
+                console.log(sessionId, this.getSessions[sessionId])
+
+                const session = this.getSessions[sessionId]
+
+                const type = 'DEPOSIT'
+
+                const txvalue = '200 bits | $0.3482'
+
+                const sessionName = 'Session #1'
+
+                const confirmations = 318
+
+                const time = '2 days ago'
+
+                const sessionData = {
+                    type,
+                    txvalue,
+                    session: sessionName,
+                    confirmations,
+                    time
+                }
+
+                tableData.data.push(sessionData)
+            })
+            console.log('TABLE DATA:', tableData)
+            return tableData
+        },
+
+        sysTable() {
+            const tableData = {
                 title: 'Application Events',
                 subTitle: 'List of ALL application activity since app setup.',
-                columns: [...tableColumns],
-                data: [...tableData]
-            },
+                columns: ['Action', 'Tx Value', 'Session', 'Confirmations', 'Time'],
+                data: []
+            }
+
+            Object.keys(this.getSessions).forEach(sessionId => {
+                console.log(sessionId, this.getSessions[sessionId])
+
+                const session = this.getSessions[sessionId]
+
+                const action = 'CREATED PURSE'
+
+                const txvalue = '200 bits | $0.3482'
+
+                const sessionName = 'Session #1'
+
+                const confirmations = 318
+
+                const time = '2 days ago'
+
+                const sessionData = {
+                    action,
+                    txvalue,
+                    session: sessionName,
+                    confirmations,
+                    time
+                }
+
+                tableData.data.push(sessionData)
+            })
+            console.log('TABLE DATA:', tableData)
+            return tableData
+        },
+
+    },
+    methods: {
+        ...mapActions('purse', [
+            // 'createSession',
+        ]),
+
+        notifyVue(verticalAlign, horizontalAlign, type=null, icon=null) {
+            if (!type) {
+                const color = Math.floor(Math.random() * 4 + 1)
+                type = this.type[color]
+            }
+
+            if (!icon) {
+                icon = 'ti-gift'
+            }
+
+            this.$notify({
+                // component: NotificationTemplate,
+                component: NewSession,
+                icon,
+                horizontalAlign,
+                verticalAlign,
+                type
+            })
         }
-    }
+    },
+    created: function () {
+        console.log('SESSION ID:', this.getActiveSessionId)
+        console.log('SESSIONS:', this.getSessions)
+
+    },
 }
 </script>
 

@@ -4,14 +4,20 @@
             <template slot="links">
                 <sidebar-link to="/dashboard" name="Dashboard" icon="ti-blackboard" />
                 <sidebar-link to="/sessions" name="Sessions" icon="ti-pulse" />
-                <sidebar-link to="/pools" name="Pools" icon="ti-layers-alt" />
                 <sidebar-link to="/history" name="History" icon="ti-time" />
+                <sidebar-link to="/send" name="Send" icon="ti-export" />
+                <sidebar-link to="/pools" name="Pools" icon="ti-layers-alt" />
                 <sidebar-link to="/settings" name="Settings" icon="ti-panel" />
 
                 <div class="nav-item nito-xchg">
+                    <small class="text-center">
+                        Need to re-combine shuffled coins?
+                        <br />Try CashFusion on Nito Exchange.
+                    </small>
+
                     <a href="https://nito.exchange" target="_blank" class="nav-link">
                         <i class="ti-control-shuffle"></i>
-                        <p>Try Nito Exchange</p>
+                        <p>Nito Exchange</p>
 
                     </a>
                 </div>
@@ -107,9 +113,20 @@ export default {
 
 <style lang="scss">
 .nito-xchg {
-    margin-top: 40px;
+    margin-top: 30px;
     border-top: 1pt solid rgba(220, 220, 220, 0.3);
-
-    cursor: pointer;
+}
+.nito-xchg small {
+    display: inline-block;
+    width: 100%;
+    margin: 10px 0 0 -15px;
+    // padding: 10px 20px 10;
+    color: rgba(220, 220, 220, 0.8);
+    cursor: default;
+}
+@media (min-width: 768px) {
+    .nito-xchg small {
+        margin: 10px auto 0;
+    }
 }
 </style>

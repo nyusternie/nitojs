@@ -12,7 +12,7 @@
 
             <div slot="legend" class="community-legend">
                 <i class="fa fa-circle text-info"></i>
-                <a href="https://nito.exchange.com" target="_blank">Nito Cloud</a>
+                <a href="https://nito.exchange" target="_blank">Nito Cloud</a>
 
                 <i class="fa fa-circle text-warning"></i>
                 <a href="https://cashshuffle.com" target="_blank">CashShuffle</a>

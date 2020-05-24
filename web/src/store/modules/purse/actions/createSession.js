@@ -33,18 +33,20 @@ const createSession = ({ commit, getters }) => {
              *
              * Deposit   : m/44'/145'/<session>'/0/<index>
              * Change    : m/44'/145'/<session>'/1/<index>
-             * Nito Cash : m/44'/145'/<session>'/7867/<index>
+             * Nito Cash : m/44'/145'/0'/7867/<index>
              * Nito Xchg : m/44'/145'/<session>'/7888/<index>
              *
              * NOTE: Change is considered "toxic waste", and will be
              *       discarded (read. donated to Causes Cash) once it reaches
              *       below the lowest threshold for shuffles & fusions.
+             *
+             * NOTE: Nito Cash will be a single `session` and `chain` to allow
+             *       for better support using Nito Cash wallet.
              */
             const accountsModel = {
                 deposit: 0,
                 change: 0,
-                nito: 0,
-                xchg: 0,
+                nitoxchg: 0, // FOR FUTURE COMPATIBILITY
             }
 
             /**

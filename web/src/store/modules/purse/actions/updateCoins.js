@@ -5,8 +5,13 @@ const bitbox = new window.BITBOX()
  * Update Coins (for ALL sessions)
  */
 const updateCoins = async ({ dispatch, getters }) => {
-    // FOR DEVELOPMENT PURPOSES ONLY
-    const sessionId = 0
+    /* Set session id. */
+    const sessionId = getters.getActiveSessionId
+
+    /* Validate session id. */
+    if (!sessionId) {
+        return
+    }
 
     /* Retrieve accounts. */
     const accounts = getters.getAccountsBySession(sessionId)

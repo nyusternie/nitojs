@@ -15,6 +15,9 @@ import History from '@/pages/History.vue'
 /* Settings */
 import Settings from '@/pages/Settings.vue'
 
+/* Settings */
+import Send from '@/pages/Send.vue'
+
 /* Support Pages */
 import NotFound from '@/pages/404.vue'
 import Blank from '@/pages/Blank.vue'
@@ -59,6 +62,13 @@ const routes = [
                 path: 'settings',
                 name: 'Settings',
                 component: Settings
+            },
+
+            /* Send */
+            {
+                path: 'send',
+                name: 'Send Coins',
+                component: Send
             },
 
             /* FOR DEVELOPMENT PURPOSES ONLY */

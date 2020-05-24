@@ -1,12 +1,11 @@
 <template>
     <div class="row">
-        <div class="col-xl-4 col-lg-5 col-md-6">
-            <Deposit />
-            <Cabinet />
+        <div class="col-md-5">
+            <Accounts />
         </div>
 
-        <div class="col-xl-8 col-lg-7 col-md-6">
-            <Manager />
+        <div class="col-md-7">
+            <Purse />
         </div>
     </div>
 </template>
@@ -15,37 +14,25 @@
 /* Initialize vuex. */
 import { mapActions, mapGetters } from 'vuex'
 
-/* Import components. */
-import Cabinet from './Sessions/Cabinet'
-import Deposit from './Sessions/Deposit'
-import Manager from './Sessions/Manager'
-
 // import NotificationTemplate from './Notifications/NotificationTemplate'
 import NewSession from './Notifications/NewSession'
 
+import Accounts from './Send/Accounts.vue'
+import Purse from './Send/Purse.vue'
+
 export default {
     components: {
-        Cabinet,
-        Deposit,
-        Manager,
-    },
-    data() {
-        return {
-            type: ['', 'info', 'success', 'warning', 'danger'],
-            notifications: {
-                topCenter: false
-            }
-        };
+        Accounts,
+        Purse,
     },
     computed: {
         ...mapGetters('purse', [
-            'getActiveSessionId',
-            'getSessions',
+            // 'getReceivingAccounts',
         ]),
     },
     methods: {
         ...mapActions('purse', [
-            'createSession',
+            //
         ]),
 
         notifyVue(verticalAlign, horizontalAlign, type=null, icon=null) {
@@ -67,10 +54,6 @@ export default {
                 type
             })
         }
-    },
-    created: function () {
-        console.log('SESSION ID:', this.getActiveSessionId)
-        console.log('SESSIONS:', this.getSessions)
     },
 }
 </script>

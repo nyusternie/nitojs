@@ -1,6 +1,7 @@
 /* Import modules (getters). */
 import getAccountBySession from './purse/getters/getAccountBySession'
 import getAccountsBySession from './purse/getters/getAccountsBySession'
+import getActiveSessionId from './purse/getters/getActiveSessionId'
 import getBalance from './purse/getters/getBalance'
 import getBalanceBySession from './purse/getters/getBalanceBySession'
 import getCoinsBySession from './purse/getters/getCoinsBySession'
@@ -9,6 +10,7 @@ import getDustAmount from './purse/getters/getDustAmount'
 import getHDNode from './purse/getters/getHDNode'
 // import getHistory from './purse/getters/getHistory'
 import getMasterSeed from './purse/getters/getMasterSeed'
+import getOutbox from './purse/getters/getOutbox'
 import getSessions from './purse/getters/getSessions'
 // import getSignedInput from './purse/getters/getSignedInput'
 
@@ -24,16 +26,37 @@ import updateCoins from './purse/actions/updateCoins'
 /* Import modules (mutations). */
 import setEmptyPurse from './purse/mutations/setEmptyPurse'
 import setMasterSeed from './purse/mutations/setMasterSeed'
+import setOutbox from './purse/mutations/setOutbox'
 import setSessions from './purse/mutations/setSessions'
 
 /* Initialize state. */
 const state = {
+    /**
+     * Active Session Id
+     *
+     * Most recently selected session's id.
+     */
+    activeSessionId: null,
+
     /**
      * Master Seed
      *
      * A 32-byte key, used to secure the entire purse.
      */
     masterSeed: null,
+
+    /**
+     * Nito Cash Index
+     *
+     * Manages a single `session` and `chain` for this wallet type.
+     * eg. m/44'/145'/0'/7867/<index>
+     */
+    nitoCashIdx: null,
+
+    /**
+     * Coins waiting to be sent out from the purse.
+     */
+    outbox: null,
 
     /**
      * Sessions
@@ -52,6 +75,7 @@ const state = {
 const getters = {
     getAccountBySession,
     getAccountsBySession,
+    getActiveSessionId,
     getBalance,
     getBalanceBySession,
     getCoinsBySession,
@@ -60,6 +84,7 @@ const getters = {
     getHDNode,
     // getHistory,
     getMasterSeed,
+    getOutbox,
     getSessions,
     // getSignedInput,
 }
@@ -79,6 +104,7 @@ const actions = {
 const mutations = {
     setEmptyPurse,
     setMasterSeed,
+    setOutbox,
     setSessions,
 }
 

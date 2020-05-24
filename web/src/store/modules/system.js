@@ -1,24 +1,22 @@
 /* Import modules (getters). */
 import getFlags from './system/getters/getFlags'
 import getLocale from './system/getters/getLocale'
+import getPool from './system/getters/getPool'
 
 /* Import modules (actions). */
 import displayError from './system/actions/displayError'
 import displayNotification from './system/actions/displayNotification'
+import updatePool from './system/actions/updatePool'
 
 /* Import modules (mutations). */
 import setError from './system/mutations/setError'
 import setFlags from './system/mutations/setFlags'
 import setLocale from './system/mutations/setLocale'
 import setNotification from './system/mutations/setNotification'
+import setPool from './system/mutations/setPool'
 
 /* Initialize state. */
 const state = {
-    /**
-     * Application Version
-     */
-    version: null,
-
     /**
      * Error Message
      */
@@ -59,18 +57,31 @@ const state = {
      * Notification Message
      */
     notifs: null,
+
+    /**
+     * Active Pool Server
+     */
+    pool: null,
+
+    /**
+     * Application Version
+     */
+    version: null,
+
 }
 
 /* Getters. */
 const getters = {
     getFlags,
     getLocale,
+    getPool,
 }
 
 /* Actions. */
 const actions = {
     displayError,
     displayNotification,
+    updatePool,
 }
 
 /* Mutations. */
@@ -79,6 +90,7 @@ const mutations = {
     setFlags,
     setLocale,
     setNotification,
+    setPool,
 }
 
 /* Export. */
