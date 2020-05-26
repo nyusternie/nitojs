@@ -3,7 +3,7 @@
  */
 const setPool = (state, _pool) => {
     /* Set pool. */
-    state.notifs = _pool
+    state.pool = _pool
 }
 
 /* Export module. */

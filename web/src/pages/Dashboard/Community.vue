@@ -1,8 +1,8 @@
 <template>
     <!--Charts-->
     <div class="col-12">
-        <chart-card title="BCH Community Anonymity"
-            sub-title="Last 24 hours of privacy activity"
+        <chart-card title="BCH Community Anonymity View"
+            sub-title="Showing the last 30 days of &quot;private&quot; transaction volume."
             :chart-data="usersChart.data"
             :chart-options="usersChart.options"
         >
@@ -12,7 +12,7 @@
 
             <div slot="legend" class="community-legend">
                 <i class="fa fa-circle text-info"></i>
-                <a href="https://nito.exchange" target="_blank">Nito Cloud</a>
+                <a href="https://nito.exchange" target="_blank">Nito Exchange</a>
 
                 <i class="fa fa-circle text-warning"></i>
                 <a href="https://cashshuffle.com" target="_blank">CashShuffle</a>
@@ -27,6 +27,7 @@
 <script>
 /* Import modules. */
 import Chartist from 'chartist'
+import moment from 'moment'
 
 /* Import components. */
 import { ChartCard } from '@/components'
@@ -43,26 +44,27 @@ export default {
             usersChart: {
                 data: {
                     labels: [
-                        '9:00AM',
-                        '12:00AM',
-                        '3:00PM',
-                        '6:00PM',
-                        '9:00PM',
-                        '12:00PM',
-                        '3:00AM',
-                        '6:00AM'
+                        moment().subtract(30, 'days').format('M/D'),
+                        moment().subtract(26, 'days').format('M/D'),
+                        moment().subtract(22, 'days').format('M/D'),
+                        moment().subtract(18, 'days').format('M/D'),
+                        moment().subtract(14, 'days').format('M/D'),
+                        moment().subtract(10, 'days').format('M/D'),
+                        moment().subtract(6, 'days').format('M/D'),
+                        moment().subtract(2, 'days').format('M/D'),
+                        'Now',
                     ],
                     series: [
-                        [287, 385, 490, 562, 594, 626, 698, 895, 952],
-                        [67, 152, 193, 240, 387, 435, 535, 642, 744],
-                        [23, 113, 67, 108, 190, 239, 307, 410, 410],
+                        [ 77, 152, 213, 270, 327, 535, 655, 855, 925 ],
+                        [ 67, 123, 193, 240, 287, 335, 435, 442, 544 ],
+                        [ 23, 40, 67, 98, 155, 279, 327, 370, 390 ],
                     ]
                 },
                 options: {
                     low: 0,
                     high: 1000,
                     showArea: true,
-                    height: '245px',
+                    // height: '245px',
                     axisX: {
                         showGrid: false
                     },

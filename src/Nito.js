@@ -1,4 +1,4 @@
-const debug = require('debug')('main')
+const debug = require('debug')('nitojs')
 const EventEmitter = require('events').EventEmitter
 
 /**
@@ -116,6 +116,16 @@ class Nito extends EventEmitter {
         return this.shuffleManager
     }
 
+    /**
+     * Send Crypto
+     */
+    static sendCoin(_coin, _outs, _doValidation=false) {
+        /* Import transaction. */
+        const Transaction = require('./Transaction')
+
+        // NOTE: Return promise.
+        return Transaction.sendCoin(_coin, _outs, _doValidation)
+    }
 
 }
 

@@ -91,7 +91,8 @@ const updateCoins = async ({ dispatch, getters }) => {
                         status: 'active',
                         txid: txDetails.txid,
                         vout: index,
-                        amountSatoshis: satoshis,
+                        amountSatoshis: satoshis, // DEPRECATED
+                        satoshis,
                         privateKeyWif: wif,
                         cashAddress: searchAddr,
                         legacyAddress: bitbox.Address.toLegacyAddress(searchAddr),

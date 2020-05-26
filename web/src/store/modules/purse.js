@@ -12,7 +12,6 @@ import getHDNode from './purse/getters/getHDNode'
 import getMasterSeed from './purse/getters/getMasterSeed'
 import getOutbox from './purse/getters/getOutbox'
 import getSessions from './purse/getters/getSessions'
-// import getSignedInput from './purse/getters/getSignedInput'
 
 /* Import modules (actions). */
 import addCoin from './purse/actions/addCoin'
@@ -20,7 +19,6 @@ import createSession from './purse/actions/createSession'
 import initPurse from './purse/actions/initPurse'
 // import nextCoin from './purse/actions/nextCoin'
 import rebuildPurse from './purse/actions/rebuildPurse'
-// import sendCrypto from './purse/actions/sendCrypto'
 import updateCoins from './purse/actions/updateCoins'
 
 /* Import modules (mutations). */
@@ -86,7 +84,6 @@ const getters = {
     getMasterSeed,
     getOutbox,
     getSessions,
-    // getSignedInput,
 }
 
 /* Actions. */
@@ -96,7 +93,6 @@ const actions = {
     initPurse,
     // nextCoin,
     rebuildPurse,
-    // sendCrypto,
     updateCoins,
 }
 

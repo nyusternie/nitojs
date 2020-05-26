@@ -1,28 +1,54 @@
 <template>
     <main>
+        <div class="row">
+            <div class="col-md-4">
+                <p-button type="success"
+                    round
+                    block
+                    @click.native="sendAll"
+                >
+                    Send Now
+                </p-button>
+            </div>
+
+            <div class="col-md-8">
+                <p>
+                    <strong>Need to re-combine shuffled coins?</strong>
+                    Consider using the non-custodial <a href="https://nito.exchange" target="_blank"><strong class="text-primary">Nito Exchange</strong></a> to add CashFusion privacy to your next session.
+                </p>
+            </div>
+        </div>
+
         <card class="card" title="Sending Outbox">
+            <paper-table class="table-responsive table-responsive-md"
+                type="hover"
+                :data="txsTable.data"
+                :columns="txsTable.columns"
+            />
+
             <form @submit.prevent>
+
                 <div class="row">
                     <div class="col-md-5">
                         <fg-input type="text"
-                            label="Company"
+                            label="Address label"
                             :disabled="true"
-                            placeholder="Paper dashboard"
-                            v-model="user.company"
+                            placeholder="loading..."
+                            v-model="target.addresses"
                         ></fg-input>
                     </div>
 
                     <div class="col-md-3">
                         <fg-input type="text"
-                            label="Username"
-                            placeholder="Username"
-                            v-model="user.username"
+                            label="Value"
+                            placeholder="loading..."
+                            v-model="target.values"
                         ></fg-input>
                     </div>
 
                     <div class="col-md-4">
-                        <fg-input type="email"
-                            label="Username"
+                        <fg-input type="text"
+                            label="Pct"
                             placeholder="Email"
                             v-model="user.email"
                         ></fg-input>
@@ -30,7 +56,15 @@
                 </div>
 
                 <div class="row">
-                    <div class="col-md-4">
+                    <div class="col-md-9">
+                        <fg-input type="text"
+                            label="Target address"
+                            placeholder="Enter your destination address"
+                            v-model="target.address"
+                        ></fg-input>
+                    </div>
+
+                    <div class="col-md-3 btn-add-address">
                         <p-button type="info"
                             block
                             @click.native.prevent="updateSettings"
@@ -38,25 +72,27 @@
                             Add new
                         </p-button>
                     </div>
+                </div>
 
-                    <div class="col-md-4">
+                <div class="row">
+                    <div class="col-md-6">
                         <p-button type="info"
                             block
                             outline
                             @click.native.prevent="updateSettings"
                         >
-                            Add Nito
+                            Add Nito addresses
                         </p-button>
                     </div>
 
-                    <div class="col-md-4">
+                    <div class="col-md-6">
                         <p-button type="info"
                             block
                             outline
-                            disabled="true"
+                            :disabled="true"
                             @click.native.prevent="updateSettings"
                         >
-                            Add xPub
+                            Add xPub addresses
                         </p-button>
                     </div>
                 </div>
@@ -66,7 +102,7 @@
                         <div class="form-group">
                             <label>Transaction Notes</label>
                             <textarea rows="5" class="form-control border-input"
-                                placeholder="Here can be your description"
+                                placeholder="Place your private (encrypted) transaction notes here."
                                 v-model="user.aboutMe">
                             </textarea>
                         </div>
@@ -95,31 +131,15 @@
 
         </card>
 
-        <div class="row">
-            <div class="col-md-4">
-                <p-button type="success"
-                    round
-                    block
-                    @click.native="resync"
-                >
-                    Send Now
-                </p-button>
-            </div>
-
-            <div class="col-md-8">
-                <p>
-                    <strong>Need to re-combine shuffled coins?</strong>
-                    Consider using the trustless <a href="https://nito.exchange" target="_blank"><strong class="text-primary">Nito Exchange</strong></a> to add CashFusion anonymity to your next shuffle transaction.
-                </p>
-            </div>
-        </div>
-
     </main>
 </template>
 
 <script>
 /* Initialize vuex. */
 import { mapActions, mapGetters } from 'vuex'
+
+/* Import modules. */
+import Nito from 'nitojs'
 
 import { PaperTable } from '@/components'
 
@@ -129,9 +149,13 @@ export default {
     },
     data() {
         return {
+            target: {
+                address: null,
+                addresses: 'qq638hdce3q0pg370hfee7f7sgxkw6j46c9cw9sqer',
+                values: '13.37 bits',
+            },
+
             user: {
-                company: 'Paper Dashboard',
-                username: 'michael23',
                 email: '',
                 aboutMe: `We must accept finite disappointment, but hold on to infinite hope.`
             }
@@ -184,27 +208,33 @@ export default {
     methods: {
         ...mapActions('purse', [
             'rebuildPurse',
+            'sendCrypto',
             'updateCoins',
         ]),
 
         /**
-         * Rebuild (Purse)
+         * Send ALL
          */
-        rebuild() {
-            this.rebuildPurse()
+        async sendAll() {
+            const coin = {
+                txid: '',
+                vout: 0,
+                satoshis: 0,
+                wif: '',
+            }
 
-            // this.notifyVue('top', 'right', 'success', 'ti-info-alt')
-        },
+            const outs = [
+                {
+                    receiver: '',
+                    satoshis: 0,
+                }
+            ]
 
-        /**
-         * Resync Purse
-         */
-        resync() {
-            /* Update coins. */
-            // FIXME: Why is this blocking the entire initial UI setup??
-            this.updateCoins()
+            /* Set validation flag. */
+            const doValidation = false
 
-            this.notifyVue('top', 'right', 'success', 'ti-info-alt')
+            const results = await Nito.sendCoin(coin, outs, doValidation)
+            console.log('SEND RESULTS', results)
         },
 
         /**
@@ -218,5 +248,7 @@ export default {
 </script>
 
 <style scoped>
-/*  */
+.btn-add-address {
+    margin-top: 30px;
+}
 </style>

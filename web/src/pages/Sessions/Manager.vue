@@ -120,7 +120,7 @@
 
 <script>
 /* Import modules. */
-const Nito = require('../../../../src/Nito.js')
+import Nito from 'nitojs'
 
 /* Initialize vuex. */
 import { mapActions, mapGetters } from 'vuex'
