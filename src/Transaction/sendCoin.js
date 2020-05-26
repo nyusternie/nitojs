@@ -90,9 +90,11 @@ const sendCoin = async (_coin, _outs, _doValidation=false) => {
         // this.sendState = 'sending'
 
         /* Broadcast transaction to network. */
-        return await bitbox.RawTransactions
+        const result = await bitbox.RawTransactions
             .sendRawTransaction(rawTx)
             .catch(err => console.error(err)) // eslint-disable-line no-console
+
+        return result
             // .then(
             //     (result) => {
             //         debug('sendRawTransaction (result):', result)

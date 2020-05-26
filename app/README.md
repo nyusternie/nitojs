@@ -1,8 +1,8 @@
-# NitoJS Web
+# NitoJS App
 
 ![NitoJS Poster](https://nitojs.org/poster.jpg?1588709532)
 
-### https://web.nitojs.org
+### https://app.nitojs.org
 
 A simple GUI to manage your coin privacy.
 
