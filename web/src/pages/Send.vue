@@ -1,11 +1,11 @@
 <template>
     <div class="row">
         <div class="col-md-5">
-            <Accounts />
+            <Coins />
         </div>
 
         <div class="col-md-7">
-            <Purse />
+            <Outbox />
         </div>
     </div>
 </template>
@@ -17,17 +17,17 @@ import { mapActions, mapGetters } from 'vuex'
 // import NotificationTemplate from './Notifications/NotificationTemplate'
 import NewSession from './Notifications/NewSession'
 
-import Accounts from './Send/Accounts.vue'
-import Purse from './Send/Purse.vue'
+import Coins from './Send/Coins.vue'
+import Outbox from './Send/Outbox.vue'
 
 export default {
     components: {
-        Accounts,
-        Purse,
+        Coins,
+        Outbox,
     },
     computed: {
         ...mapGetters('purse', [
-            // 'getReceivingAccounts',
+            // 'getReceivingCoins',
         ]),
     },
     methods: {

@@ -1,10 +1,10 @@
 <template>
     <main>
-        <card class="card" :title="txsTable.title" :subTitle="txsTable.subTitle">
+        <card class="card" :title="coinsTable.title" :subTitle="coinsTable.subTitle">
             <paper-table class="table-responsive table-responsive-md"
                 type="hover"
-                :data="txsTable.data"
-                :columns="txsTable.columns"
+                :data="coinsTable.data"
+                :columns="coinsTable.columns"
             />
 
             <div class="row">
@@ -82,33 +82,54 @@ export default {
             'getSessions',
         ]),
 
-        txsTable() {
+        coinsTable() {
             const tableData = {
-                title: 'My Coins Book',
-                subTitle: 'ALL coins currently available for sending.',
-                columns: ['Coin Label', 'Privacy', 'Value'],
+                title: 'My Unspent Coins',
+                subTitle: 'All Sessions : Confirmed & Unconfirmed',
+                columns: ['Coin Label', 'Status', 'Value'],
                 data: []
             }
 
             Object.keys(this.getSessions).forEach(sessionId => {
-                console.log(sessionId, this.getSessions[sessionId])
+                /* Initialize sessions. */
+                const sessions = this.getSessions
+                console.log('COINS (sessions):', sessions)
 
-                const session = this.getSessions[sessionId]
+                Object.keys(sessions).forEach(sessionIdx => {
+                    /* Initialize session. */
+                    const session = sessions[sessionIdx]
 
-                const coinLabel = 'Fresh mint'
+                    /* Initialize coins. */
+                    const coins = session.coins
+                    console.log('COINS (coins):', coins)
 
-                const privacy = 'A'
+                    Object.keys(coins).forEach(async txid => {
+                        /* Initialize coin. */
+                        const coin = coins[txid]
+                        console.log('COINS (coin):', coin)
 
-                const value = '200 bits | $0.3482'
+                        // const coinLabel = 'Fresh mint'
+                        const coinLabel = `${coin.txid.slice(0, 8)}:${coin.vout}`
 
-                const sessionData = {
-                    coinlabel: coinLabel,
-                    privacy,
-                    value,
-                }
+                        const status = coin.status
 
-                tableData.data.push(sessionData)
+                        // const value = '200 bits | $0.3482'
+                        const value = coin.amountSatoshis
+
+                        const sessionData = {
+                            coinlabel: coinLabel,
+                            status,
+                            value,
+                        }
+
+                        tableData.data.push(sessionData)
+
+                    })
+
+                })
+
             })
+
             console.log('TABLE DATA:', tableData)
             return tableData
         },

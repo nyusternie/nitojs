@@ -3,8 +3,8 @@ const debug = require('debug')('nitojs:transaction:sendcoin')
 /* Initialize BITBOX. */
 const bitbox = new window.BITBOX()
 
-/* Set dust amount. */
-const DUST_AMOUNT = 546
+/* Set dust (amount) satoshis. */
+const DUST_SATOSHIS = 546
 
 /* Import (local) modules. */
 const signInput = require('./signInput')
@@ -48,10 +48,10 @@ const sendCoin = async (_coin, _outs, _doValidation=false) => {
 
         /* Validate send satoshis. */
         // TODO: Validate BCH dust satoshis.
-        if (_doValidation && txAmount < DUST_AMOUNT) {
+        if (_doValidation && txAmount < DUST_SATOSHIS) {
             /* Display error. */
             console.error('displayError',
-                `Amount is too low. Min: ${DUST_AMOUNT} sats`, { root: true })
+                `Amount is too low. Min: ${DUST_SATOSHIS} sats`, { root: true })
 
             /* Set flag. */
             // FIXME: How can we display this on the UI?
@@ -71,8 +71,8 @@ const sendCoin = async (_coin, _outs, _doValidation=false) => {
          * Add Outputs
          */
         _outs.forEach(out => {
-            /* Add output w/ address and amount to send. */
-            transactionBuilder.addOutput(out.receiver, out.amount)
+            /* Add output w/ address and satoshis to send. */
+            transactionBuilder.addOutput(out.receiver, out.satoshis)
         })
 
         /* Sign input. */
@@ -85,8 +85,6 @@ const sendCoin = async (_coin, _outs, _doValidation=false) => {
         /* Set tx output to raw hex. */
         const rawTx = tx.toHex()
         console.info('\nRaw transaction (hex):', rawTx) // eslint-disable-line no-console
-
-        if (rawTx) return // FOR DEVELOPMENT ONLY
 
         /* Set state. */
         // this.sendState = 'sending'

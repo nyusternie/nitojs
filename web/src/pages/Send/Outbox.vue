@@ -19,7 +19,7 @@
             </div>
         </div>
 
-        <card class="card" title="Sending Outbox">
+        <card class="card" title="My Coin Outbox">
             <paper-table class="table-responsive table-responsive-md"
                 type="hover"
                 :data="txsTable.data"
@@ -34,7 +34,7 @@
                             label="Address label"
                             :disabled="true"
                             placeholder="loading..."
-                            v-model="target.addresses"
+                            :value="displayAddress"
                         ></fg-input>
                     </div>
 
@@ -42,7 +42,7 @@
                         <fg-input type="text"
                             label="Value"
                             placeholder="loading..."
-                            v-model="target.values"
+                            v-model="output.satoshis"
                         ></fg-input>
                     </div>
 
@@ -60,14 +60,14 @@
                         <fg-input type="text"
                             label="Target address"
                             placeholder="Enter your destination address"
-                            v-model="target.address"
+                            v-model="output.address"
                         ></fg-input>
                     </div>
 
                     <div class="col-md-3 btn-add-address">
                         <p-button type="info"
                             block
-                            @click.native.prevent="updateSettings"
+                            @click.native.prevent="addAddress"
                         >
                             Add new
                         </p-button>
@@ -81,7 +81,7 @@
                             outline
                             @click.native.prevent="updateSettings"
                         >
-                            Add Nito addresses
+                            Add next Nito address
                         </p-button>
                     </div>
 
@@ -92,7 +92,7 @@
                             :disabled="true"
                             @click.native.prevent="updateSettings"
                         >
-                            Add xPub addresses
+                            Add next xPub address
                         </p-button>
                     </div>
                 </div>
@@ -149,10 +149,10 @@ export default {
     },
     data() {
         return {
-            target: {
+            output: {
                 address: null,
-                addresses: 'qq638hdce3q0pg370hfee7f7sgxkw6j46c9cw9sqer',
-                values: '13.37 bits',
+                satoshis: null,
+                targets: [],
             },
 
             user: {
@@ -166,6 +166,20 @@ export default {
             'getActiveSessionId',
             'getSessions',
         ]),
+
+        displayAddress() {
+            if (this.output.address) {
+                const address = this.output.address
+
+                if (address.indexOf('bitcoin') !== -1) {
+                    return address.slice(12)
+                } else {
+                    return address
+                }
+            } else {
+                return 'loading...'
+            }
+        },
 
         txsTable() {
             const tableData = {
@@ -212,29 +226,63 @@ export default {
             'updateCoins',
         ]),
 
+        addAddress() {
+            // this.output.satoshis = 19395
+            this.output.satoshis = (19395 - 270)
+        },
+
         /**
          * Send ALL
          */
-        async sendAll() {
-            const coin = {
-                txid: '',
-                vout: 0,
-                satoshis: 0,
-                wif: '',
+        sendAll() {
+            // FOR DEVELOPMENT PURPOSES ONLY
+            if (!this.output.address) {
+                return alert('Set cash address')
+            } else if (!this.output.satoshis) {
+                return alert('Set amount')
             }
 
-            const outs = [
-                {
-                    receiver: '',
-                    satoshis: 0,
-                }
-            ]
+            const sessions = this.getSessions
+            console.log('OUTBOX (sessions):', sessions)
 
-            /* Set validation flag. */
-            const doValidation = false
+            Object.keys(sessions).forEach(sessionIdx => {
+                /* Initialize session. */
+                const session = sessions[sessionIdx]
 
-            const results = await Nito.sendCoin(coin, outs, doValidation)
-            console.log('SEND RESULTS', results)
+                /* Initialize coins. */
+                const coins = session.coins
+                console.log('OUTBOX (coins)', coins)
+
+                Object.keys(coins).forEach(async txid => {
+                    /* Initialize coin. */
+                    const coin = coins[txid]
+                    console.log('OUTBOX (coin)', coin)
+
+                    /* Add WIF. */
+                    coin.wif = coin.privateKeyWif
+
+                    /* Add satoshis. */
+                    coin.satoshis = coin.amountSatoshis
+
+                    const outs = [
+                        {
+                            receiver: this.output.address,
+                            satoshis: this.output.satoshis,
+                        }
+                    ]
+
+                    /* Set validation flag. */
+                    const doValidation = false
+
+                    if (coin.satoshis < 20000) {
+                        const results = await Nito.sendCoin(coin, outs, doValidation)
+                        console.log('SEND RESULTS', results)
+                    } else {
+                        console.error('SKIPPING COIN')
+                    }
+
+                })
+            })
         },
 
         /**
