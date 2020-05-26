@@ -13,7 +13,7 @@ class Nito extends EventEmitter {
         super()
 
         /* Initialize shuffle client. */
-        this.shuffleClient = require('./libs/cashshuffle/ShuffleClient.js')
+        this.shuffleClient = require('../libs/cashshuffle/ShuffleClient.js')
 
         /* Initialize shuffle manager. */
         this.shuffleManager = null
