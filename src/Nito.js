@@ -1,6 +1,9 @@
 const debug = require('debug')('nitojs')
 const EventEmitter = require('events').EventEmitter
 
+/* Initialize shuffle client. */
+const shuffleClient = require('../libs/cashshuffle/ShuffleClient.js')
+
 /**
  * Nito
  *
@@ -12,8 +15,8 @@ class Nito extends EventEmitter {
         debug('Initializing NitoJS...')
         super()
 
-        /* Initialize shuffle client. */
-        this.shuffleClient = require('../libs/cashshuffle/ShuffleClient.js')
+        /* Initialize wallet. */
+        this.wallet = null
 
         /* Initialize shuffle manager. */
         this.shuffleManager = null
@@ -81,7 +84,7 @@ class Nito extends EventEmitter {
      *    3. Target (address) generator function.
      */
     getShuffleManager(_coin, _changeFunc, _targetFunc, _disableAutoShuffle=false) {
-        this.shuffleManager = new this.shuffleClient({
+        this.shuffleManager = new shuffleClient({
             coins: [ _coin ],
 
             hooks: {
@@ -114,6 +117,17 @@ class Nito extends EventEmitter {
 
         /* Return shuffle manager. */
         return this.shuffleManager
+    }
+
+    /**
+     * Get Wallet
+     */
+    getWallet(_auth) {
+        /* Import wallet. */
+        const Wallet = require('./Wallet')
+
+        // NOTE: Return promise.
+        return Wallet.init(_auth)
     }
 
     /**

@@ -135,7 +135,7 @@ export default {
 
         sysTable() {
             const tableData = {
-                title: 'Application Events',
+                title: 'Application',
                 subTitle: 'List of ALL application activity since app setup.',
                 columns: ['Action', 'Tx Value', 'Session', 'Confirmations', 'Time'],
                 data: []

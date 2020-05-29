@@ -50,10 +50,10 @@ const routes = [
                 component: Pools
             },
 
-            /* Transaction History */
+            /* Event History */
             {
                 path: 'history',
-                name: 'Transaction History',
+                name: 'Event History',
                 component: History
             },
 
