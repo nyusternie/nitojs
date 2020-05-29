@@ -10,6 +10,7 @@ import getDustAmount from './purse/getters/getDustAmount'
 import getHDNode from './purse/getters/getHDNode'
 // import getHistory from './purse/getters/getHistory'
 import getMasterSeed from './purse/getters/getMasterSeed'
+import getMnemonic from './purse/getters/getMnemonic'
 import getOutbox from './purse/getters/getOutbox'
 import getSessions from './purse/getters/getSessions'
 
@@ -82,6 +83,7 @@ const getters = {
     getHDNode,
     // getHistory,
     getMasterSeed,
+    getMnemonic,
     getOutbox,
     getSessions,
 }

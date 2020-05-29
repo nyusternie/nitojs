@@ -126,7 +126,6 @@
                     </p-button>
 
                 </div> -->
-                <div class="clearfix"></div>
             </form>
 
         </card>
@@ -217,7 +216,7 @@ export default {
 
                     tableData.data.push(sessionData)
                 })
-                
+
             }
 
             console.log('TABLE DATA:', tableData)

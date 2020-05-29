@@ -1,11 +1,13 @@
 <template>
     <div class="row">
-        <div class="col-12 col-md-4">
-            <App />
+        <div class="col-12 col-md-8 order-md-1">
+            <Purse />
         </div>
 
-        <div class="col-12 col-md-8">
-            <Purse />
+        <div class="col-12 col-md-4">
+            <hr class="d-md-none" />
+
+            <App />
         </div>
     </div>
 </template>

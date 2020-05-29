@@ -100,8 +100,6 @@
                         </div>
                     </div>
                 </div>
-
-                <div class="clearfix"></div>
             </form>
         </card>
 
