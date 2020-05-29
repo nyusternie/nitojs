@@ -1,10 +1,10 @@
 <template>
     <div class="row">
-        <div class="col-md-4 col-12">
+        <div class="col-12 col-md-4">
             <App />
         </div>
 
-        <div class="col-md-8 col-12">
+        <div class="col-12 col-md-8">
             <Purse />
         </div>
     </div>
@@ -27,17 +27,7 @@ export default {
         //
     },
     created: function () {
-        /* Set message. */
-        const message = `Oops! Looks like you don't have a purse yet.`
-
-        /* Display notification. */
-        this.$notify({
-            message,
-            icon: 'ti-alert', // ti-info-alt | ti-alert
-            verticalAlign: 'top',
-            horizontalAlign: 'right',
-            type: 'danger', // info | danger
-        })
+        //
     },
     mounted: function () {
         //

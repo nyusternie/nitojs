@@ -83,6 +83,7 @@ export default {
         ]),
 
         coinsTable() {
+            /* Set table data. */
             const tableData = {
                 title: 'My Unspent Coins',
                 subTitle: 'All Sessions : Confirmed & Unconfirmed',
@@ -90,45 +91,49 @@ export default {
                 data: []
             }
 
-            Object.keys(this.getSessions).forEach(sessionId => {
-                /* Initialize sessions. */
-                const sessions = this.getSessions
-                console.log('COINS (sessions):', sessions)
+            /* Validate sessions. */
+            if (this.getSessions) {
+                Object.keys(this.getSessions).forEach(sessionId => {
+                    /* Initialize sessions. */
+                    const sessions = this.getSessions
+                    console.log('COINS (sessions):', sessions)
 
-                Object.keys(sessions).forEach(sessionIdx => {
-                    /* Initialize session. */
-                    const session = sessions[sessionIdx]
+                    Object.keys(sessions).forEach(sessionIdx => {
+                        /* Initialize session. */
+                        const session = sessions[sessionIdx]
 
-                    /* Initialize coins. */
-                    const coins = session.coins
-                    console.log('COINS (coins):', coins)
+                        /* Initialize coins. */
+                        const coins = session.coins
+                        console.log('COINS (coins):', coins)
 
-                    Object.keys(coins).forEach(async txid => {
-                        /* Initialize coin. */
-                        const coin = coins[txid]
-                        console.log('COINS (coin):', coin)
+                        Object.keys(coins).forEach(async txid => {
+                            /* Initialize coin. */
+                            const coin = coins[txid]
+                            console.log('COINS (coin):', coin)
 
-                        // const coinLabel = 'Fresh mint'
-                        const coinLabel = `${coin.txid.slice(0, 8)}:${coin.vout}`
+                            // const coinLabel = 'Fresh mint'
+                            const coinLabel = `${coin.txid.slice(0, 8)}:${coin.vout}`
 
-                        const status = coin.status
+                            const status = coin.status
 
-                        // const value = '200 bits | $0.3482'
-                        const value = coin.amountSatoshis
+                            // const value = '200 bits | $0.3482'
+                            const value = coin.amountSatoshis
 
-                        const sessionData = {
-                            coinlabel: coinLabel,
-                            status,
-                            value,
-                        }
+                            const sessionData = {
+                                coinlabel: coinLabel,
+                                status,
+                                value,
+                            }
 
-                        tableData.data.push(sessionData)
+                            tableData.data.push(sessionData)
+
+                        })
 
                     })
 
                 })
 
-            })
+            }
 
             console.log('TABLE DATA:', tableData)
             return tableData

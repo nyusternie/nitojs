@@ -79,8 +79,25 @@ export default {
         };
     },
     methods: {
-        // 
-    }
+        //
+    },
+    created: function () {
+        /* Set message. */
+        const message = `Hi there! Looks like you're setting up a new page. Good luck! 加油！`
+
+        /* Display notification. */
+        this.$notify({
+            message,
+            icon: 'ti-info-alt', // ti-info-alt | ti-alert
+            verticalAlign: 'top',
+            horizontalAlign: 'right',
+            type: 'info', // info | danger
+            // timeout: 0, // 0: persistent | 5000: default
+        })
+    },
+    mounted: function () {
+        //
+    },
 }
 </script>
 

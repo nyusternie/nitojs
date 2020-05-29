@@ -4,7 +4,7 @@ const bitbox = new window.BITBOX()
 /**
  * Initialize Purse
  */
-const initPurse = async ({ state, commit }) => {
+const initPurse = ({ state, commit }) => {
     console.info('Initializing purse...') // eslint-disable-line no-console
 
     /* Validate purse. */
@@ -12,7 +12,7 @@ const initPurse = async ({ state, commit }) => {
         console.info('Purse already exists.') // eslint-disable-line no-console
 
         /* Cancel initialization. */
-        return
+        return false
     } else {
         console.info('Initializing NEW purse...') // eslint-disable-line no-console
     }
@@ -30,6 +30,8 @@ const initPurse = async ({ state, commit }) => {
 
     /* Set new master (private) key. */
     commit('setMasterSeed', masterSeed)
+
+    return true
 }
 
 /* Export module. */

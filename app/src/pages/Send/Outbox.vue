@@ -182,6 +182,7 @@ export default {
         },
 
         txsTable() {
+            /* Set table data. */
             const tableData = {
                 title: 'Deposits & Transfers',
                 subTitle: 'List of ALL incoming and outgoing coin activity since app setup.',
@@ -189,31 +190,36 @@ export default {
                 data: []
             }
 
-            Object.keys(this.getSessions).forEach(sessionId => {
-                console.log(sessionId, this.getSessions[sessionId])
+            /* Validate sessions. */
+            if (this.getSessions) {
+                Object.keys(this.getSessions).forEach(sessionId => {
+                    console.log(sessionId, this.getSessions[sessionId])
 
-                const session = this.getSessions[sessionId]
+                    const session = this.getSessions[sessionId]
 
-                const type = 'DEPOSIT'
+                    const type = 'DEPOSIT'
 
-                const txvalue = '200 bits | $0.3482'
+                    const txvalue = '200 bits | $0.3482'
 
-                const sessionName = 'Session #1'
+                    const sessionName = 'Session #1'
 
-                const confirmations = 318
+                    const confirmations = 318
 
-                const time = '2 days ago'
+                    const time = '2 days ago'
 
-                const sessionData = {
-                    type,
-                    txvalue,
-                    session: sessionName,
-                    confirmations,
-                    time
-                }
+                    const sessionData = {
+                        type,
+                        txvalue,
+                        session: sessionName,
+                        confirmations,
+                        time
+                    }
 
-                tableData.data.push(sessionData)
-            })
+                    tableData.data.push(sessionData)
+                })
+                
+            }
+
             console.log('TABLE DATA:', tableData)
             return tableData
         },
@@ -237,9 +243,31 @@ export default {
         sendAll() {
             // FOR DEVELOPMENT PURPOSES ONLY
             if (!this.output.address) {
-                return alert('Set cash address')
+                /* Set message. */
+                const message = `Please enter a cash address.`
+
+                /* Display notification. */
+                return this.$notify({
+                    message,
+                    icon: 'ti-alert', // ti-info-alt | ti-alert
+                    verticalAlign: 'top',
+                    horizontalAlign: 'right',
+                    type: 'danger', // info | danger
+                    // timeout: 0, // 0: persistent | 5000: default
+                })
             } else if (!this.output.satoshis) {
-                return alert('Set amount')
+                /* Set message. */
+                const message = `Please enter a transfer amount.`
+
+                /* Display notification. */
+                return this.$notify({
+                    message,
+                    icon: 'ti-alert', // ti-info-alt | ti-alert
+                    verticalAlign: 'top',
+                    horizontalAlign: 'right',
+                    type: 'danger', // info | danger
+                    // timeout: 0, // 0: persistent | 5000: default
+                })
             }
 
             const sessions = this.getSessions
@@ -253,35 +281,39 @@ export default {
                 const coins = session.coins
                 console.log('OUTBOX (coins)', coins)
 
-                Object.keys(coins).forEach(async txid => {
-                    /* Initialize coin. */
-                    const coin = coins[txid]
-                    console.log('OUTBOX (coin)', coin)
+                /* Validate coins. */
+                if (coins) {
+                    Object.keys(coins).forEach(async txid => {
+                        /* Initialize coin. */
+                        const coin = coins[txid]
+                        console.log('OUTBOX (coin)', coin)
 
-                    /* Add WIF. */
-                    coin.wif = coin.privateKeyWif
+                        /* Add WIF. */
+                        coin.wif = coin.privateKeyWif
 
-                    /* Add satoshis. */
-                    coin.satoshis = coin.amountSatoshis
+                        /* Add satoshis. */
+                        coin.satoshis = coin.amountSatoshis
 
-                    const outs = [
-                        {
-                            receiver: this.output.address,
-                            satoshis: this.output.satoshis,
+                        const outs = [
+                            {
+                                receiver: this.output.address,
+                                satoshis: this.output.satoshis,
+                            }
+                        ]
+
+                        /* Set validation flag. */
+                        const doValidation = false
+
+                        if (coin.satoshis < 20000) {
+                            const results = await Nito.sendCoin(coin, outs, doValidation)
+                            console.log('SEND RESULTS', results)
+                        } else {
+                            console.error('SKIPPING COIN')
                         }
-                    ]
 
-                    /* Set validation flag. */
-                    const doValidation = false
+                    })
 
-                    if (coin.satoshis < 20000) {
-                        const results = await Nito.sendCoin(coin, outs, doValidation)
-                        console.log('SEND RESULTS', results)
-                    } else {
-                        console.error('SKIPPING COIN')
-                    }
-
-                })
+                }
             })
         },
 

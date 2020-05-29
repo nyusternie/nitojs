@@ -25,11 +25,16 @@ export default {
         ]),
 
     },
-    created: function () {
+    created: async function () {
         // console.log('APPLICATION STATE', this.$store.state)
-        if (this.initPurse()) {
+
+        /* Initialize purse. */
+        const newPurse = await this.initPurse()
+
+        /* Validate new purse. */
+        if (newPurse) {
             /* Set message. */
-            const message = `We've just created a new purse for you.`
+            const message = `Welcome to NitoJS! A new purse has been created for your coins.`
 
             /* Display notification. */
             this.$notify({
@@ -38,6 +43,7 @@ export default {
                 verticalAlign: 'top',
                 horizontalAlign: 'right',
                 type: 'info', // info | danger
+                timeout: 0, // 0: persistent | 5000: default
             })
         }
     },

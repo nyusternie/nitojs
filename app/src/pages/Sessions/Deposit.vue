@@ -275,7 +275,18 @@ export default {
                 document.execCommand('copy')
                 document.body.removeChild(textArea)
 
-                alert('copied to clipboard')
+                /* Set message. */
+                const message = `Address has been copied to your clipboard.`
+
+                /* Display notification. */
+                this.$notify({
+                    message,
+                    icon: 'ti-info-alt', // ti-info-alt | ti-alert
+                    verticalAlign: 'top',
+                    horizontalAlign: 'right',
+                    type: 'info', // info | danger
+                    // timeout: 0, // 0: persistent | 5000: default
+                })
 
                 return true
             } catch (err) {
