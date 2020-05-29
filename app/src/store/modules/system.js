@@ -6,25 +6,16 @@ import getPool from './system/getters/getPool'
 
 /* Import modules (actions). */
 import addNotice from './system/actions/addNotice'
-import displayError from './system/actions/displayError'
-import displayNotification from './system/actions/displayNotification'
 import updatePool from './system/actions/updatePool'
 
 /* Import modules (mutations). */
-import setError from './system/mutations/setError'
 import setFlags from './system/mutations/setFlags'
 import setLocale from './system/mutations/setLocale'
 import setNotices from './system/mutations/setNotices'
-import setNotification from './system/mutations/setNotification'
 import setPool from './system/mutations/setPool'
 
 /* Initialize state. */
 const state = {
-    /**
-     * Error Message
-     */
-    errors: null,
-
     /**
      * Flags
      *
@@ -57,11 +48,6 @@ const state = {
     notices: {},
 
     /**
-     * Notification Message
-     */
-    notifs: null,
-
-    /**
      * Active Pool Server
      */
     pool: null,
@@ -84,18 +70,14 @@ const getters = {
 /* Actions. */
 const actions = {
     addNotice,
-    displayError,
-    displayNotification,
     updatePool,
 }
 
 /* Mutations. */
 const mutations = {
-    setError,
     setFlags,
     setLocale,
     setNotices,
-    setNotification,
     setPool,
 }
 

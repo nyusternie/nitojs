@@ -34,8 +34,6 @@
 /* Initialize vuex. */
 import { mapActions, mapGetters } from 'vuex'
 
-import NotificationTemplate from '@/pages/Notifications/NotificationTemplate'
-
 export default {
     data() {
         return {
@@ -99,18 +97,6 @@ export default {
                 return 'col-lg-3'
             }
         },
-
-        notifyVue(verticalAlign, horizontalAlign) {
-            const color = Math.floor(Math.random() * 4 + 1)
-
-            this.$notify({
-                component: NotificationTemplate,
-                icon: 'ti-gift',
-                horizontalAlign: horizontalAlign,
-                verticalAlign: verticalAlign,
-                type: this.type[color]
-            })
-        }
     },
     created: function () {
         //

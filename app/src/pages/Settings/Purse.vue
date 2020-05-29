@@ -103,7 +103,7 @@
 
 <script>
 /* Initialize vuex. */
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 
 export default {
     data() {
@@ -115,6 +115,11 @@ export default {
                 aboutMe: `We must accept finite disappointment, but hold on to infinite hope.`
             }
         }
+    },
+    computed: {
+        ...mapGetters('purse', [
+            // 'getReceivingAccounts',
+        ]),
     },
     methods: {
         ...mapActions('purse', [

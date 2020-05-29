@@ -176,25 +176,6 @@ export default {
             // 'createSession',
         ]),
 
-        notifyVue(verticalAlign, horizontalAlign, type=null, icon=null) {
-            if (!type) {
-                const color = Math.floor(Math.random() * 4 + 1)
-                type = this.type[color]
-            }
-
-            if (!icon) {
-                icon = 'ti-gift'
-            }
-
-            this.$notify({
-                // component: NotificationTemplate,
-                component: NewSession,
-                icon,
-                horizontalAlign,
-                verticalAlign,
-                type
-            })
-        }
     },
     created: function () {
         console.log('SESSION ID:', this.getActiveSessionId)

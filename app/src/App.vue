@@ -7,20 +7,42 @@
 
 <script>
 /* Initialize vuex. */
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 
 export default {
+    computed: {
+        ...mapGetters([
+            //
+        ]),
+    },
     methods: {
+        ...mapActions([
+            //
+        ]),
+
         ...mapActions('purse', [
             'initPurse',
         ]),
+
     },
     created: function () {
         // console.log('APPLICATION STATE', this.$store.state)
-        this.initPurse()
+        if (this.initPurse()) {
+            /* Set message. */
+            const message = `We've just created a new purse for you.`
+
+            /* Display notification. */
+            this.$notify({
+                message,
+                icon: 'ti-info-alt', // ti-info-alt | ti-alert
+                verticalAlign: 'top',
+                horizontalAlign: 'right',
+                type: 'info', // info | danger
+            })
+        }
     },
     mounted: function () {
-        // 
+        //
     },
 }
 </script>

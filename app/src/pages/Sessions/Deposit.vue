@@ -81,8 +81,6 @@ import { mapActions, mapGetters } from 'vuex'
 /* Import components. */
 import QRCode from 'qrcode'
 
-import CopiedToClipboard from '@/pages/Notifications/CopiedToClipboard'
-
 export default {
     data() {
         return {
@@ -277,13 +275,7 @@ export default {
                 document.execCommand('copy')
                 document.body.removeChild(textArea)
 
-                this.$notify({
-                    component: CopiedToClipboard,
-                    icon: 'ti-info-alt',
-                    horizontalAlign: 'right',
-                    verticalAlign: 'top',
-                    type: 'success'
-                })
+                alert('copied to clipboard')
 
                 return true
             } catch (err) {

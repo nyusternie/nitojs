@@ -1,22 +1,17 @@
 <template>
     <div class="row">
-        <div class="col-xl-4 col-lg-5 col-md-6">
+        <div class="col-md-4 col-12">
             <App />
         </div>
 
-        <div class="col-xl-8 col-lg-7 col-md-6">
+        <div class="col-md-8 col-12">
             <Purse />
         </div>
     </div>
 </template>
 
 <script>
-/* Initialize vuex. */
-import { mapActions, mapGetters } from 'vuex'
-
-// import NotificationTemplate from './Notifications/NotificationTemplate'
-import NewSession from './Notifications/NewSession'
-
+/* Import components. */
 import Purse from './Settings/Purse.vue'
 import App from './Settings/App.vue'
 
@@ -26,34 +21,26 @@ export default {
         App,
     },
     computed: {
-        ...mapGetters('purse', [
-            // 'getReceivingAccounts',
-        ]),
+        //
     },
     methods: {
-        ...mapActions('purse', [
-            //
-        ]),
+        //
+    },
+    created: function () {
+        /* Set message. */
+        const message = `Oops! Looks like you don't have a purse yet.`
 
-        notifyVue(verticalAlign, horizontalAlign, type=null, icon=null) {
-            if (!type) {
-                const color = Math.floor(Math.random() * 4 + 1)
-                type = this.type[color]
-            }
-
-            if (!icon) {
-                icon = 'ti-gift'
-            }
-
-            this.$notify({
-                // component: NotificationTemplate,
-                component: NewSession,
-                icon,
-                horizontalAlign,
-                verticalAlign,
-                type
-            })
-        }
+        /* Display notification. */
+        this.$notify({
+            message,
+            icon: 'ti-alert', // ti-info-alt | ti-alert
+            verticalAlign: 'top',
+            horizontalAlign: 'right',
+            type: 'danger', // info | danger
+        })
+    },
+    mounted: function () {
+        //
     },
 }
 </script>

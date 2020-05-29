@@ -25,6 +25,9 @@
 </template>
 
 <script>
+/* Initialize vuex. */
+import { mapActions, mapGetters } from 'vuex'
+
 export default {
     data() {
         return {
@@ -44,7 +47,16 @@ export default {
             ]
         }
     },
+    computed: {
+        ...mapGetters('purse', [
+            // 'getReceivingAccounts',
+        ]),
+    },
     methods: {
+        ...mapActions('purse', [
+            //
+        ]),
+
         //
     }
 }

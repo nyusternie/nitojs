@@ -125,8 +125,6 @@ import Nito from 'nitojs'
 /* Initialize vuex. */
 import { mapActions, mapGetters } from 'vuex'
 
-import NotificationTemplate from '@/pages/Notifications/NotificationTemplate'
-
 import { PaperTable } from '@/components'
 
 const tableColumns = ['Id', 'Name', 'Salary', 'Country', 'City']
@@ -372,18 +370,6 @@ export default {
                 this.shuffleManager.stop()
             }
         },
-
-        notifyVue(verticalAlign, horizontalAlign) {
-            const color = Math.floor(Math.random() * 4 + 1)
-
-            this.$notify({
-                component: NotificationTemplate,
-                icon: 'ti-gift',
-                horizontalAlign: horizontalAlign,
-                verticalAlign: verticalAlign,
-                type: this.type[color]
-            })
-        }
     },
     created: function () {
         /* Initialize BITBOX. */
