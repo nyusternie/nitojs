@@ -20,113 +20,97 @@
         </div>
 
         <card class="card" title="My Coin Outbox">
-            <paper-table class="table-responsive table-responsive-md"
-                type="hover"
-                :data="txsTable.data"
-                :columns="txsTable.columns"
-            />
-
-            <form @submit.prevent>
-
-                <div class="row">
-                    <div class="col-md-5">
-                        <fg-input type="text"
-                            label="Address label"
-                            :disabled="true"
-                            placeholder="loading..."
-                            :value="displayAddress"
-                        ></fg-input>
-                    </div>
-
-                    <div class="col-md-3">
-                        <fg-input type="text"
-                            label="Value"
-                            placeholder="loading..."
-                            v-model="output.satoshis"
-                        ></fg-input>
-                    </div>
-
-                    <div class="col-md-4">
-                        <fg-input type="text"
-                            label="Pct"
-                            placeholder="Email"
-                            v-model="user.email"
-                        ></fg-input>
-                    </div>
+            <div
+                class="row coinRow"
+                v-for="coin of outboxTable.data"
+                :key="coin.id"
+            >
+                <div class="col-8">
+                    {{coin.txid.slice(0, 12)}} ... {{coin.txid.slice(-12)}}
                 </div>
 
-                <div class="row">
-                    <div class="col-md-9">
-                        <fg-input type="text"
-                            label="Target address"
-                            placeholder="Enter your destination address"
-                            v-model="output.address"
-                        ></fg-input>
-                    </div>
+                <div class="col-4">
+                    {{getFormattedValue(coin.satoshis).rounded}}
+                    {{getFormattedValue(coin.satoshis).unit}}
+                </div>
+            </div>
 
-                    <div class="col-md-3 btn-add-address">
-                        <p-button type="info"
-                            block
-                            @click.native.prevent="addAddress"
-                        >
-                            Add new
-                        </p-button>
-                    </div>
+            <!-- <div class="row mt-3">
+                <div class="col-md-5">
+                    <fg-input type="text"
+                        label="Address Label"
+                        :disabled="true"
+                        placeholder="loading..."
+                        :value="displayAddress"
+                    ></fg-input>
                 </div>
 
-                <div class="row">
-                    <div class="col-md-6">
-                        <p-button type="info"
-                            block
-                            outline
-                            @click.native.prevent="updateSettings"
-                        >
-                            Add next Nito address
-                        </p-button>
-                    </div>
-
-                    <div class="col-md-6">
-                        <p-button type="info"
-                            block
-                            outline
-                            :disabled="true"
-                            @click.native.prevent="updateSettings"
-                        >
-                            Add next xPub address
-                        </p-button>
-                    </div>
+                <div class="col-md-3">
+                    <fg-input type="text"
+                        label="Value"
+                        placeholder="loading..."
+                        v-model="output.satoshis"
+                    ></fg-input>
                 </div>
 
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <label>Transaction Notes</label>
-                            <textarea rows="5" class="form-control border-input"
-                                placeholder="Place your private (encrypted) transaction notes here."
-                                v-model="user.aboutMe">
-                            </textarea>
-                        </div>
-                    </div>
+                <div class="col-md-4">
+                    <fg-input type="text"
+                        label="Pct"
+                        placeholder="Email"
+                    ></fg-input>
+                </div>
+            </div> -->
+
+            <div class="row">
+                <div class="col-md-9">
+                    <fg-input type="text"
+                        label="Destination Address"
+                        placeholder="Enter your destination address"
+                        v-model="output.address"
+                    ></fg-input>
                 </div>
 
-                <!-- <div class="text-center">
-                    <p-button type="info" class="mx-3"
-                        round
-                        @click.native.prevent="updateSettings"
+                <div class="col-md-3 btn-add-address">
+                    <p-button type="info"
+                        block
+                        :disabled="true"
+                        @click.native="addAddress"
                     >
-                        Add ALL Inputs
+                        Add new
                     </p-button>
+                </div>
+            </div>
 
-                    <p-button type="info" class="mx-3"
-                        round
+            <div class="row">
+                <div class="col-md-6">
+                    <p-button type="info"
+                        block
                         outline
-                        @click.native.prevent="updateSettings"
+                        @click.native.prevent="addNitoAddress"
                     >
-                        Randomize Output
+                        Add next Nito address
                     </p-button>
+                </div>
 
-                </div> -->
-            </form>
+                <div class="col-md-6">
+                    <p-button type="info"
+                        block
+                        outline
+                        :disabled="true"
+                        @click.native.prevent="addXPubAddress"
+                    >
+                        Add next xPub address
+                    </p-button>
+                </div>
+            </div>
+
+            <div class="form-group mt-3">
+                <label>Transaction Notes</label>
+                <textarea rows="5" class="form-control border-input"
+                    placeholder="Enter your private (encrypted) transaction notes here."
+                    v-model="output.notes">
+                </textarea>
+            </div>
 
         </card>
 
@@ -140,30 +124,30 @@ import { mapActions, mapGetters } from 'vuex'
 /* Import modules. */
 import Nito from 'nitojs'
 
-import { PaperTable } from '@/components'
-
 export default {
     components: {
-        PaperTable
+        //
     },
     data() {
         return {
             output: {
                 address: null,
                 satoshis: null,
-                targets: [],
+                // destinations: null,
+                notes: null,
             },
 
-            user: {
-                email: '',
-                aboutMe: `We must accept finite disappointment, but hold on to infinite hope.`
-            }
         }
     },
     computed: {
         ...mapGetters('purse', [
             'getActiveSessionId',
+            'getOutbox',
             'getSessions',
+        ]),
+
+        ...mapGetters('utils', [
+            'getFormattedValue',
         ]),
 
         displayAddress() {
@@ -180,7 +164,7 @@ export default {
             }
         },
 
-        txsTable() {
+        outboxTable() {
             /* Set table data. */
             const tableData = {
                 title: 'Deposits & Transfers',
@@ -190,31 +174,12 @@ export default {
             }
 
             /* Validate sessions. */
-            if (this.getSessions) {
-                Object.keys(this.getSessions).forEach(sessionId => {
-                    console.log(sessionId, this.getSessions[sessionId])
+            if (this.getOutbox) {
+                Object.keys(this.getOutbox).forEach(_coinId => {
+                    const coin = this.getOutbox[_coinId]
+                    console.log('OUTBOX (coin)', coin)
 
-                    const session = this.getSessions[sessionId]
-
-                    const type = 'DEPOSIT'
-
-                    const txvalue = '200 bits | $0.3482'
-
-                    const sessionName = 'Session #1'
-
-                    const confirmations = 318
-
-                    const time = '2 days ago'
-
-                    const sessionData = {
-                        type,
-                        txvalue,
-                        session: sessionName,
-                        confirmations,
-                        time
-                    }
-
-                    tableData.data.push(sessionData)
+                    tableData.data.push(coin)
                 })
 
             }
@@ -229,34 +194,21 @@ export default {
             'rebuildPurse',
             'sendCrypto',
             'updateCoins',
+            'updateOutbox',
         ]),
 
         addAddress() {
             // this.output.satoshis = 19395
-            this.output.satoshis = (19395 - 270)
+            // this.output.satoshis = (19395 - 270)
         },
 
         /**
          * Send ALL
          */
         sendAll() {
-            // FOR DEVELOPMENT PURPOSES ONLY
-            if (!this.output.address) {
+            if (!this.getOutbox) {
                 /* Set message. */
-                const message = `Please enter a cash address.`
-
-                /* Display notification. */
-                return this.$notify({
-                    message,
-                    icon: 'ti-alert', // ti-info-alt | ti-alert
-                    verticalAlign: 'top',
-                    horizontalAlign: 'right',
-                    type: 'danger', // info | danger
-                    // timeout: 0, // 0: persistent | 5000: default
-                })
-            } else if (!this.output.satoshis) {
-                /* Set message. */
-                const message = `Please enter a transfer amount.`
+                const message = `Oops! You need to first add a coin to your outbox.`
 
                 /* Display notification. */
                 return this.$notify({
@@ -269,58 +221,122 @@ export default {
                 })
             }
 
-            const sessions = this.getSessions
-            console.log('OUTBOX (sessions):', sessions)
 
-            Object.keys(sessions).forEach(sessionIdx => {
-                /* Initialize session. */
-                const session = sessions[sessionIdx]
+            if (!this.output.address) {
+                /* Set message. */
+                const message = `Oops! You need to enter a destination address before sending coins.`
 
-                /* Initialize coins. */
-                const coins = session.coins
-                console.log('OUTBOX (coins)', coins)
+                /* Display notification. */
+                return this.$notify({
+                    message,
+                    icon: 'ti-alert', // ti-info-alt | ti-alert
+                    verticalAlign: 'top',
+                    horizontalAlign: 'right',
+                    type: 'danger', // info | danger
+                    // timeout: 0, // 0: persistent | 5000: default
+                })
+            }
 
-                /* Validate coins. */
-                if (coins) {
-                    Object.keys(coins).forEach(async txid => {
-                        /* Initialize coin. */
-                        const coin = coins[txid]
-                        console.log('OUTBOX (coin)', coin)
+            const outbox = this.getOutbox
+            console.log('OUTBOX (outbox):', outbox)
 
-                        /* Add WIF. */
-                        coin.wif = coin.privateKeyWif
+            Object.keys(outbox).forEach(async _coinId => {
+                /* Initialize coin. */
+                const coin = outbox[_coinId]
 
-                        /* Add satoshis. */
-                        coin.satoshis = coin.amountSatoshis
+                /* Validate coin. */
+                if (coin) {
+                    /* Add WIF. */
+                    coin.wif = coin.privateKeyWif
 
-                        const outs = [
-                            {
-                                receiver: this.output.address,
-                                satoshis: this.output.satoshis,
-                            }
-                        ]
+                    /* Add satoshis. */
+                    coin.satoshis = coin.amountSatoshis
 
-                        /* Set validation flag. */
-                        const doValidation = false
-
-                        if (coin.satoshis < 20000) {
-                            const results = await Nito.sendCoin(coin, outs, doValidation)
-                            console.log('SEND RESULTS', results)
-                        } else {
-                            console.error('SKIPPING COIN')
+                    const outs = [
+                        {
+                            receiver: this.output.address,
+                            satoshis: coin.satoshis - 270,
                         }
+                    ]
 
-                    })
+                    /* Set validation flag. */
+                    const doValidation = false
 
+                    const results = await Nito.sendCoin(coin, outs, doValidation)
+                    console.log('SEND RESULTS', results)
+
+                    if (results) {
+                        /* Update outbox. */
+                        this.updateOutbox(null)
+
+                        /* Set message. */
+                        const message = `Your coins have been sent successfully!`
+
+                        /* Display notification. */
+                        this.$notify({
+                            message,
+                            icon: 'ti-info-alt', // ti-info-alt | ti-alert
+                            verticalAlign: 'top',
+                            horizontalAlign: 'right',
+                            type: 'info', // info | danger
+                            // timeout: 0, // 0: persistent | 5000: default
+                        })
+
+                    } else {
+                        /* Set message. */
+                        const message = `Oops! Something went wrong and your coin(s) were NOT sent.`
+
+                        /* Display notification. */
+                        this.$notify({
+                            message,
+                            icon: 'ti-alert', // ti-info-alt | ti-alert
+                            verticalAlign: 'top',
+                            horizontalAlign: 'right',
+                            type: 'danger', // info | danger
+                            // timeout: 0, // 0: persistent | 5000: default
+                        })
+                    }
+                } else {
+                    alert('Something went terribly wrong!')
+                    throw new Error('Something went terribly wrong!')
                 }
             })
         },
 
         /**
-         * Update Settings
+         * Add Nito (Cash) Address
          */
-        updateSettings() {
-            alert('Your data: ' + JSON.stringify(this.user))
+        addNitoAddress() {
+            /* Set message. */
+            const message = `Oops! This feature is not available yet, but our team is working on it!`
+
+            /* Display notification. */
+            this.$notify({
+                message,
+                icon: 'ti-alert', // ti-info-alt | ti-alert
+                verticalAlign: 'top',
+                horizontalAlign: 'right',
+                type: 'danger', // info | danger
+                // timeout: 0, // 0: persistent | 5000: default
+            })
+        },
+
+        /**
+         * Add xPubKey Address
+         */
+        addXPubAddress() {
+            /* Set message. */
+            const message = `Oops! This feature is not available yet, but our team is working on it!`
+
+            /* Display notification. */
+            this.$notify({
+                message,
+                icon: 'ti-alert', // ti-info-alt | ti-alert
+                verticalAlign: 'top',
+                horizontalAlign: 'right',
+                type: 'danger', // info | danger
+                // timeout: 0, // 0: persistent | 5000: default
+            })
         },
     }
 }
@@ -329,5 +345,13 @@ export default {
 <style scoped>
 .btn-add-address {
     margin-top: 30px;
+}
+
+.coinRow {
+    padding: 10px;
+    cursor: default;
+}
+.coinRow:hover {
+    background-color: rgba(255, 0, 0, 0.2);
 }
 </style>

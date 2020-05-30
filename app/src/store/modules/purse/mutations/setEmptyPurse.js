@@ -6,13 +6,19 @@
  */
 const destroyPurse = (state) => {
     /* Reset active session. */
-    state.activeSession = null
+    state.activeSessionId = null
 
     /* Reset master seed. */
     state.masterSeed = null
 
     /* Reset metadata. */
     state.meta = null
+
+    /* Reset Nito Cash index. */
+    state.nitoCashIdx = null
+
+    /* Reset outbox. */
+    state.outbox = null
 
     /* Reset sessions. */
     state.sessions = null

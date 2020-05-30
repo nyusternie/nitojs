@@ -4,6 +4,7 @@ import getAccountsBySession from './purse/getters/getAccountsBySession'
 import getActiveSessionId from './purse/getters/getActiveSessionId'
 import getBalance from './purse/getters/getBalance'
 import getBalanceBySession from './purse/getters/getBalanceBySession'
+import getCoinById from './purse/getters/getCoinById'
 import getCoinsBySession from './purse/getters/getCoinsBySession'
 import getDerivationPath from './purse/getters/getDerivationPath'
 import getDustAmount from './purse/getters/getDustAmount'
@@ -23,6 +24,7 @@ import initPurse from './purse/actions/initPurse'
 import rebuildPurse from './purse/actions/rebuildPurse'
 import updateCoins from './purse/actions/updateCoins'
 import updateMeta from './purse/actions/updateMeta'
+import updateOutbox from './purse/actions/updateOutbox'
 
 /* Import modules (mutations). */
 import setEmptyPurse from './purse/mutations/setEmptyPurse'
@@ -84,6 +86,7 @@ const getters = {
     getAccountsBySession,
     getActiveSessionId,
     getBalance,
+    getCoinById,
     getBalanceBySession,
     getCoinsBySession,
     getDerivationPath,
@@ -105,6 +108,7 @@ const actions = {
     // nextCoin,
     rebuildPurse,
     updateCoins,
+    updateOutbox,
 }
 
 /* Mutations. */

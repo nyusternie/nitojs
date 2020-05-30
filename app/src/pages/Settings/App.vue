@@ -4,7 +4,7 @@
             <img src="@/assets/img/background.jpg" alt="...">
         </div>
 
-        <div class="flag" @click="toggleUnconfirmed">
+        <div class="toggleFlag" @click="toggleUnconfirmed">
             <h3>
                 <i v-if="getFlags.unconfirmed" class="fa fa-check-square mr-2"></i>
                 <i v-else class="fa fa-square mr-2"></i>
@@ -18,7 +18,7 @@
 
         <hr>
 
-        <div class="flag" @click="toggleDarkMode">
+        <div class="toggleFlag" @click="toggleDarkMode">
             <h3>
                 <i v-if="getFlags.darkMode" class="fa fa-check-square mr-2"></i>
                 <i v-else class="fa fa-square mr-2"></i>
@@ -121,9 +121,5 @@ export default {
 .setting-tip {
     margin-left: 40px;
     font-size: 0.9em;
-}
-
-.flag {
-    cursor: pointer;
 }
 </style>

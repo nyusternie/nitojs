@@ -1,11 +1,11 @@
 <template>
     <div class="row">
-        <div class="col-md-5">
-            <Coins />
+        <div class="col-12 col-xl-7 order-xl-2">
+            <Outbox />
         </div>
 
-        <div class="col-md-7">
-            <Outbox />
+        <div class="col-12 col-xl-5 order-xl-1">
+            <Coins />
         </div>
     </div>
 </template>

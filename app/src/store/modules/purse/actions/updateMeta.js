@@ -2,7 +2,7 @@
  * Update Metadata
  */
 const updateMeta = ({ commit }, _meta) => {
-    /* Commit empty purse. */
+    /* Commit metadata. */
     commit('setMeta', _meta)
 }
 
