@@ -133,12 +133,12 @@ class Nito extends EventEmitter {
     /**
      * Send Crypto
      */
-    static sendCoin(_coin, _outs, _doValidation=false) {
+    static async sendCoin(_coin, _outs, _doValidation=false) {
         /* Import transaction. */
         const Transaction = require('./Transaction')
 
         // NOTE: Return promise.
-        return Transaction.sendCoin(_coin, _outs, _doValidation)
+        return await Transaction.sendCoin(_coin, _outs, _doValidation)
     }
 
 }

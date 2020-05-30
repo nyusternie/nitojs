@@ -29,8 +29,9 @@ const sendCoin = async (_coin, _outs, _doValidation=false) => {
 
     /* Validate satoshis (sending to receiver). */
     if (!satoshis) {
-        return console.error('displayError',
-            'Cannot send coin without satoshis', { root: true })
+        throw new Error('No transaction value.')
+        // return console.error('displayError',
+        //     'Cannot send coin without satoshis', { root: true })
     }
 
     try {
@@ -90,55 +91,32 @@ const sendCoin = async (_coin, _outs, _doValidation=false) => {
         // this.sendState = 'sending'
 
         /* Broadcast transaction to network. */
-        const result = await bitbox.RawTransactions
+        return await bitbox.RawTransactions
             .sendRawTransaction(rawTx)
-            .catch(err => console.error(err)) // eslint-disable-line no-console
-
-        return result
-            // .then(
-            //     (result) => {
-            //         debug('sendRawTransaction (result):', result)
-            //         console.info('sendRawTransaction (result):', result) // eslint-disable-line no-console
-            //
-            //         /* Increment receiving wallet (index). */
-            //         // FIXME: Verify that a change coins was used.
-            //         // dispatch('updateAccounts', {
-            //         //     action: 'disable',
-            //         //     indexes: coinsIndexes,
-            //         //     wallet: 'BCH',
-            //         // })
-            //
-            //         /* Display notification. */
-            //         // dispatch('displayNotification',
-            //         //     'Sent successfully!', { root: true })
-            //
-            //         /* Set flag. */
-            //         // this.sendState = 'idle'
-            //     },
-            //     (err) => {
-            //         console.error('TX SEND ERROR:', err) // eslint-disable-line no-console
-            //
-            //         /* Validate error. */
-            //         if (err && err.error && err.error.includes('insufficient priority')) {
-            //             return console.error('displayError',
-            //                 `Blockchain fee is too low (${amount} sats)`,
-            //                 { root: true })
-            //         }
-            //
-            //         /* Display error. */
-            //         console.error('displayError',
-            //             err.message ? err.message.split(';')[0] : err, { root: true })
-            //
-            //         /* Set flag. */
-            //         // this.sendState = 'idle'
-            //     }
-            // )
+            .catch(err => {
+                console.error(err) // eslint-disable-line no-console
+                //         console.error('TX SEND ERROR:', err) // eslint-disable-line no-console
+                //
+                //         /* Validate error. */
+                //         if (err && err.error && err.error.includes('insufficient priority')) {
+                //             return console.error('displayError',
+                //                 `Blockchain fee is too low (${amount} sats)`,
+                //                 { root: true })
+                //         }
+                //
+                //         /* Display error. */
+                //         console.error('displayError',
+                //             err.message ? err.message.split(';')[0] : err, { root: true })
+                //
+                //         /* Set flag. */
+                //         // this.sendState = 'idle'
+            })
     } catch (err) {
         console.error(err) // eslint-disable-line no-console
 
         /* Display error. */
-        console.error('displayError',
-            err.message ? err.message.split(';')[0] : err, { root: true })
+        // console.error('displayError',
+        //     err.message ? err.message.split(';')[0] : err, { root: true })
 
         /* Set flag. */
         // FIXME: Add this to the `system` module.

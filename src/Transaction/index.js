@@ -9,9 +9,9 @@ class Transaction extends EventEmitter {
         super()
     }
 
-    static sendCoin(_coin, _outs, _doValidation) {
+    static async sendCoin(_coin, _outs, _doValidation) {
         debug('Sending a coin:', _coin, _outs, _doValidation)
-        require('./sendCoin')(_coin, _outs, _doValidation)
+        return await require('./sendCoin')(_coin, _outs, _doValidation)
     }
 }
 
