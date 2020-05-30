@@ -1,24 +1,21 @@
 <template>
     <card class="card-user">
-        <div v-if="depositAccount" class="depositAccount">
-            <div
-                slot="image"
-                v-html="qr"
-                class="qr"
-                @click="setClipboard"
-            >
-                <!-- placeholder for QRCode -->
+        <div v-if="depositAccount">
+            <div class="depositAccount">
+                <div
+                    slot="image"
+                    v-html="qr"
+                    class="qr"
+                    @click="setClipboard"
+                >
+                    <!-- placeholder for QRCode -->
+                </div>
+
+                <div class="clipboard-note" @click="setClipboard">
+                    click to copy to your clipboard
+                </div>
             </div>
 
-            <div class="clipboard-note" @click="setClipboard">
-                click to copy to your clipboard
-            </div>
-        </div>
-        <div v-else slot="image">
-            <img src="@/assets/img/qr-placeholder.jpg" alt="...">
-        </div>
-
-        <div>
             <div class="author">
                 <!-- <img class="avatar border-white" src="@/assets/img/faces/face-2.jpg" alt="..."> -->
 
@@ -38,39 +35,44 @@
                 <br />
                 <small class="text-muted"><em>(address privacy is managed automatically)</em></small>
             </p>
-        </div>
 
-        <hr>
+            <hr>
 
-        <div class="text-center">
-            <div class="row">
-                <div class="col">
-                    <h5>
-                        {{numCoins}}
-                        <br>
-                        <small>Coins</small>
-                    </h5>
-                </div>
+            <div class="text-center">
+                <div class="row">
+                    <div class="col">
+                        <h5>
+                            {{numCoins}}
+                            <br>
+                            <small>Coins</small>
+                        </h5>
+                    </div>
 
-                <div class="col">
-                    <h5>
-                        {{crypto.value}}
-                        <br>
-                        <small class="text-uppercase">
-                            {{crypto.unit}}
-                        </small>
-                    </h5>
-                </div>
+                    <div class="col">
+                        <h5>
+                            {{crypto.value}}
+                            <br>
+                            <small class="text-uppercase">
+                                {{crypto.unit}}
+                            </small>
+                        </h5>
+                    </div>
 
-                <div class="col">
-                    <h5>
-                        {{fiat.value}}
-                        <br>
-                        <small>{{fiat.unit}}</small>
-                    </h5>
+                    <div class="col">
+                        <h5>
+                            {{fiat.value}}
+                            <br>
+                            <small>{{fiat.unit}}</small>
+                        </h5>
+                    </div>
                 </div>
             </div>
         </div>
+
+        <div v-else slot="image">
+            <img src="@/assets/img/qr-placeholder.jpg" alt="...">
+        </div>
+
     </card>
 </template>
 
@@ -86,9 +88,10 @@ export default {
         return {
             bitbox: null,
 
-            balance: null,
-            coins: null,
-            depositAccount: null,
+            sessionId: null,
+
+            // balance: null,
+            // coins: null,
         }
     },
     computed: {
@@ -101,6 +104,22 @@ export default {
             'getBalanceBySession',
             'getCoinsBySession',
         ]),
+
+        depositAccount() {
+            /* Set deposit address. */
+            return this.getAccountBySession(this.sessionId)
+        },
+
+        async balance() {
+            /* Retreive session balance. */
+            return await this.getBalanceBySession(this.sessionId, 'USD')
+            // console.log('DEPOSIT (balance):', this.balance)
+        },
+
+        coins() {
+            /* Retreive session balance. */
+            return this.getCoinsBySession(this.sessionId)
+        },
 
         shortAccount() {
             if (this.depositAccount) {
@@ -156,10 +175,10 @@ export default {
 
         fiat() {
             /* Initialize value. */
-            let value = 0
+            let value = '$0.00'
 
             /* Initialize unit. */
-            let unit = ''
+            let unit = 'USD'
 
             /* Validate balance. */
             if (this.balance && this.balance.fiat) {
@@ -276,7 +295,7 @@ export default {
                 document.body.removeChild(textArea)
 
                 /* Set message. */
-                const message = `Address has been copied to your clipboard.`
+                const message = `Your deposit address has been copied to your clipboard.`
 
                 /* Display notification. */
                 this.$notify({
@@ -306,19 +325,8 @@ export default {
         // this.openConn()
 
         // FOR DEVELOPMENT PURPOSES ONLY
-        const sessionId = 0
-
-        /* Set deposit address. */
-        this.depositAccount = this.getAccountBySession(sessionId)
-        // console.log('DEPOSIT (address):', this.depositAccount)
-
-        /* Retreive session balance. */
-        this.balance = await this.getBalanceBySession(sessionId, 'USD')
-        // console.log('DEPOSIT (balance):', this.balance)
-
-        /* Retreive session balance. */
-        this.coins = await this.getCoinsBySession(sessionId)
-        // console.log('DEPOSIT (coins):', this.coins)
+        // NOTE: We start with session #1 (zero is reserved).
+        this.sessionId = 1
 
         // this.watchForDeposit()
 

@@ -9,9 +9,11 @@
                         <span>This is a plain notification</span>
                     </div>
 
-                    <p-button round outline block @click.native="notifyVue('top', 'right')">Top Right</p-button>
+                    <hr />
 
-                    <p-button round outline block @click.native="notifyVue('bottom', 'right')">Bottom Right</p-button>
+                    <p-button round outline block>Sample Button #1</p-button>
+
+                    <p-button round block>Sample Button #2</p-button>
                 </div>
 
                 <div class="col-md-6">

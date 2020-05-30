@@ -1,7 +1,7 @@
 /**
- * Create Session
+ * Add a New Session
  */
-const createSession = ({ commit, getters }) => {
+const addSession = ({ commit, getters }) => {
     console.info('Creating a NEW session...') // eslint-disable-line no-console
 
     /* Initialize session model. */
@@ -90,4 +90,4 @@ const createSession = ({ commit, getters }) => {
 }
 
 /* Export module. */
-export default createSession
+export default addSession

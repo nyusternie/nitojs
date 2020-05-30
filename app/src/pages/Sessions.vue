@@ -1,12 +1,12 @@
 <template>
     <div class="row">
-        <div class="col-xl-4 col-lg-5 col-md-6">
-            <Deposit />
-            <Cabinet />
+        <div class="col-12 col-xl-8 order-xl-2">
+            <Manager />
         </div>
 
-        <div class="col-xl-8 col-lg-7 col-md-6">
-            <Manager />
+        <div class="col-12 col-xl-4 order-xl-1">
+            <Deposit />
+            <Cabinet />
         </div>
     </div>
 </template>
@@ -42,13 +42,13 @@ export default {
     },
     methods: {
         ...mapActions('purse', [
-            'createSession',
+            //
         ]),
 
     },
     created: function () {
-        console.log('SESSION ID:', this.getActiveSessionId)
         console.log('SESSIONS:', this.getSessions)
+        console.log('SESSION ID:', this.getActiveSessionId)
     },
 }
 </script>

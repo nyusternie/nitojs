@@ -17,7 +17,7 @@ import getSessions from './purse/getters/getSessions'
 
 /* Import modules (actions). */
 import addCoin from './purse/actions/addCoin'
-import createSession from './purse/actions/createSession'
+import addSession from './purse/actions/addSession'
 import initPurse from './purse/actions/initPurse'
 // import nextCoin from './purse/actions/nextCoin'
 import rebuildPurse from './purse/actions/rebuildPurse'
@@ -100,7 +100,7 @@ const getters = {
 /* Actions. */
 const actions = {
     addCoin,
-    createSession,
+    addSession,
     initPurse,
     // nextCoin,
     rebuildPurse,

@@ -1,30 +1,14 @@
 <template>
     <main>
         <div class="row">
-            <div class="col-md-4">
+            <div class="col-md-4 mb-3">
                 <p-button
                     round
                     outline
                     block
-                    @click.native="newSession"
+                    @click.native="createSession"
                 >
                     Create a new session
-                </p-button>
-
-                <p-button type="info"
-                    round
-                    block
-                    @click.native="startShuffle"
-                >
-                    Start Shuffle
-                </p-button>
-
-                <p-button type="danger"
-                    round
-                    block
-                    @click.native="stopShuffle"
-                >
-                    Stop Shuffle
                 </p-button>
             </div>
 
@@ -37,82 +21,105 @@
             </div>
         </div>
 
-        <hr />
+        <hr v-if="getSessions" />
 
-        <card class="card" title="Session Manager">
-            <form @submit.prevent>
-                <div class="row">
-                    <div class="col-md-5">
-                        <fg-input type="text"
-                            label="Session Title"
-                            :disabled="true"
-                            placeholder="loading, please wait..."
-                            v-model="session.title"
-                        ></fg-input>
+        <card v-if="getSessions" class="card" title="Session Manager">
+            <div class="row">
+                <div class="col-md-5">
+                    <fg-input type="text"
+                        label="Session Label"
+                        :disabled="true"
+                        placeholder="loading, please wait..."
+                        v-model="session.label"
+                    ></fg-input>
 
-                        <fg-input type="text"
-                            label="Current Status"
-                            :disabled="true"
-                            placeholder="loading, please wait..."
-                            v-model="session.status"
-                        ></fg-input>
+                    <fg-input type="text"
+                        label="Current Status"
+                        :disabled="true"
+                        placeholder="loading, please wait..."
+                        v-model="session.status"
+                    ></fg-input>
 
-                        <fg-input type="text"
-                            label="Current Phase"
-                            :disabled="true"
-                            placeholder="loading, please wait..."
-                            v-model="session.phase"
-                        ></fg-input>
-                    </div>
-
-                    <div class="col-md-6 offset-md-1">
-                        <div>
-                            <h3><i class="fa fa-check-square mr-2"></i> Auto-start</h3>
-                        </div>
-
-                        <p class="setting-tip">
-                            Will automatically start shuffling when new coins are added to the session.
-                        </p>
-
-                        <hr>
-
-                        <div>
-                            <h3><i class="fa fa-check-square mr-2"></i> Auto-reshuffle</h3>
-                        </div>
-
-                        <p class="setting-tip">
-                            Will automatically start shuffling when change is added to the session.
-                        </p>
-                    </div>
+                    <fg-input type="text"
+                        label="Current Shuffle Phase"
+                        :disabled="true"
+                        placeholder="loading, please wait..."
+                        v-model="session.phase"
+                    ></fg-input>
                 </div>
 
-                <hr />
+                <div class="col-md-6 offset-md-1">
+                    <p-button
+                        v-if="!isShuffling"
+                        block
+                        type="info"
+                        @click.native="startShuffle"
+                    >
+                        Start Shuffling
+                    </p-button>
 
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <label>Session Log</label>
+                    <p-button
+                        v-if="isShuffling"
+                        block
+                        type="danger"
+                        @click.native="stopShuffle"
+                    >
+                        Stop Shuffling
+                    </p-button>
 
-                            <textarea rows="5" class="form-control border-input"
-                                placeholder="Waiting for real-time updates..."
-                                v-model="logDisplay">
-                            </textarea>
-                        </div>
+                    <div class="flag" @click="toggleAutoStart">
+                        <h3>
+                            <i v-if="autoStart" class="fa fa-check-square mr-2"></i>
+                            <i v-else class="fa fa-square mr-2"></i>
+                            Auto-start
+                        </h3>
+                    </div>
+
+                    <p class="setting-tip">
+                        Will automatically start shuffling when new coins are added to the session.
+                    </p>
+
+                    <hr>
+
+                    <div class="flag" @click="toggleAutoReshuffle">
+                        <h3>
+                            <i v-if="autoReshuffle" class="fa fa-check-square mr-2"></i>
+                            <i v-else class="fa fa-square mr-2"></i>
+                            Auto-reshuffle
+                        </h3>
+                    </div>
+
+                    <p class="setting-tip">
+                        Will automatically start shuffling when change is added to the session.
+                    </p>
+                </div>
+            </div>
+
+            <hr />
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Session Log</label>
+
+                        <textarea rows="5" class="form-control border-input"
+                            placeholder="Waiting for real-time updates..."
+                            v-model="logDisplay">
+                        </textarea>
                     </div>
                 </div>
-            </form>
+            </div>
         </card>
 
-        <hr />
+        <hr v-if="coins" />
 
-        <card class="card-plain" :title="coins.title" :subTitle="coins.subTitle">
+        <card v-if="coins" class="card-plain" :title="coins.title" :subTitle="coins.subTitle">
             <div class="table-full-width table-responsive">
                 <paper-table type="hover" :title="coins.title" :sub-title="coins.subTitle" :data="coins.data"
-                     :columns="coins.columns">
-
-                 </paper-table>
-             </div>
-         </card>
+                    :columns="coins.columns">
+                </paper-table>
+            </div>
+        </card>
     </main>
 </template>
 
@@ -175,6 +182,7 @@ export default {
             bitbox: null,
             nito: null,
             shuffleManager: null,
+            isShuffling: false,
 
             depositAddress: null,
             type: ['', 'info', 'success', 'warning', 'danger'],
@@ -185,7 +193,7 @@ export default {
             coins: [],
             session: {
                 id: 0,
-                title: 'Session #1',
+                label: 'My first session',
                 status: null,
                 phase: null,
                 logs: [],
@@ -224,12 +232,20 @@ export default {
 
             /* Return (reversed) notes. */
             return notes.reverse()
-        }
+        },
+
+        autoStart() {
+            return false
+        },
+
+        autoReshuffle() {
+            return false
+        },
 
     },
     methods: {
         ...mapActions('purse', [
-            // 'initSession',
+            'addSession',
         ]),
 
         /**
@@ -247,14 +263,81 @@ export default {
             }
         },
 
-        newSession() {
-            this.createSession()
+        /**
+         * Create Session
+         */
+        createSession() {
+            // FOR DEVELOPMENT PURPOSES ONLY
+            if (this.getSessions) {
+                /* Set message. */
+                const message = `Oops! Multiple sessions are not ready yet, but our team is working on it!`
 
-            this.notifyVue('top', 'right', 'success', 'ti-info-alt')
+                /* Display notification. */
+                return this.$notify({
+                    message,
+                    icon: 'ti-alert', // ti-info-alt | ti-alert
+                    verticalAlign: 'top',
+                    horizontalAlign: 'right',
+                    type: 'danger', // info | danger
+                    // timeout: 0, // 0: persistent | 5000: default
+                })
+            }
+
+            /* Add session. */
+            this.addSession()
+
+            /* Set message. */
+            const message = `Nice! You've got a brand new session. Now it's time to fill it with coins.`
+
+            /* Display notification. */
+            this.$notify({
+                message,
+                icon: 'ti-info-alt', // ti-info-alt | ti-alert | ti-pin-alt
+                verticalAlign: 'top',
+                horizontalAlign: 'right',
+                type: 'info', // info | danger | warning
+                // timeout: 0, // 0: persistent | 5000: default
+            })
         },
 
         /**
-         * Change Account
+         * Toggle Auto-start
+         */
+        toggleAutoStart() {
+            /* Set message. */
+            const message = `Oops! Auto-start is not available yet, but our team is working on it!`
+
+            /* Display notification. */
+            this.$notify({
+                message,
+                icon: 'ti-alert', // ti-info-alt | ti-alert
+                verticalAlign: 'top',
+                horizontalAlign: 'right',
+                type: 'danger', // info | danger
+                // timeout: 0, // 0: persistent | 5000: default
+            })
+        },
+
+        /**
+         * Toggle Auto-reshuffle
+         */
+        toggleAutoReshuffle() {
+            /* Set message. */
+            const message = `Oops! Auto-reshuffle is not available yet, but our team is working on it!`
+
+            /* Display notification. */
+            this.$notify({
+                message,
+                icon: 'ti-alert', // ti-info-alt | ti-alert
+                verticalAlign: 'top',
+                horizontalAlign: 'right',
+                type: 'danger', // info | danger
+                // timeout: 0, // 0: persistent | 5000: default
+            })
+        },
+
+        /**
+         * Change (Account / Address)
          */
         change() {
             /* Set chain. */
@@ -292,7 +375,7 @@ export default {
         },
 
         /**
-         * Target Account
+         * Target (Account / Address)
          */
         target() {
             /* Set chain. */
@@ -329,44 +412,98 @@ export default {
             }
         },
 
+        /**
+         * Start Shuffle
+         */
         startShuffle() {
             this.session.id = 0 // FOR DEVELOPMENT PURPOSES ONLY
 
             const coins = this.getCoinsBySession(this.session.id)
             console.log('MANAGER (coins):', coins)
 
-            const coin = coins[Object.keys(coins)[0]]
-            console.log('MANAGER (coin):', JSON.stringify(coin, null, 4))
+            if (coins) {
+                const coin = coins[Object.keys(coins)[0]]
+                console.log('MANAGER (coin):', JSON.stringify(coin, null, 4))
 
-            console.log('MANAGER (target):', this.target())
-            console.log('MANAGER (change):', this.change())
+                console.log('MANAGER (target):', this.target())
+                console.log('MANAGER (change):', this.change())
 
-            /* Initialize Nito. */
-            this.nito = new Nito()
+                /* Initialize Nito. */
+                this.nito = new Nito()
 
-            /* Handle Nito phases. */
-            this.nito.on('phase', async (_phase) => {
-                /* Set session phase. */
-                this.session.phase = _phase
-            })
+                /* Handle Nito phases. */
+                this.nito.on('phase', async (_phase) => {
+                    /* Set session phase. */
+                    this.session.phase = _phase
+                })
 
-            /* Handle Nito logs. */
-            this.nito.on('notice', async (_notice) => {
-                /* Set session notice. */
-                this.session.logs.push(_notice)
-            })
+                /* Handle Nito logs. */
+                this.nito.on('notice', async (_notice) => {
+                    /* Set session notice. */
+                    this.session.logs.push(_notice)
+                })
 
-            /* Start shuffle manager. */
-            this.shuffleManager = this.nito
-                .getShuffleManager(coin, this.change, this.target, false)
+                /* Start shuffle manager. */
+                this.shuffleManager = this.nito
+                    .getShuffleManager(coin, this.change, this.target, false)
+
+                /* Set message. */
+                const message = `You have STARTED shuffling your coins.`
+
+                /* Display notification. */
+                this.$notify({
+                    message,
+                    icon: 'ti-info-alt', // ti-info-alt | ti-alert | ti-pin-alt
+                    verticalAlign: 'top',
+                    horizontalAlign: 'right',
+                    type: 'info', // info | danger | warning
+                    // timeout: 0, // 0: persistent | 5000: default
+                })
+
+                /* Set flag. */
+                this.isShuffling = true
+
+            } else {
+                /* Set message. */
+                const message = `Oops! You don't have any coins available to shuffle.`
+
+                /* Display notification. */
+                this.$notify({
+                    message,
+                    icon: 'ti-alert', // ti-info-alt | ti-alert | ti-pin-alt
+                    verticalAlign: 'top',
+                    horizontalAlign: 'right',
+                    type: 'danger', // info | danger | warning
+                    // timeout: 0, // 0: persistent | 5000: default
+                })
+            }
         },
 
+        /**
+         * Stop Shuffle
+         */
         stopShuffle() {
+            /* Set flag. */
+            this.isShuffling = true
+
             /* Validate shuffle manager. */
             if (this.shuffleManager) {
                 /* Stop shuffle. */
                 this.shuffleManager.stop()
             }
+
+            /* Set message. */
+            const message = `You have STOPPED shuffling your coins.`
+
+            /* Display notification. */
+            this.$notify({
+                message,
+                icon: 'ti-info-alt', // ti-info-alt | ti-alert | ti-pin-alt
+                verticalAlign: 'top',
+                horizontalAlign: 'right',
+                type: 'info', // info | danger | warning
+                // timeout: 0, // 0: persistent | 5000: default
+            })
         },
     },
     created: function () {
@@ -380,8 +517,8 @@ export default {
         this.session.phase = 'INACTIVE'
 
         /* Retrieve coins. */
-        this.coins = getCoinsBySession(this.session.id)
-        console.log('COINS', coins)
+        this.coins = this.getCoinsBySession(this.session.id)
+        console.log('COINS', this.coins)
 
     }
 }

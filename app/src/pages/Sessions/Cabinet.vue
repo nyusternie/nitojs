@@ -1,31 +1,31 @@
 <template>
-    <card class="card" title="Sessions Cabinet">
-        <div>
-            <ul class="list-unstyled team-members">
-                <li>
-                    <div class="row journal-row" v-for="session in sessions" :key="session.name">
-                        <div class="col-3">
-                            <div class="avatar">
-                                <img :src="session.image" alt="Circle Image" class="rounded img-fluid">
-                            </div>
-                        </div>
-
-                        <div class="col-6">
-                            {{session.name}}
-                            <br>
-                            <span :class="getStatusClass(session.status)">
-                                <small>{{session.status}}</small>
-                            </span>
-                        </div>
-
-                        <div class="col-3">
-                            <p-button type="success" outline icon>
-                                <i class="fa fa-list-ol"></i>
-                            </p-button>
+    <card class="card" title="My Sessions">
+        <ul v-if="getSessions" class="list-unstyled team-members">
+            <li>
+                <div class="row cabinet-row" v-for="session in sessions" :key="session.name">
+                    <div class="col-3">
+                        <div class="avatar">
+                            <img :src="session.image" alt="Circle Image" class="rounded img-fluid">
                         </div>
                     </div>
-                </li>
-            </ul>
+
+                    <div class="col-6">
+                        <span class="text-capitalize">{{session.label}}</span>
+                        <br>
+                        <span :class="getStatusClass(session.status)">
+                            <small>{{session.status}}</small>
+                        </span>
+                    </div>
+
+                    <div class="col-3 text-center">
+                        <i class="fa fa-circle fa-2x text-success"></i>
+                    </div>
+                </div>
+            </li>
+        </ul>
+
+        <div v-else>
+            <em class="text-danger">You have no sessions available</em>
         </div>
     </card>
 </template>
@@ -37,40 +37,18 @@ import { mapActions, mapGetters } from 'vuex'
 export default {
     data() {
         return {
-            depositAddress: null,
-            type: ['', 'info', 'success', 'warning', 'danger'],
-            notifications: {
-                topCenter: false
-            },
-
-            sessions: [
-                {
-                    image: require('@/assets/img/faces/face-1.jpg'),
-                    name: 'Party goods',
-                    status: 'Active'
-                },
-                {
-                    image: require('@/assets/img/faces/face-1.jpg'),
-                    name: 'Testing',
-                    status: 'Canceled'
-                },
-                {
-                    image: require('@/assets/img/faces/face-1.jpg'),
-                    name: 'Session #1',
-                    status: 'Failed'
-                },
-            ]
+            sessions: null,
         }
     },
     computed: {
         ...mapGetters('purse', [
-            // 'getAddress',
+            'getSessions',
         ]),
 
     },
     methods: {
         ...mapActions('purse', [
-            // 'initSession',
+            //
         ]),
 
         getStatusClass(status) {
@@ -99,15 +77,36 @@ export default {
         },
     },
     created: function () {
-        //
+        // FOR DEVELOPMENT PURPOSES ONLY
+        this.sessions = [
+            // {
+            //     label: 'Party goods',
+            //     status: 'Active',
+            //     image: require('@/assets/img/faces/face-1.jpg'),
+            // },
+            // {
+            //     label: 'Testing',
+            //     status: 'Canceled',
+            //     image: require('@/assets/img/faces/face-1.jpg'),
+            // },
+            {
+                label: 'My first session',
+                status: 'Active',
+                image: require('@/assets/img/incognito.jpg'),
+            },
+        ]
     }
 }
 </script>
 
 <style scoped>
-.journal-row {
-    border-bottom: 1pt solid rgba(180, 180, 180, 0.2);
-    padding-bottom: 10px;
+.cabinet-row {
+    /* border-bottom: 1pt solid rgba(180, 180, 180, 0.2); */
+    padding: 10px 0;
     margin-bottom: 10px;
+    cursor: pointer;
+}
+.cabinet-row:hover {
+    background-color: rgba(255, 0, 0, 0.2);
 }
 </style>

@@ -173,7 +173,7 @@ export default {
     },
     methods: {
         ...mapActions('purse', [
-            // 'createSession',
+            // 
         ]),
 
     },
