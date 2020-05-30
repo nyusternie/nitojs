@@ -46,7 +46,7 @@ import { PaperTable } from '@/components'
 
 export default {
     components: {
-        PaperTable
+        PaperTable,
     },
     data() {
         return {
@@ -55,8 +55,7 @@ export default {
     },
     computed: {
         ...mapGetters('purse', [
-            'getActiveSessionId',
-            'getSessions',
+            //
         ]),
 
         sessionsTable() {
@@ -173,14 +172,12 @@ export default {
     },
     methods: {
         ...mapActions('purse', [
-            // 
+            //
         ]),
 
     },
     created: function () {
-        console.log('SESSION ID:', this.getActiveSessionId)
-        console.log('SESSIONS:', this.getSessions)
-
+        //
     },
 }
 </script>

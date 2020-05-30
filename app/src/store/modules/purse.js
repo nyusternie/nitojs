@@ -13,6 +13,7 @@ import getHDNode from './purse/getters/getHDNode'
 import getMasterSeed from './purse/getters/getMasterSeed'
 import getMeta from './purse/getters/getMeta'
 import getMnemonic from './purse/getters/getMnemonic'
+import getNitoCashIdx from './purse/getters/getNitoCashIdx'
 import getOutbox from './purse/getters/getOutbox'
 import getSessions from './purse/getters/getSessions'
 
@@ -96,6 +97,7 @@ const getters = {
     getMasterSeed,
     getMeta,
     getMnemonic,
+    getNitoCashIdx,
     getOutbox,
     getSessions,
 }

@@ -65,8 +65,8 @@ const getAccounts = (state, getters) => (_sessionId) => {
     }
 
     /* Loop through ALL (Nito Cash) indexes (inclusive). */
-    for (let i = 0; i <= session.accounts.nito; i++) {
-        loadAccounts(getters, _sessionId, 7867, i)
+    for (let i = 0; i <= getters.getNitoCashIdx; i++) {
+        loadAccounts(getters, 0, 7867, i)
     }
 
     /* Loop through ALL (Nito Xchg) indexes (inclusive). */

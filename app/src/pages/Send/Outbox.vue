@@ -141,7 +141,6 @@ export default {
     },
     computed: {
         ...mapGetters('purse', [
-            'getActiveSessionId',
             'getOutbox',
             'getSessions',
         ]),

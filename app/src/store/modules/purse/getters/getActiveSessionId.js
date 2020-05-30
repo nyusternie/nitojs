@@ -4,7 +4,7 @@
 const getActiveSessionId = (state) => {
     /* Return active session id. */
     // return state.activeSessionId
-    return 1
+    return 0
 }
 
 /* Export module. */

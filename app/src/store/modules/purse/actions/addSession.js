@@ -66,12 +66,9 @@ const addSession = ({ commit, getters }) => {
              *     - privateKeyWif
              *     - cashAddress
              *     - legacyAddress
-             *
-             * NOTE: We start our session index at `1`, in order to protect
-             *       Nito Cash assets at account level `0`.
              */
             sessionsModel = {
-                1: {
+                0: {
                     status: 'active',
                     accounts: accountsModel,
                     coins: {}

@@ -101,7 +101,6 @@ export default {
     },
     computed: {
         ...mapGetters('purse', [
-            'getActiveSessionId',
             'getCoinById',
             'getOutbox',
             'getSessions',
@@ -125,7 +124,7 @@ export default {
                 Object.keys(this.getSessions).forEach(sessionId => {
                     /* Initialize sessions. */
                     const sessions = this.getSessions
-                    // console.log('COINS (sessions):', sessions)
+                    console.log('COINS (sessions):', sessions)
 
                     Object.keys(sessions).forEach(sessionIdx => {
                         /* Initialize session. */

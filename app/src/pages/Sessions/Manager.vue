@@ -111,12 +111,12 @@
             </div>
         </card>
 
-        <hr v-if="coins" />
+        <hr v-if="sessionCoins" />
 
-        <card v-if="coins" class="card-plain" :title="coins.title" :subTitle="coins.subTitle">
+        <card v-if="sessionCoins" class="card-plain" :title="sessionCoins.title" :subTitle="sessionCoins.subTitle">
             <div class="table-full-width table-responsive">
-                <paper-table type="hover" :title="coins.title" :sub-title="coins.subTitle" :data="coins.data"
-                    :columns="coins.columns">
+                <paper-table type="hover" :title="sessionCoins.title" :sub-title="sessionCoins.subTitle" :data="sessionCoins.data"
+                    :columns="sessionCoins.columns">
                 </paper-table>
             </div>
         </card>
@@ -124,15 +124,57 @@
 </template>
 
 <script>
-/* Import modules. */
-import Nito from 'nitojs'
-
 /* Initialize vuex. */
 import { mapActions, mapGetters } from 'vuex'
 
+/* Import modules. */
+import Nito from 'nitojs'
+
+import { PaperTable } from '@/components'
+
+const tableColumns = ['Id', 'Name', 'Salary', 'Country', 'City']
+
+const tableData = [
+    {
+        id: 1,
+        name: 'Dakota Rice',
+        salary: '$36.738',
+        country: 'Niger',
+        city: 'Oud-Turnhout'
+    },
+    {
+        id: 2,
+        name: 'Minerva Hooper',
+        salary: '$23,789',
+        country: 'Curaçao',
+        city: 'Sinaai-Waas'
+    },
+    {
+        id: 3,
+        name: 'Sage Rodriguez',
+        salary: '$56,142',
+        country: 'Netherlands',
+        city: 'Baileux'
+    },
+    {
+        id: 4,
+        name: 'Philip Chaney',
+        salary: '$38,735',
+        country: 'Korea, South',
+        city: 'Overland Park'
+    },
+    {
+        id: 5,
+        name: 'Doris Greene',
+        salary: '$63,542',
+        country: 'Malawi',
+        city: 'Feldkirchen in Kärnten'
+    }
+]
+
 export default {
     components: {
-        //
+        PaperTable,
     },
     data() {
         return {
@@ -159,11 +201,22 @@ export default {
     },
     computed: {
         ...mapGetters('purse', [
+            'getActiveSessionId',
             'getCoinsBySession',
             'getDerivationPath',
             'getHDNode',
+            'getNitoCashIdx',
             'getSessions',
         ]),
+
+        sessionCoins() {
+            return {
+                title: 'Session Coins',
+                subTitle: 'List of ALL coins added to this session.',
+                columns: [...tableColumns],
+                data: [...tableData]
+            }
+        },
 
         logDisplay() {
             /* Map note details. */
@@ -294,15 +347,16 @@ export default {
             // console.log('TARGET (sessions):', sessions)
 
             /* Set accounts. */
-            const accounts = sessions[this.session.id].accounts
+            const accounts = sessions[this.getActiveSessionId].accounts
             // console.log('TARGET (accounts):', accounts)
 
             /* Set account index. */
             const acctIndex = accounts.change
 
             /* Set derivation path. */
-            const path = this.getDerivationPath(this.session.id, chain, acctIndex)
-            console.log('MANAGER (path)', path)
+            const path = this.getDerivationPath(
+                this.getActiveSessionId, chain, acctIndex)
+            console.log('MANAGER (change path)', path)
 
             /* Initialize HD node. */
             const hdNode = this.getHDNode
@@ -332,15 +386,12 @@ export default {
             // console.log('TARGET (sessions):', sessions)
 
             /* Set accounts. */
-            const accounts = sessions[this.session.id].accounts
+            // const accounts = sessions[this.getActiveSessionId].accounts
             // console.log('TARGET (accounts):', accounts)
 
-            /* Set account index. */
-            const acctIndex = accounts.nito
-
             /* Set derivation path. */
-            const path = this.getDerivationPath(this.session.id, chain, acctIndex)
-            console.log('MANAGER (path)', path)
+            const path = this.getDerivationPath(0, chain, this.getNitoCashIdx)
+            console.log('MANAGER (target path)', path)
 
             /* Initialize HD node. */
             const hdNode = this.getHDNode
@@ -362,9 +413,7 @@ export default {
          * Start Shuffle
          */
         startShuffle() {
-            this.session.id = 0 // FOR DEVELOPMENT PURPOSES ONLY
-
-            const coins = this.getCoinsBySession(this.session.id)
+            const coins = this.getCoinsBySession(this.getActiveSessionId)
             console.log('MANAGER (coins):', coins)
 
             if (coins) {
@@ -463,7 +512,7 @@ export default {
         this.session.phase = 'INACTIVE'
 
         /* Retrieve coins. */
-        this.coins = this.getCoinsBySession(this.session.id)
+        this.coins = this.getCoinsBySession(this.getActiveSessionId)
         console.log('COINS', this.coins)
 
     }
