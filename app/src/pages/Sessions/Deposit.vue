@@ -90,7 +90,7 @@ export default {
 
             sessionId: null,
 
-            // balance: null,
+            balance: null,
             // coins: null,
         }
     },
@@ -108,12 +108,6 @@ export default {
         depositAccount() {
             /* Set deposit address. */
             return this.getAccountBySession(this.sessionId)
-        },
-
-        async balance() {
-            /* Retreive session balance. */
-            return await this.getBalanceBySession(this.sessionId, 'USD')
-            // console.log('DEPOSIT (balance):', this.balance)
         },
 
         coins() {
@@ -249,6 +243,12 @@ export default {
             }
         },
 
+        async updateBalance() {
+            /* Retreive session balance. */
+            this.balance = await this.getBalanceBySession(this.sessionId, 'USD')
+            console.log('BALANCE', this.balance)
+        },
+
         async watchForDeposit() {
             const query = {
                 v: 3,
@@ -327,6 +327,9 @@ export default {
         // FOR DEVELOPMENT PURPOSES ONLY
         // NOTE: We start with session #1 (zero is reserved).
         this.sessionId = 1
+
+        /* Update balance. */
+        this.updateBalance()
 
         // this.watchForDeposit()
 

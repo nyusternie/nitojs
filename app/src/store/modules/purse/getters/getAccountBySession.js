@@ -6,7 +6,8 @@ const bitbox = new window.BITBOX()
  *
  * Returns the next avaialble "receiving" account, for the session.
  */
-const getAccount = (state, getters) => (_session) => {
+const getAccount = (state, getters) => (_sessionId) => {
+    // console.log('GET ACCOUNT BY SESSION (sessionid)', _sessionId)
     /* Validate sessions. */
     if (!getters.getSessions) {
         return null
@@ -14,19 +15,18 @@ const getAccount = (state, getters) => (_session) => {
 
     /* Initialize sessions. */
     const sessions = getters.getSessions
-    // console.log('GET ACCOUNT (sessions):', sessions)
+    console.log('GET ACCOUNT (sessions):', sessions)
 
     /* Initialize current (coin) index. */
-    // FIXME: Needs to query coins.
-    const currentIndex = Math.max(...Object.keys(sessions))
-    // console.log('GET ACCOUNT (currentIndex):', currentIndex)
+    const currentIndex = sessions[_sessionId].accounts.deposit
+    console.log('GET ACCOUNT (currentIndex):', currentIndex)
 
     /* Set chain. */
     const chain = 0 // receiving account
 
     /* Set derivation path. */
-    const path = getters.getDerivationPath(_session, chain, currentIndex)
-    // console.log('GET ACCOUNT (path)', path)
+    const path = getters.getDerivationPath(_sessionId, chain, currentIndex)
+    console.log('GET ACCOUNT (path)', path)
 
     /* Initialize HD node. */
     const hdNode = getters.getHDNode
