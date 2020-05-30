@@ -1,9 +1,20 @@
+/* Import modules. */
+const msgpack = require('msgpack-lite')
+
 /**
  * Get Outbox
  */
 const getOutbox = (state) => {
+    /* Validate state (of outbox). */
+    if (!state || !state.outbox) {
+        return null
+    }
+
+    /* Initialize outbox. */
+    const outbox = msgpack.decode(Buffer.from(state.outbox))
+
     /* Return outbox. */
-    return state.outbox
+    return outbox
 }
 
 /* Export module. */

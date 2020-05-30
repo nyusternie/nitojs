@@ -10,6 +10,7 @@ import getDustAmount from './purse/getters/getDustAmount'
 import getHDNode from './purse/getters/getHDNode'
 // import getHistory from './purse/getters/getHistory'
 import getMasterSeed from './purse/getters/getMasterSeed'
+import getMeta from './purse/getters/getMeta'
 import getMnemonic from './purse/getters/getMnemonic'
 import getOutbox from './purse/getters/getOutbox'
 import getSessions from './purse/getters/getSessions'
@@ -21,10 +22,12 @@ import initPurse from './purse/actions/initPurse'
 // import nextCoin from './purse/actions/nextCoin'
 import rebuildPurse from './purse/actions/rebuildPurse'
 import updateCoins from './purse/actions/updateCoins'
+import updateMeta from './purse/actions/updateMeta'
 
 /* Import modules (mutations). */
 import setEmptyPurse from './purse/mutations/setEmptyPurse'
 import setMasterSeed from './purse/mutations/setMasterSeed'
+import setMeta from './purse/mutations/setMeta'
 import setOutbox from './purse/mutations/setOutbox'
 import setSessions from './purse/mutations/setSessions'
 
@@ -43,6 +46,11 @@ const state = {
      * A 32-byte key, used to secure the entire purse.
      */
     masterSeed: null,
+
+    /**
+     * Metadata
+     */
+    meta: null,
 
     /**
      * Nito Cash Index
@@ -83,6 +91,7 @@ const getters = {
     getHDNode,
     // getHistory,
     getMasterSeed,
+    getMeta,
     getMnemonic,
     getOutbox,
     getSessions,
@@ -102,6 +111,7 @@ const actions = {
 const mutations = {
     setEmptyPurse,
     setMasterSeed,
+    setMeta,
     setOutbox,
     setSessions,
 }

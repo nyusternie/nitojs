@@ -2,28 +2,19 @@
     <main>
         <card class="card" title="Purse Settings">
             <div class="row">
-                <div class="col-md-5">
+                <div class="col-12 col-sm-6">
                     <fg-input type="text"
-                        label="Company"
+                        label="Label"
                         :disabled="true"
-                        placeholder="Paper dashboard"
-                        v-model="user.company"
+                        :value="label"
                     ></fg-input>
                 </div>
 
-                <div class="col-md-3">
+                <div class="col-12 col-sm-6">
                     <fg-input type="text"
-                        label="Username"
-                        placeholder="Username"
-                        v-model="user.username"
-                    ></fg-input>
-                </div>
-
-                <div class="col-md-4">
-                    <fg-input type="email"
-                        label="Username"
-                        placeholder="Email"
-                        v-model="user.email"
+                        label="Created"
+                        :disabled="true"
+                        :value="createdAt"
                     ></fg-input>
                 </div>
             </div>
@@ -37,6 +28,7 @@
                         <textarea
                             rows="3"
                             class="form-control border-input"
+                            :disabled="true"
                             :value="getMnemonic">
                         </textarea>
                     </div>
@@ -95,26 +87,34 @@
 /* Initialize vuex. */
 import { mapActions, mapGetters } from 'vuex'
 
+/* Import modules. */
+import moment from 'moment'
+
 export default {
     data() {
         return {
-            user: {
-                company: 'Paper Dashboard',
-                username: 'michael23',
-                email: '',
-                aboutMe: `We must accept finite disappointment, but hold on to infinite hope.`
-            }
+            //
         }
     },
     computed: {
         ...mapGetters('purse', [
+            'getMeta',
             'getMnemonic',
         ]),
+
+        label() {
+            return this.getMeta.label
+        },
+
+        createdAt() {
+            return moment.unix(this.getMeta.createdAt).format('LLLL')
+        },
     },
     methods: {
         ...mapActions('purse', [
             'rebuildPurse',
             'updateCoins',
+            'updateMeta',
         ]),
 
         /**
@@ -123,18 +123,41 @@ export default {
         rebuild() {
             this.rebuildPurse()
 
-            // this.notifyVue('top', 'right', 'success', 'ti-info-alt')
+            /* Set message. */
+            const message = `Your purse has been successfully rebuilt. It's time to fill it with coins!`
+
+            /* Display notification. */
+            this.$notify({
+                message,
+                icon: 'ti-info-alt', // ti-info-alt | ti-alert
+                verticalAlign: 'top',
+                horizontalAlign: 'right',
+                type: 'info', // info | danger
+                // timeout: 0, // 0: persistent | 5000: default
+            })
+
         },
 
         /**
          * Resync Purse
          */
-        resync() {
+        async resync() {
             /* Update coins. */
             // FIXME: Why is this blocking the entire initial UI setup??
-            this.updateCoins()
+            await this.updateCoins()
 
-            this.notifyVue('top', 'right', 'success', 'ti-info-alt')
+            /* Set message. */
+            const message = `Your purse has been successfully re-synced. It's time to go shuffle!`
+
+            /* Display notification. */
+            this.$notify({
+                message,
+                icon: 'ti-info-alt', // ti-info-alt | ti-alert
+                verticalAlign: 'top',
+                horizontalAlign: 'right',
+                type: 'info', // info | danger
+                // timeout: 0, // 0: persistent | 5000: default
+            })
         },
 
         /**
@@ -143,7 +166,11 @@ export default {
         updateSettings() {
             alert('Your data: ' + JSON.stringify(this.user))
         },
-    }
+    },
+    created: function () {
+        const meta = this.getMeta
+        console.log('METADATA', meta)
+    },
 }
 </script>
 

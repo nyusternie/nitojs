@@ -39,10 +39,10 @@ export default {
             /* Display notification. */
             this.$notify({
                 message,
-                icon: 'ti-info-alt', // ti-info-alt | ti-alert
+                icon: 'ti-pin-alt', // ti-info-alt | ti-alert | ti-pin-alt
                 verticalAlign: 'top',
                 horizontalAlign: 'right',
-                type: 'info', // info | danger
+                type: 'warning', // info | danger | warning
                 timeout: 0, // 0: persistent | 5000: default
             })
         }

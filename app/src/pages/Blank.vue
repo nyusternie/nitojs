@@ -72,31 +72,31 @@
 export default {
     data() {
         return {
-            type: ['', 'info', 'success', 'warning', 'danger'],
-            notifications: {
-                topCenter: false
-            }
-        };
+            //
+        }
+    },
+    computed: {
+        //
     },
     methods: {
         //
     },
     created: function () {
+        //
+    },
+    mounted: function () {
         /* Set message. */
         const message = `Hi there! Looks like you're setting up a new page. Good luck! 加油！`
 
         /* Display notification. */
         this.$notify({
             message,
-            icon: 'ti-info-alt', // ti-info-alt | ti-alert
+            icon: 'ti-info-alt', // ti-info-alt | ti-alert | ti-pin-alt
             verticalAlign: 'top',
             horizontalAlign: 'right',
-            type: 'info', // info | danger
+            type: 'info', // info | danger | warning
             // timeout: 0, // 0: persistent | 5000: default
         })
-    },
-    mounted: function () {
-        //
     },
 }
 </script>

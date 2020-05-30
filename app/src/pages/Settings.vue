@@ -14,13 +14,13 @@
 
 <script>
 /* Import components. */
-import Purse from './Settings/Purse.vue'
 import App from './Settings/App.vue'
+import Purse from './Settings/Purse.vue'
 
 export default {
     components: {
-        Purse,
         App,
+        Purse,
     },
     computed: {
         //

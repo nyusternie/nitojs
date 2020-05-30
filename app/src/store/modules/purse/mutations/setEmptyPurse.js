@@ -11,6 +11,9 @@ const destroyPurse = (state) => {
     /* Reset master seed. */
     state.masterSeed = null
 
+    /* Reset metadata. */
+    state.meta = null
+
     /* Reset sessions. */
     state.sessions = null
 }

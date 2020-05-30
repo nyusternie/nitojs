@@ -1,3 +1,6 @@
+/* Import modules. */
+const moment = require('moment')
+
 /* Initialize BITBOX. */
 const bitbox = new window.BITBOX()
 
@@ -30,6 +33,15 @@ const initPurse = ({ state, commit }) => {
 
     /* Set new master (private) key. */
     commit('setMasterSeed', masterSeed)
+
+    /* Build metadata. */
+    const meta = {
+        label: 'My Favorite Purse',
+        createdAt: moment().unix(),
+    }
+
+    /* Set metadata. */
+    commit('setMeta', meta)
 
     return true
 }

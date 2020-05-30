@@ -1,3 +1,6 @@
+/* Import modules. */
+const msgpack = require('msgpack-lite')
+
 /**
  * Set Outbox
  *
@@ -5,7 +8,7 @@
  */
 const setOutbox = (state, _outbox) => {
     /* Set outbox. */
-    state.outbox = _outbox
+    state.outbox = msgpack.encode(_outbox)
 }
 
 /* Export module. */
