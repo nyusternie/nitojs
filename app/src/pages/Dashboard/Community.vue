@@ -72,7 +72,8 @@ export default {
                         divisor: 3
                     }),
                     showLine: true,
-                    showPoint: false
+                    showPoint: false,
+                    // chartPadding: 0,
                 }
             }
         }

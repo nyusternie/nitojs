@@ -120,8 +120,8 @@ export default {
         /**
          * Rebuild (Purse)
          */
-        rebuild() {
-            this.rebuildPurse()
+        async rebuild() {
+            await this.rebuildPurse()
 
             /* Set message. */
             const message = `Your purse has been successfully rebuilt. It's time to fill it with coins!`
@@ -160,16 +160,9 @@ export default {
             })
         },
 
-        /**
-         * Update Settings
-         */
-        updateSettings() {
-            alert('Your data: ' + JSON.stringify(this.user))
-        },
     },
     created: function () {
-        const meta = this.getMeta
-        console.log('METADATA', meta)
+        //
     },
 }
 </script>
