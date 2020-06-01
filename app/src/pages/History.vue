@@ -55,7 +55,7 @@ export default {
     },
     computed: {
         ...mapGetters('purse', [
-            //
+            'getSessions',
         ]),
 
         sessionsTable() {
@@ -66,31 +66,35 @@ export default {
                 data: []
             }
 
-            Object.keys(this.getSessions).forEach(sessionId => {
-                console.log(sessionId, this.getSessions[sessionId])
+            /* Validate sessions. */
+            if (this.getSessions) {
+                Object.keys(this.getSessions).forEach(sessionId => {
+                    console.log(sessionId, this.getSessions[sessionId])
 
-                const session = this.getSessions[sessionId]
+                    const session = this.getSessions[sessionId]
 
-                const id = parseInt(sessionId) + 1
+                    const id = parseInt(sessionId) + 1
 
-                const name = 'Session #1'
+                    const name = 'Session #1'
 
-                const currentvalue = '$36.7381'
+                    const currentvalue = '$36.7381'
 
-                const numcoins = Object.keys(session.coins).length
+                    const numcoins = Object.keys(session.coins).length
 
-                const status = 'ACTIVE'
+                    const status = 'ACTIVE'
 
-                const sessionData = {
-                    id,
-                    name,
-                    currentvalue,
-                    numcoins,
-                    status
-                }
+                    const sessionData = {
+                        id,
+                        name,
+                        currentvalue,
+                        numcoins,
+                        status
+                    }
 
-                tableData.data.push(sessionData)
-            })
+                    tableData.data.push(sessionData)
+                })
+            }
+
             console.log('TABLE DATA:', tableData)
             return tableData
         },
@@ -103,31 +107,35 @@ export default {
                 data: []
             }
 
-            Object.keys(this.getSessions).forEach(sessionId => {
-                console.log(sessionId, this.getSessions[sessionId])
+            /* Validate sessions. */
+            if (this.getSessions) {
+                Object.keys(this.getSessions).forEach(sessionId => {
+                    console.log(sessionId, this.getSessions[sessionId])
 
-                const session = this.getSessions[sessionId]
+                    const session = this.getSessions[sessionId]
 
-                const type = 'DEPOSIT'
+                    const type = 'DEPOSIT'
 
-                const txvalue = '200 bits | $0.3482'
+                    const txvalue = '200 bits | $0.3482'
 
-                const sessionName = 'Session #1'
+                    const sessionName = 'Session #1'
 
-                const confirmations = 318
+                    const confirmations = 318
 
-                const time = '2 days ago'
+                    const time = '2 days ago'
 
-                const sessionData = {
-                    type,
-                    txvalue,
-                    session: sessionName,
-                    confirmations,
-                    time
-                }
+                    const sessionData = {
+                        type,
+                        txvalue,
+                        session: sessionName,
+                        confirmations,
+                        time
+                    }
 
-                tableData.data.push(sessionData)
-            })
+                    tableData.data.push(sessionData)
+                })
+            }
+
             console.log('TABLE DATA:', tableData)
             return tableData
         },
@@ -140,31 +148,35 @@ export default {
                 data: []
             }
 
-            Object.keys(this.getSessions).forEach(sessionId => {
-                console.log(sessionId, this.getSessions[sessionId])
+            /* Validate sessions. */
+            if (this.getSessions) {
+                Object.keys(this.getSessions).forEach(sessionId => {
+                    console.log(sessionId, this.getSessions[sessionId])
 
-                const session = this.getSessions[sessionId]
+                    const session = this.getSessions[sessionId]
 
-                const action = 'CREATED PURSE'
+                    const action = 'CREATED PURSE'
 
-                const txvalue = '200 bits | $0.3482'
+                    const txvalue = '200 bits | $0.3482'
 
-                const sessionName = 'Session #1'
+                    const sessionName = 'Session #1'
 
-                const confirmations = 318
+                    const confirmations = 318
 
-                const time = '2 days ago'
+                    const time = '2 days ago'
 
-                const sessionData = {
-                    action,
-                    txvalue,
-                    session: sessionName,
-                    confirmations,
-                    time
-                }
+                    const sessionData = {
+                        action,
+                        txvalue,
+                        session: sessionName,
+                        confirmations,
+                        time
+                    }
 
-                tableData.data.push(sessionData)
-            })
+                    tableData.data.push(sessionData)
+                })
+            }
+
             console.log('TABLE DATA:', tableData)
             return tableData
         },

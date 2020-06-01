@@ -138,6 +138,7 @@ temp/
 
 # End of https://www.gitignore.io/api/node,macos
 
+/app/build
 _book
 _failed*
 testCoins.js

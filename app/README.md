@@ -1,30 +1,22 @@
 # NitoJS App
 
-![NitoJS Poster](https://nitojs.org/poster.jpg?1588709532)
-
 ### https://app.nitojs.org
 
-A simple GUI to manage your coin privacy.
+We've provided a reference application to demonstrate all the many features of the library. The code has been modularized and heavily documented to make it easy to cut-and-paste directly into your own applications.
 
 ## Build Setup
 
-### install dependencies
+### Install dependencies
 ```
 npm install
 ```
-### serve with hot reload at localhost:8080
+
+### Serve with hot reload at localhost:8080
 ```
-npm run dev
+npm run serve
 ```
-### build for production with minification
+
+### Build for production with minification
 ```
 npm run build
 ```
-### lint
-```
-npm run lint
-```
-
-## License
-
-[MIT](https://github.com/cristijora/vue-paper-dashboard/blob/master/LICENSE.md)

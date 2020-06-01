@@ -111,9 +111,9 @@
             </div>
         </card>
 
-        <hr v-if="sessionCoins" />
+        <hr v-if="sessionCoins.data" />
 
-        <card v-if="sessionCoins" class="card-plain" :title="sessionCoins.title" :subTitle="sessionCoins.subTitle">
+        <card v-if="sessionCoins.data" class="card-plain" :title="sessionCoins.title" :subTitle="sessionCoins.subTitle">
             <div class="table-full-width table-responsive">
                 <paper-table type="hover" :title="sessionCoins.title" :sub-title="sessionCoins.subTitle" :data="sessionCoins.data"
                     :columns="sessionCoins.columns">
@@ -214,7 +214,7 @@ export default {
                 title: 'Session Coins',
                 subTitle: 'List of ALL coins added to this session.',
                 columns: [...tableColumns],
-                data: [...tableData]
+                data: [...tableData],
             }
         },
 

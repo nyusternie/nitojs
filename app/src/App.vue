@@ -24,28 +24,67 @@ export default {
             'initPurse',
         ]),
 
+        /**
+         * Security Check
+         */
+        securityCheck() {
+            /* Validate security for ALL Nito distributions. */
+            if (process.env.NODE_ENV === 'production') {
+                /* Validate SSL connection. */
+                if (window.location.protocol === 'http:') {
+                    /* Set secure URL. */
+                    const secureUrl = window.location.href
+                        .replace('http', 'https')
+
+                    /* Redirect to secure URL. */
+                    window.location.replace(secureUrl)
+                }
+            }
+        },
+
+        /**
+         * Initialize (Application)
+         */
+        async init() {
+            /* Initialize purse. */
+            const newPurse = await this.initPurse()
+
+            /* Validate new purse. */
+            if (newPurse) {
+                /* Set message. */
+                const message = `Welcome to NitoJS! A new purse has been created for your coins.`
+
+                /* Display notification. */
+                this.$notify({
+                    message,
+                    icon: 'ti-pin-alt', // ti-info-alt | ti-alert | ti-pin-alt
+                    verticalAlign: 'top',
+                    horizontalAlign: 'right',
+                    type: 'warning', // info | danger | warning
+                    timeout: 0, // 0: persistent | 5000: default
+                })
+            }
+
+            /* Set locale. */
+            // FIXME: We need to do some browser detection here.
+            // this.$i18n.locale = 'en'
+
+            /* Retrieve application version. */
+            // TODO: Display CHANGELOG when new version is detected.
+            const appVersion = require('../package.json').version
+            console.info('Application version', appVersion) // eslint-disable-line no-console
+
+        },
     },
-    created: async function () {
+    created: function () {
         // console.log('APPLICATION STATE', this.$store.state)
+        console.log('Initializing Nito Cash...')
 
-        /* Initialize purse. */
-        const newPurse = await this.initPurse()
+        /* Security check. */
+        this.securityCheck()
 
-        /* Validate new purse. */
-        if (newPurse) {
-            /* Set message. */
-            const message = `Welcome to NitoJS! A new purse has been created for your coins.`
-
-            /* Display notification. */
-            this.$notify({
-                message,
-                icon: 'ti-pin-alt', // ti-info-alt | ti-alert | ti-pin-alt
-                verticalAlign: 'top',
-                horizontalAlign: 'right',
-                type: 'warning', // info | danger | warning
-                timeout: 0, // 0: persistent | 5000: default
-            })
-        }
+        /* Initialize application. */
+        this.init()
     },
     mounted: function () {
         //
