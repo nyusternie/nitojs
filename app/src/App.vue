@@ -26,6 +26,9 @@ export default {
 
         /**
          * Security Check
+         *
+         * FIXME: We should restrict this forced redirect to ONLY
+         *        hosted instances and NOT localhost.
          */
         securityCheck() {
             /* Validate security for ALL Nito distributions. */
