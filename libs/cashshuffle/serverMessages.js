@@ -236,9 +236,10 @@ const handleMessageBuffer = (messageBuffer) => {
 function decodeAndClassify (messageBuffer) {
     return new Promise(function (resolve, reject) {
         /* Validate and parse message data. */
+        /* eslint-disable-next-line no-undef */
         if (messageBuffer && messageBuffer.data && messageBuffer.data instanceof Blob) {
             /* Initialize file reader. */
-            const reader = new FileReader()
+            const reader = new FileReader() // eslint-disable-line no-undef
 
             /* Handle onload. */
             reader.onload = () => {
@@ -850,7 +851,9 @@ function blameMessage (
     const blameMessage = _.reduce(_.keys(options), function (msg, oneOptionName) {
         switch (oneOptionName) {
         case 'reason':
-            msg.packet.message.blame.reason = PB.Reason.values[options.reason ? options.reason.toUpperCase() : 'NONE']
+            msg.packet.message.blame.reason = PB.Reason.values[
+                options.reason ? options.reason.toUpperCase() : 'NONE'
+            ]
             break
         case 'accused':
             msg.packet.message.blame.accused = PB.VerificationKey.create({
@@ -858,10 +861,15 @@ function blameMessage (
             })
             break
         case 'invalid':
-            msg.packet.message.blame.invalue = PB.Invalid.create({ invalid: invalidPackets })
+            // msg.packet.message.blame.invalue = PB.Invalid.create({ invalid: invalidPackets })
+            msg.packet.message.blame.invalue = PB.Invalid.create({
+                invalid: options.invalidPackets
+            })
             break
         case 'hash':
-            msg.packet.message.hash = PB.Hash.create({ hash: options.hash })
+            msg.packet.message.hash = PB.Hash.create({
+                hash: options.hash
+            })
             break
         case 'keypair':
             msg.packet.message.blame.key = PB.DecryptionKey.create({

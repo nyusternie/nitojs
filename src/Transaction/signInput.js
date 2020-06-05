@@ -1,7 +1,7 @@
 const debug = require('debug')('nitojs:transaction:signinput')
 
 /* Initialize BITBOX. */
-const bitbox = new window.BITBOX()
+const bitbox = new window.BITBOX() // eslint-disable-line no-undef
 
 /**
  * Sign an Input

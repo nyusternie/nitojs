@@ -8,7 +8,7 @@ let bitbox = null
 
 /* Set BITBOX. */
 if (typeof window !== 'undefined') {
-    bitbox = new window.BITBOX()
+    bitbox = new window.BITBOX() // eslint-disable-line no-undef
 } else {
     /* Import BITBOX. */
     const BITBOX = require('bitbox-sdk').BITBOX

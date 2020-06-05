@@ -66,6 +66,7 @@ class CommChannel extends EventEmitter {
         //       a separate class. The `Round` should only touch messages
         //       after they have been parsed, validated, and classified.
         if (typeof window !== 'undefined') {
+            /* eslint-disable-next-line no-undef */
             this._wsClient = new window.WebSocket(this.serverUri)
         } else {
             this._wsClient = new WebSocket(this.serverUri, {
@@ -125,7 +126,8 @@ class CommChannel extends EventEmitter {
                 const sender = _.find(this.round.players, {
                     verificationKey: message.packets[0].packet.fromKey.key
                 })
-                debug('Websocket message (this.round.players):', this.round.players)
+                debug('Websocket message (this.round.players / sender):',
+                    this.round.players, sender)
                 // debug('Checking signature for',
                 //     message.pruned.messageType.toUpperCase(),
                 //     'message from',

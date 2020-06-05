@@ -1,7 +1,7 @@
 const debug = require('debug')('nitojs:transaction:sendcoin')
 
 /* Initialize BITBOX. */
-const bitbox = new window.BITBOX()
+const bitbox = new window.BITBOX() // eslint-disable-line no-undef
 
 /* Set dust (amount) satoshis. */
 const DUST_SATOSHIS = 546
