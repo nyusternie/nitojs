@@ -145,3 +145,34 @@ superagent
             console.error('\nReceived unparceable data:', util.inspect(data, false, null, true))
         }
     })
+
+/**
+ * Socket Class
+ */
+class Socket {
+    constructor() {
+
+    }
+
+    /**
+     * Block Height
+     *
+     * Returns the latest block height.
+     */
+    blockHeight() {
+        const query = {
+            v: 3,
+            q: {
+                find: {},
+                limit: 1
+            },
+            r: {
+                f: '[ .[] | { blockHeight: .blk.i } ]'
+            }
+        }
+    }
+
+}
+
+/* Export module. */
+module.exports = Socket

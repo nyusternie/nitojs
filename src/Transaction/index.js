@@ -2,7 +2,7 @@ const debug = require('debug')('nitojs:transaction')
 const EventEmitter = require('events').EventEmitter
 
 /**
- * Transaction
+ * Transaction Class
  */
 class Transaction extends EventEmitter {
     constructor() {

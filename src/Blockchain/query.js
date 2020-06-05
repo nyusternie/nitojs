@@ -141,3 +141,37 @@ bitsocket.onmessage = function (_evt) {
     const data = JSON.parse(_evt.data)
     console.log('\nReceived data:', util.inspect(data, false, null, true))
 }
+
+/**
+ * Query Class
+ */
+class Query {
+    constructor() {
+
+    }
+
+    /**
+     * Get Account Balance
+     *
+     * Retruns the balance for an account.
+     *
+     * NOTE: An account represents an entire derivation path, eg:
+     *       m/44'/145'/0'/<chain>/<address-index>
+     */
+    getAccountBalance() {
+
+    }
+
+    /**
+     * Get Address Balance
+     *
+     * Retruns the balance for an individual account address.
+     */
+    getAddressBalance() {
+
+    }
+
+}
+
+/* Export module. */
+module.exports = Query

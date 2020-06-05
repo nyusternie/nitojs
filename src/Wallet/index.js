@@ -2,7 +2,7 @@ const debug = require('debug')('nitojs:wallet')
 const EventEmitter = require('events').EventEmitter
 
 /**
- * Wallet
+ * Wallet Class
  */
 class Wallet extends EventEmitter {
     constructor() {
