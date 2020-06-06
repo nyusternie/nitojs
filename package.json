@@ -1,8 +1,8 @@
 {
   "name": "nitojs",
-  "version": "20.5.7",
+  "version": "20.6.6",
   "license": "MIT",
-  "author": "Shomari Prince <nyusternie@sdot.io>",
+  "author": "Shomari Prince <s.prince@bchplease.org>",
   "description": "Nito JavaScript Library and Software Development Kit (SDK).",
   "repository": "git@gitlab.com:bchplease/nitojs.git",
   "main": "index.js",

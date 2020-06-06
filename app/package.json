@@ -1,7 +1,10 @@
 {
-  "name": "nitojs-web",
-  "version": "20.5.17",
+  "name": "nitojs-app",
+  "version": "20.6.6",
   "license": "MIT",
+  "author": "Shomari Prince <s.prince@bchplease.org>",
+  "description": "Nito JavaScript Library and Software Development Kit (SDK).",
+  "repository": "git@gitlab.com:bchplease/nitojs.git",
   "scripts": {
     "build": "vue-cli-service build",
     "e2e": "node test/e2e/runner.js",

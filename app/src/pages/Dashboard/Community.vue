@@ -11,13 +11,12 @@
             </span>
 
             <div slot="legend" class="community-legend">
+                <!-- <i class="fa fa-circle text-warning"></i> -->
                 <i class="fa fa-circle text-info"></i>
-                <a href="https://nito.exchange" target="_blank">Nito Exchange</a>
-
-                <i class="fa fa-circle text-warning"></i>
                 <a href="https://cashshuffle.com" target="_blank">CashShuffle</a>
 
-                <i class="fa fa-circle text-danger"></i>
+                <!-- <i class="fa fa-circle text-danger"></i> -->
+                <i class="fa fa-circle text-warning"></i>
                 <a href="https://cashfusion.org" target="_blank">CashFusion</a>
             </div>
         </chart-card>
@@ -55,10 +54,16 @@ export default {
                         'Now',
                     ],
                     series: [
-                        [ 77, 152, 213, 270, 327, 535, 655, 855, 925 ],
-                        [ 67, 123, 193, 240, 287, 335, 435, 442, 544 ],
-                        [ 23, 40, 67, 98, 155, 279, 327, 370, 390 ],
+                        [ 200, 220, 253, 320, 417, 535, 655, 855, 925 ],
+                        [ 120, 150, 193, 240, 287, 335, 435, 442, 544 ],
                     ]
+                    // series: [{
+                    //     // name: 'series-1',
+                    //     data: [ 200, 220, 253, 320, 417, 535, 655, 855, 925 ],
+                    // }, {
+                    //     // name: 'series-2',
+                    //     data: [ 120, 150, 193, 240, 287, 335, 435, 442, 544 ],
+                    // }]
                 },
                 options: {
                     low: 0,
@@ -86,6 +91,24 @@ export default {
     }
 }
 </script>
+
+<style>
+/* .ct-series-a .ct-line,
+.ct-series-a .ct-point {
+    stroke: orange;
+}
+.ct-series-b .ct-line,
+.ct-series-b .ct-point {
+    stroke: red;
+}
+
+.ct-series-a .ct-area {
+    fill: orange;
+}
+.ct-series-b .ct-area {
+    fill: red;
+} */
+</style>
 
 <style scoped>
 .community-legend a {

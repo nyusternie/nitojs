@@ -25,6 +25,7 @@
 import numeral from 'numeral'
 
 /* Import components. */
+import Nito from 'nitojs'
 import { StatsCard } from '@/components'
 
 export default {
@@ -33,7 +34,6 @@ export default {
     },
     data: () => {
         return {
-            bitbox: null,
             usd: 0,
 
             statsCards: [
@@ -42,7 +42,7 @@ export default {
                     icon: 'ti-money',
                     title: 'BCH / USD',
                     value: '$0.00',
-                    footerText: '+2.7% in the last 24hrs',
+                    footerText: 'loading...',
                     footerIcon: 'ti-stats-up'
                 },
                 {
@@ -83,41 +83,30 @@ export default {
          * Format Price
          */
         formatPrice: function () {
-            return numeral(this.usd / 100).format('$0.00[00]')
-        },
-
-        /**
-         * Initialize BITBOX
-         */
-        initBitbox() {
-            console.info('Initializing BITBOX..')
-
-            try {
-                /* Initialize BITBOX. */
-                // this.bitbox = new BITBOX()
-                this.bitbox = new window.BITBOX()
-            } catch (err) {
-                console.error(err)
-            }
+            return numeral(this.usd).format('$0.00')
         },
 
         /**
          * Update Price
          */
         async updatePrice() {
-            try {
-                /* Request current price. */
-                const current = await this.bitbox.Price.current('usd')
-                // console.log('CURRENT PRICE', current)
+            /* Request current quote. */
+            const quote = await Nito.Markets.getQuote('bch')
+                .catch(err => console.error(err)) // eslint-disable-line no-console
+            // console.log('CURRENT QUOTE', data)
 
-                /* Set current price. */
-                this.usd = current
+            /* Set current price. */
+            this.usd = quote.price
+            // console.log('CURRENT USD', this.usd)
 
-                /* Set card value. */
-                this.statsCards[0].value = this.formatPrice(current)
-            } catch (err) {
-                console.error(err)
-            }
+            /* Set card value. */
+            this.statsCards[0].value = this.formatPrice(quote.price)
+
+            /* Set percentage change (last 24 hours). */
+            const change = numeral(quote.percent_change_24h).format('0.00')
+
+            /* Set card footer. */
+            this.statsCards[0].footerText = `${change}% in the last 24hrs`
         },
 
         /**
@@ -128,10 +117,7 @@ export default {
         },
     },
     created: function () {
-        /* Initialize BITBOX. */
-        this.initBitbox()
-
-        /* Update USD. */
+        /* Update ticker price (in USD). */
         this.updatePrice()
     },
     mounted: function () {
