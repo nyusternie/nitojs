@@ -3,6 +3,8 @@ const EventEmitter = require('events').EventEmitter
 
 /**
  * Wallet Class
+ *
+ * Provides a complete (mutli-currency) wallet.
  */
 class Wallet extends EventEmitter {
     constructor() {

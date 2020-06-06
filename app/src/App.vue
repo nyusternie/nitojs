@@ -9,6 +9,9 @@
 /* Initialize vuex. */
 import { mapActions, mapGetters } from 'vuex'
 
+/* Import modules. */
+import Nito from 'nitojs'
+
 export default {
     computed: {
         ...mapGetters([
@@ -79,7 +82,7 @@ export default {
 
         },
     },
-    created: function () {
+    created: async function () {
         // console.log('APPLICATION STATE', this.$store.state)
         console.log('Initializing Nito Cash...')
 
@@ -88,6 +91,27 @@ export default {
 
         /* Initialize application. */
         this.init()
+
+        // FOR DEVELOPMENT PURPOSES ONLY
+        // const blockHeight = await Nito.Blockchain.Query.getBlockHeight()
+        // console.log('BLOCK HEIGHT', blockHeight)
+
+        const blockchain = new Nito.Blockchain()
+        console.log('BLOCKCHAIN', blockchain)
+
+        const socket = new blockchain.Socket()
+        console.log('SOCKET', socket)
+
+        socket.watchAddress('qqy0l8y249dr4suvalvqunzxmp6kgslxd5uve0j4y2')
+
+        socket.on('data', (msg) => {
+            console.log('APP RECEIVED A MESSAGE (data):', msg)
+            socket.close()
+        })
+        socket.on('open', msg => {
+            console.log('APP RECEIVED A MESSAGE (open):', msg)
+            socket.close()
+        })
     },
     mounted: function () {
         //

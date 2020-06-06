@@ -1,8 +1,6 @@
+/* Import modules. */
 const debug = require('debug')('nitojs')
 const EventEmitter = require('events').EventEmitter
-
-/* Initialize shuffle client. */
-const shuffleClient = require('../libs/cashshuffle/ShuffleClient.js')
 
 /**
  * Nito
@@ -74,71 +72,50 @@ class Nito extends EventEmitter {
         return 0
     }
 
-    /**
-     * Get Shuffle Manager
-     *
-     * Starts the shuffle manager with an attached shuffle client,
-     * providing the following:
-     *    1. Coin: Nito Wallet Format (NWF).
-     *    2. Change (address) generator function.
-     *    3. Target (address) generator function.
-     */
-    getShuffleManager(_coin, _changeFunc, _targetFunc, _disableAutoShuffle=false) {
-        this.shuffleManager = new shuffleClient({
-            coins: [ _coin ],
-
-            hooks: {
-                change: _changeFunc, // NOTE: This is a function.
-                shuffled: _targetFunc, // NOTE: This is a function.
-            },
-
-            protocolVersion: 300,
-
-            maxShuffleRounds: 1,
-
-            // Disable automatically joining shuffle rounds
-            // once a connection with the server is established
-            disableAutoShuffle: _disableAutoShuffle,
-
-            serverStatsUri: 'https://shuffle.servo.cash:8080/stats'
-            // serverStatsUri: 'https://cashshuffle.c3-soft.com:9999/stats'
-        })
-
-        /* Handle phase change messages. */
-        this.shuffleManager.on('phase', (_phase) => {
-            this.emit('phase', _phase)
-        })
-
-        /* Handle notices. */
-        this.shuffleManager.on('notice', (_notice) => {
-            /* Emit notice. */
-            this.emit('notice', _notice)
-        })
-
-        /* Return shuffle manager. */
-        return this.shuffleManager
+    /* Blockchain */
+    get Blockchain() {
+        return require('./Blockchain')
     }
 
-    /**
-     * Get Wallet
-     */
-    getWallet(_auth) {
-        /* Import wallet. */
-        const Wallet = require('./Wallet')
-
-        // NOTE: Return promise.
-        return Wallet.init(_auth)
+    /* (Static) Blockchain */
+    static get Blockchain() {
+        return require('./Blockchain')
     }
 
-    /**
-     * Send Crypto
-     */
-    static async sendCoin(_coin, _outs, _doValidation=false) {
-        /* Import transaction. */
-        const Transaction = require('./Transaction')
+    /* Markets */
+    // NOTE: This class is read-only and ONLY supports static methods.
+    static get Markets() {
+        return require('./Markets')
+    }
 
-        // NOTE: Return promise.
-        return await Transaction.sendCoin(_coin, _outs, _doValidation)
+    /* Privacy */
+    get Privacy() {
+        return require('./Privacy')
+    }
+
+    /* (Static) Privacy */
+    static get Privacy() {
+        return require('./Privacy')
+    }
+
+    /* Transaction */
+    get Transaction() {
+        return require('./Transaction')
+    }
+
+    /* (Static) Transaction */
+    static get Transaction() {
+        return require('./Transaction')
+    }
+
+    /* Wallet */
+    get Wallet() {
+        return require('./Wallet')
+    }
+
+    /* (Static) Wallet */
+    static get Wallet() {
+        return require('./Wallet')
     }
 
 }

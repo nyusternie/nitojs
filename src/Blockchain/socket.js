@@ -1,37 +1,43 @@
 /* Import modules. */
-const superagent = require('superagent')
+const debug = require('debug')('nitojs:blockchain:socket')
+const EventEmitter = require('events').EventEmitter
+const EventSource = require('eventsource')
 const util = require('util')
 
 // examples source:
-// https://github.com/fountainhead-cash/bitplaylist/blob/master/bitdb/README.md
+// https://github.com/fountainhead-cash/bitplaylist/blob/master/bitsocket/README.md
 
 /* Set endpoint. */
-const ENDPOINT = 'https://bitdb.fountainhead.cash/q/'
+const ENDPOINT = 'https://bitsocket.bch.sx/s/'
 
 /* Set fountainhead API key. */
-const APIKEY = '1M2PjV7yGRg4dB8N32Qhw1wrDfDfZyi8VQ'
+// const APIKEY = '1M2PjV7yGRg4dB8N32Qhw1wrDfDfZyi8VQ'
+
+/* Set BitDB query language version. */
+const VERSION = 3
 
 /**
  * All (Firehose)
  */
 const all = {
-    v: 3,
+    v: VERSION,
     q: {
         find: {},
-        limit: 10
-    }
+    },
 }
 
 /**
- * Confirmed ONLY
+ * Address
+ *
+ * Watch for a transfer from certain address.
  */
-const confirmedOnly = {
-    v: 3,
+const address = {
+    v: VERSION,
     q: {
-        db: ['c'],
-        find: {},
-        limit: 10
-    }
+        find: {
+            'out.e.a': 'qq4kp3w3yhhvy4gm4jgeza4vus8vpxgrwc90n8rhxe',
+        },
+    },
 }
 
 /**
@@ -40,136 +46,182 @@ const confirmedOnly = {
  * Listen to all realtime memo.cash posts.
  */
 const memoPosts = {
-    v: 3,
+    v: VERSION,
     q: {
-        find: { 'out.b0': { 'op': 106 }, 'out.h1': '6d02' },
-        project: { 'out.$': 1 }
+        find: { 'out.h1': '6d02' },
     },
     r: {
-        f: '[ .[] | { msg: .out[0].s2 } ]'
+        f: '.[] | .out[] | select(.b0.op? == 106) | .s2',
+    },
+}
+
+/**
+ * Memo Topic
+ *
+ * Listen to a specific topic.
+ */
+const memoTopic = {
+    v: VERSION,
+    q: {
+        find: { 'out.h1': '6d0c', 'out.s2': 'playBCH_bot' },
+    },
+    r: {
+        f: '.[] | .out[] | select(.b0.op? == 106) | .s3'
     }
 }
 
 /**
- * Memo Formatted
+ * Coinbase
  *
- * Listen to all realtime memo.cash posts.
+ * Only monitor coinbase transactions.
  */
-const memoFormatted = {
-    v: 3,
-    q: {
-        find: { 'out.h1': '6d02' },
-        limit: 10
-    },
-    r: {
-        f: '[ .[] | { txid: .tx.h, block: .blk.i?, timestamp: .blk.t?, one: .out[0].s2, two: .out[1].s2 } ]'
-    }
-}
-
-// FOR DEVELPMENT PURPOSES ONLY
-const complex = {
-    v: 3,
+const coinbase = {
+    v: VERSION,
     q: {
         db: ['c'],
-        find: { 'out.h1': '6d02' },
-        limit: 100
+        find: {
+            'in.0': {
+                '$exists': false,
+            }
+        }
     },
     r: {
-        f: '[ group_by(.blk.h)[] | { blocks: { (.[0].blk.i | tostring): [.[] | {message: .out[1].s2, tx: .tx.h} ] } } ]'
-    }
-}
-
-// FOR DEVELPMENT PURPOSES ONLY
-const mongoProjection = {
-    v: 3,
-    q: {
-        find: { 'out.h1': '6d02' },
-        limit: 10,
-        project: { 'out.$': 1 }
+        f: '.[] | {winner: .out[0].e.a, prize: "\\(.out[0].e.v/100000000) BCH", transactionId: .tx.h, block_height: .blk.i, block_hash: .blk.h}'
     }
 }
 
 /**
- * Text Search
+ * Transactions
+ *
+ * Monitor full firehose and emit a transaction graph as event
+ * for each transaction.
  */
-const txtSearch = {
-    v: 3,
+const transactions = {
+    v: VERSION,
     q: {
-        find: {
-            '$text': { '$search': 'bet' },
-            'out.h1': '6d02'
-        },
-        project: { 'out.$': 1 },
-        limit: 10
-    }
-}
-
-// FOR DEVELPMENT PURPOSES ONLY
-const strInterpolation = {
-    v: 3,
-    q: {
-        find: { 'out.h1': '534c5000', 'out.s3': 'GENESIS' },
-        limit: 20,
-        project: { 'out.$': 1, '_id': 0 }
+        find: {}
     },
     r: {
-        f: '[.[] | .out[0] | {title: "[\\(.s4)] \\(.s5)", document_url: .s6} ]'
+        f: ".[] | { from: [.in[] | { prevTransactionId: .e.h, sender: \"bitcoincash:\\(.e.a)\" }], to: [.out[] | { receiver: \"bitcoincash:\\(.e.a?)\", amount: .e.v? }] }"
     }
 }
 
-/* Set query. */
-const query = Buffer.from(
-    JSON.stringify(strInterpolation)
-).toString('base64')
-
-/* Set target. */
-const target = ENDPOINT + query
-
-/* Call remote API. */
-superagent
-    .get(target)
-    // .set('key', APIKEY)
-    .end((err, res) => {
-        if (err) return console.error(err) // eslint-disable-line no-console
-
-        /* Set data (body). */
-        const data = res.body
-
-        /* Validate (confirmed) data. */
-        if (data.c) {
-            /* Loop through each record. */
-            data.c.forEach(output => {
-                console.log(output)
-            })
-        } else {
-            console.error('\nReceived unparceable data:', util.inspect(data, false, null, true))
-        }
-    })
+/**
+ * Transaction Explorers
+ *
+ * Monitor full firehose and emit a custom object made up of
+ * transaction id and block explorer urls.
+ */
+const txExplorers = {
+  v: VERSION,
+  q: {
+      find: {}
+  },
+  r: {
+      f: '.[] | { id: .tx.h, explorers: ["https://explorer.bitcoin.com/bch/tx/\\(.tx.h)", "https://blockchair.com/bitcoin-cash/transaction/\\(.tx.h)"] }'
+  }
+}
 
 /**
  * Socket Class
  */
-class Socket {
+class Socket extends EventEmitter {
     constructor() {
+        super()
 
+        debug('Socket class has been initialized.')
+
+        /* Initialize bitsocket. */
+        this.bitsocket = null
     }
 
     /**
-     * Block Height
-     *
-     * Returns the latest block height.
+     * Close (Socket) Connection
      */
-    blockHeight() {
-        const query = {
-            v: 3,
+    close() {
+        /* Close bitsocket connection. */
+        this.bitsocket.close()
+    }
+
+    /**
+     * Watch Address
+     *
+     * Watches an address for any on-chain activity.
+     */
+    watchAddress(_address) {
+        /* Validate address. */
+        if (!_address) {
+            return `Address [ ${_address} ] is invalid!`
+        }
+
+        /* Validate prefix. */
+        if (_address.indexOf('bitcoincash:') !== -1) {
+            _address = _address.slice(12)
+        }
+
+        /* Set (query) parameters. */
+        const params = {
+            v: VERSION,
             q: {
-                find: {},
-                limit: 1
+                find: {
+                    'out.e.a': _address,
+                },
             },
-            r: {
-                f: '[ .[] | { blockHeight: .blk.i } ]'
+        }
+
+        /* Set query. */
+        const query = Buffer.from(
+            JSON.stringify(params)
+        ).toString('base64')
+
+        /* Set (event) source. */
+        const source = ENDPOINT + query
+
+        /* Initialize BitSocket. */
+        this.bitsocket = new EventSource(source)
+
+        /* Handle connection opening. */
+        this.bitsocket.onopen = () => {
+            /* Set message. */
+            const msg = `Started listening for [ ${JSON.stringify(params)} ]`
+            debug(msg)
+            console.log(msg) // FOR DEBUGGING PURPOSES ONLY
+
+            /* Emit message. */
+            this.emit('open', msg)
+        }
+
+        /* Handle connection closing. */
+        this.bitsocket.onclose = () => {
+            /* Set message. */
+            const msg = `Stopped listening for [ ${JSON.stringify(params)} ]`
+            debug(msg)
+            console.log(msg) // FOR DEBUGGING PURPOSES ONLY
+
+            /* Emit message. */
+            this.emit('close', msg)
+        }
+
+        /* Handle message. */
+        this.bitsocket.onmessage = (_evt) => {
+            console.log('ONMESSAGE (evt):', util.inspect(_evt, false, null, true))
+            try {
+                /* Parse data. */
+                const data = JSON.parse(_evt.data)
+
+                /* Set message. */
+                const msg = `\nReceived data for [ ${JSON.stringify(params)} ]:`
+                debug(msg, util.inspect(data, false, null, true))
+                // console.log(msg, util.inspect(data, false, null, true))
+
+                /* Emit data. */
+                this.emit('data', data)
+            } catch (err) {
+                /* Emit error. */
+                this.emit('error', err)
             }
         }
+
     }
 
 }

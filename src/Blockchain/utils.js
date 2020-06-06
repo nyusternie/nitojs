@@ -6,7 +6,7 @@
  *
  * Useful functions for blockchain management.
  */
-class Broadcast {
+class Utils {
     constructor() {
 
     }
@@ -21,4 +21,4 @@ class Broadcast {
 }
 
 /* Export module. */
-module.exports = Broadcast
+module.exports = Utils
