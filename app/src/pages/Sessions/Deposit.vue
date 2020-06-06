@@ -88,7 +88,7 @@ export default {
         return {
             bitbox: null,
 
-            sessionId: null,
+            // sessionId: null,
 
             balance: null,
             // coins: null,
@@ -101,18 +101,19 @@ export default {
 
         ...mapGetters('purse', [
             'getAccountBySession',
+            'getActiveSessionId',
             'getBalanceBySession',
             'getCoinsBySession',
         ]),
 
         depositAccount() {
             /* Set deposit address. */
-            return this.getAccountBySession(this.sessionId)
+            return this.getAccountBySession(this.getActiveSessionId)
         },
 
         coins() {
             /* Retreive session balance. */
-            return this.getCoinsBySession(this.sessionId)
+            return this.getCoinsBySession(this.getActiveSessionId)
         },
 
         shortAccount() {
@@ -245,7 +246,7 @@ export default {
 
         async updateBalance() {
             /* Retreive session balance. */
-            this.balance = await this.getBalanceBySession(this.sessionId, 'USD')
+            this.balance = await this.getBalanceBySession(this.getActiveSessionId, 'USD')
             console.log('BALANCE', this.balance)
         },
 
@@ -323,10 +324,6 @@ export default {
         /* Initialize connection. */
         // NOTE: Open socket connection to the blockchain.
         // this.openConn()
-
-        // FOR DEVELOPMENT PURPOSES ONLY
-        // NOTE: We start with session #1 (zero is reserved).
-        this.sessionId = 1
 
         /* Update balance. */
         this.updateBalance()

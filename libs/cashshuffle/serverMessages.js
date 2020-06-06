@@ -25,6 +25,7 @@ const pbTypes = [
 /* Initialize protobuf. */
 // NOTE: Problem loading from local file, so copied to web root. See issue:
 //       https://github.com/protobufjs/protobuf.js/issues/1023#issuecomment-629165262
+// TODO: Translate `.proto` to `.json` and use JSON load.
 let PB = {}
 let protoFile = null
 if (typeof window !== 'undefined') {

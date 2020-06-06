@@ -7,7 +7,7 @@ const bitbox = new window.BITBOX()
  * Returns the next avaialble "receiving" account, for the session.
  */
 const getAccount = (state, getters) => (_sessionId) => {
-    // console.log('GET ACCOUNT BY SESSION (sessionid)', _sessionId)
+    console.log('GET ACCOUNT BY SESSION (sessionid)', _sessionId)
     /* Validate sessions. */
     if (!getters.getSessions) {
         return null
