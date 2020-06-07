@@ -5,7 +5,7 @@
                 class="row coinRow"
                 v-for="coin of coinsTable.data"
                 :key="coin.id"
-                @click="addToOutbox(coin.id)"
+                @click="addToOutbox(coin)"
             >
                 <div class="col-1">
                     {{coin.status}}
@@ -134,9 +134,9 @@ export default {
                         const coins = session.coins
                         // console.log('COINS (coins):', coins)
 
-                        Object.keys(coins).forEach(async txid => {
+                        Object.keys(coins).forEach(async coinId => {
                             /* Initialize coin. */
-                            const coin = coins[txid]
+                            const coin = coins[coinId]
                             // console.log('COINS (coin):', coin)
 
                             /* Set id. */
@@ -147,7 +147,7 @@ export default {
 
                             /* Set status. */
                             // TODO: Will probably develop a rating scale??
-                            const status = '✓'
+                            const status = coin.status === 'active' ? '✓' : 'ⅹ'
 
                             /* Set value. */
                             const value = coin.amountSatoshis
@@ -160,7 +160,10 @@ export default {
                                 value,
                             }
 
-                            tableData.data.push(coinData)
+                            // TODO: Allow display of spent coins.
+                            if (status === '✓') {
+                                tableData.data.push(coinData)
+                            }
 
                         })
 
@@ -193,8 +196,8 @@ export default {
         /**
          * Add To Outbox
          */
-        addToOutbox(_coinId) {
-            console.log('COIN ID', _coinId)
+        addToOutbox(_coin) {
+            console.log('COIN ID', _coin.id)
 
             /* Retrieve outbox. */
             let outbox = this.getOutbox
@@ -207,13 +210,26 @@ export default {
             }
 
             /* Retrieve coin details. */
-            const coin = this.getCoinById(_coinId)
+            const coin = this.getCoinById(_coin.id)
             // console.log('FOUND COIN', coin)
 
             /* Set label. */
             const label = `${coin.txid.slice(0, 8)} ... ${coin.txid.slice(-8)} : ${coin.vout}`
 
-            if (outbox[_coinId]) {
+            if (_coin.status !== '✓') {
+                /* Set message. */
+                const message = `${label} has already been spent.`
+
+                /* Display notification. */
+                this.$notify({
+                    message,
+                    icon: 'ti-alert', // ti-info-alt | ti-alert
+                    verticalAlign: 'top',
+                    horizontalAlign: 'right',
+                    type: 'danger', // info | danger
+                    // timeout: 0, // 0: persistent | 5000: default
+                })
+            } else if (outbox[_coin.id]) {
                 /* Set message. */
                 const message = `${label} has already been added to your outbox.`
 
@@ -228,7 +244,7 @@ export default {
                 })
             } else {
                 /* Add coin to outbox. */
-                outbox[_coinId] = coin
+                outbox[_coin.id] = coin
 
                 /* Update outbox. */
                 this.updateOutbox(outbox)

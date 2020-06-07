@@ -23,6 +23,7 @@ import addSession from './purse/actions/addSession'
 import initPurse from './purse/actions/initPurse'
 import rebuildPurse from './purse/actions/rebuildPurse'
 import updateCoins from './purse/actions/updateCoins'
+import updateCoin from './purse/actions/updateCoin'
 import updateMeta from './purse/actions/updateMeta'
 import updateOutbox from './purse/actions/updateOutbox'
 
@@ -113,6 +114,7 @@ const actions = {
     initPurse,
     rebuildPurse,
     updateCoins,
+    updateCoin,
     updateMeta,
     updateOutbox,
 }

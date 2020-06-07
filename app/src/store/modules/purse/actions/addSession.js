@@ -25,8 +25,8 @@ const addSession = ({ commit, getters }) => {
      *       for better support with Nito-based wallets.
      */
     const accountModel = {
-        change: 0,
         deposit: 0,
+        change: 0,
         nitoxchg: 0, // NOTE: For "possible" future compatability with Nito Exchange.
     }
 
@@ -49,9 +49,9 @@ const addSession = ({ commit, getters }) => {
      *     - legacyAddress
      */
     const sessionModel = {
+        status: 'active',
         accounts: accountModel,
         coins: {},
-        status: 'active',
     }
 
     try {

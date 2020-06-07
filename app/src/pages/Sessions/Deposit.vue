@@ -1,7 +1,7 @@
 <template>
     <card class="card-user">
-        <div v-if="depositAccount">
-            <div class="depositAccount">
+        <div v-if="depositAddress">
+            <div class="depositAddress">
                 <div
                     slot="image"
                     v-html="qr"
@@ -23,7 +23,7 @@
                     <br>
                     <a :href="explorerLink" target="_blank">
                         <small>
-                            {{shortAccount}}
+                            {{shortAddress}}
                             <i class="fa fa-external-link ml-1"></i>
                         </small>
                     </a>
@@ -81,12 +81,14 @@
 import { mapActions, mapGetters } from 'vuex'
 
 /* Import components. */
+import Nito from 'nitojs'
 import QRCode from 'qrcode'
 
 export default {
     data() {
         return {
             bitbox: null,
+            blockchain: null,
 
             // sessionId: null,
 
@@ -100,40 +102,50 @@ export default {
         ]),
 
         ...mapGetters('purse', [
-            'getAccountBySession',
+            'getAddressBySessionId',
             'getActiveSessionId',
-            'getBalanceBySession',
-            'getCoinsBySession',
+            'getBalanceBySessionId',
+            'getCoinsBySessionId',
         ]),
 
-        depositAccount() {
+        /**
+         * Deposit Address
+         *
+         * Returns the next available receiving address.
+         */
+        depositAddress() {
             /* Set deposit address. */
-            return this.getAccountBySession(this.getActiveSessionId)
+            return this.getAddressBySessionId(this.getActiveSessionId)
         },
 
         coins() {
             /* Retreive session balance. */
-            return this.getCoinsBySession(this.getActiveSessionId)
+            return this.getCoinsBySessionId(this.getActiveSessionId)
         },
 
-        shortAccount() {
-            if (this.depositAccount) {
-                return `${this.depositAccount.slice(12, 20)} ... ${this.depositAccount.slice(-8)}`
+        /**
+         * Short Address
+         *
+         * Formats to a shortened version of the deposit address.
+         */
+        shortAddress() {
+            if (this.depositAddress) {
+                return `${this.depositAddress.slice(12, 20)} ... ${this.depositAddress.slice(-8)}`
             } else {
                 return ''
             }
         },
 
-        queryAccount() {
-            if (this.depositAccount.includes('bitcoincash:')) {
-                return this.depositAccount.slice(12)
+        queryAddress() {
+            if (this.depositAddress.includes('bitcoincash:')) {
+                return this.depositAddress.slice(12)
             } else {
-                return this.depositAccount
+                return this.depositAddress
             }
         },
 
         explorerLink() {
-            return `https://explorer.bitcoin.com/bch/address/${this.depositAccount}`
+            return `https://explorer.bitcoin.com/bch/address/${this.depositAddress}`
         },
 
         numCoins() {
@@ -207,8 +219,8 @@ export default {
             }
 
             /* Validate deposit address. */
-            if (this.depositAccount) {
-                QRCode.toString(this.depositAccount, params, (err, value) => {
+            if (this.depositAddress) {
+                QRCode.toString(this.depositAddress, params, (err, value) => {
                     if (err) {
                         return console.error('QR Code ERROR:', err)
                     }
@@ -224,9 +236,8 @@ export default {
 
     },
     methods: {
-        ...mapActions('blockchain', [
-            'closeConn',
-            'openConn',
+        ...mapActions('purse', [
+            'updateCoins',
         ]),
 
         /**
@@ -244,30 +255,40 @@ export default {
             }
         },
 
-        async updateBalance() {
-            /* Retreive session balance. */
-            this.balance = await this.getBalanceBySession(this.getActiveSessionId, 'USD')
-            console.log('BALANCE', this.balance)
+        /**
+         * Initialize Blockchain
+         */
+        initBlockchain() {
+            /* Initialize Nito blockchain. */
+            this.blockchain = new Nito.Blockchain()
+            console.log('NITO BLOCKCHAIN', this.blockchain)
+
+            if (this.depositAddress) {
+                /* Subscribe to address updates. */
+                const watching = this.blockchain
+                    .subscribe('address', this.depositAddress)
+                console.log('DEPOSIT (watching):', watching)
+            }
+
+            /* Handle blockchain updates. */
+            this.blockchain.on('update', (_msg) => {
+                console.log('DEPOSIT RECEIVED BLOCKCHAIN UPDATE (msg):', _msg)
+
+                /* Update coins. */
+                // FIXME: Why is this blocking the entire initial UI setup??
+                this.updateCoins()
+            })
         },
 
-        async watchForDeposit() {
-            const query = {
-                v: 3,
-                q: {
-                    find: {
-                        'in.e.a': this.queryAccount,
-                        'out.e.a': this.queryAccount,
-                        // 'in.e.a': 'qr5cv5xee23wdy8nundht82v6637etlq3u6kzrjknk',
-                        // 'out.e.a': 'qr5cv5xee23wdy8nundht82v6637etlq3u6kzrjknk'
-                    },
-                    limit: 10
-                }
-            }
-            console.log('Watch query:', query)
-
-            const res = await this.bitbox.BitDB.get(query)
-            console.log('Watch result:', JSON.stringify(res, null, 4))
-
+        /**
+         * Update Balance
+         */
+        async updateBalance() {
+            /* Retreive session balance. */
+            this.balance = await this
+                .getBalanceBySessionId(this.getActiveSessionId, 'USD')
+                .catch(err => console.error(err))
+            console.log('DEPOSIT (balance):', this.balance)
         },
 
         /**
@@ -276,7 +297,7 @@ export default {
         setClipboard() {
             try {
                 const textArea = document.createElement('textarea')
-                textArea.value = this.depositAccount
+                textArea.value = this.depositAddress
                 document.body.appendChild(textArea)
 
                 if (navigator.userAgent.match(/ipad|iphone/i)) {
@@ -317,18 +338,25 @@ export default {
             }
         },
     },
+    watch: {
+        depositAddress: function (_address) {
+            console.log('DEPOSIT ADDRESS HAS CHANGED, REGISTER IT!!', _address)
+
+            /* Subscribe to address updates. */
+            const watching = this.blockchain
+                .subscribe('address', this.depositAddress)
+            console.log('DEPOSIT (watching):', watching)
+        },
+    },
     created: async function () {
         /* Initialize BITBOX. */
         this.initBitbox()
 
-        /* Initialize connection. */
-        // NOTE: Open socket connection to the blockchain.
-        // this.openConn()
+        /* Initialize blockchain. */
+        this.initBlockchain()
 
         /* Update balance. */
         this.updateBalance()
-
-        // this.watchForDeposit()
 
     },
     beforeDestroy() {
@@ -341,27 +369,27 @@ export default {
 </script>
 
 <style scoped>
-.card-user .depositAccount {
+.card-user .depositAddress {
     /* padding: 0 5px; */
     /* border: 1pt solid red; */
     cursor: pointer;
     text-align: center;
 }
 
-.card-user .depositAccount .qr {
+.card-user .depositAddress .qr {
     margin-top: -15px;
 }
 @media (min-width: 768px) {
-    .card-user .depositAccount .qr {
+    .card-user .depositAddress .qr {
         margin-left: -10px;
     }
 }
 
-.card-user .depositAccount .clipboard-note {
+.card-user .depositAddress .clipboard-note {
     margin-top: -15px;
     color: rgba(255, 90, 90, 0.5);
 }
-.card-user .depositAccount .clipboard-note:hover {
+.card-user .depositAddress .clipboard-note:hover {
     margin-top: -15px;
     color: rgba(255, 90, 90, 1.0);
 }

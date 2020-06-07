@@ -1,13 +1,11 @@
 /* Initialize BITBOX. */
 const bitbox = new window.BITBOX()
 
-/* Initialize account. */
-const account = []
-
 /**
  * Load (Derivation) Path
  */
-const loadPath = (_getters, _sessionId, _chainId, _acctIdx) => {
+const loadPath = (_getters, _account, _sessionId, _chainId, _acctIdx) => {
+    console.log('LOAD PATH', _sessionId, _chainId, _acctIdx)
     /* Initialize HD node. */
     const hdNode = _getters.getHDNode
 
@@ -26,7 +24,7 @@ const loadPath = (_getters, _sessionId, _chainId, _acctIdx) => {
     // console.log('GET ACCOUNTS (address)', address)
 
     /* Add to all receiving (pool). */
-    account.push({
+    _account.push({
         sessionId: _sessionId,
         chainId: _chainId,
         address,
@@ -42,6 +40,9 @@ const loadPath = (_getters, _sessionId, _chainId, _acctIdx) => {
  * (incl. index and WIF) for ALL derivation paths in-use for a session.
  */
 const getAccountBySessionId = (state, getters) => (_sessionId) => {
+    /* Initialize account. */
+    const account = []
+
     /* Validate sessions. */
     if (!getters.getSessions) {
         return null
@@ -57,22 +58,22 @@ const getAccountBySessionId = (state, getters) => (_sessionId) => {
 
     /* Loop through ALL (deposit) indexes (inclusive). */
     for (let i = 0; i <= session.accounts.deposit; i++) {
-        loadPath(getters, _sessionId, 0, i)
+        loadPath(getters, account, _sessionId, 0, i)
     }
 
     /* Loop through ALL (change) indexes (inclusive). */
     for (let i = 0; i <= session.accounts.change; i++) {
-        loadPath(getters, _sessionId, 1, i)
+        loadPath(getters, account, _sessionId, 1, i)
     }
 
     /* Loop through ALL (Nito Cash) indexes (inclusive). */
     for (let i = 0; i <= getters.getNitoCashIdx; i++) {
-        loadPath(getters, 0, 7867, i)
+        loadPath(getters, account, 0, 7867, i)
     }
 
     /* Loop through ALL (Nito Xchg) indexes (inclusive). */
     for (let i = 0; i <= session.accounts.xchg; i++) {
-        loadPath(getters, _sessionId, 7888, i)
+        loadPath(getters, account, _sessionId, 7888, i)
     }
     console.log('GET ACCOUNT BY SESSION (account):', account)
 

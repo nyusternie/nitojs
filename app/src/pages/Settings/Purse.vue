@@ -144,7 +144,7 @@ export default {
         async resync() {
             /* Update coins. */
             // FIXME: Why is this blocking the entire initial UI setup??
-            await this.updateCoins()
+            this.updateCoins()
 
             /* Set message. */
             const message = `Your purse has been successfully re-synced. It's time to go shuffle!`
