@@ -21,7 +21,6 @@ import getSessions from './purse/getters/getSessions'
 import addCoin from './purse/actions/addCoin'
 import addSession from './purse/actions/addSession'
 import initPurse from './purse/actions/initPurse'
-// import nextCoin from './purse/actions/nextCoin'
 import rebuildPurse from './purse/actions/rebuildPurse'
 import updateCoins from './purse/actions/updateCoins'
 import updateMeta from './purse/actions/updateMeta'
@@ -112,7 +111,6 @@ const actions = {
     addCoin,
     addSession,
     initPurse,
-    // nextCoin,
     rebuildPurse,
     updateCoins,
     updateMeta,

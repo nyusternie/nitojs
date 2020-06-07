@@ -22,9 +22,9 @@ const updateCoins = async ({ dispatch, getters }) => {
     if (account === null) {
         return
     }
-return
+
     /* Build search array. */
-    const acctSearch = accounts.map(obj => {
+    const acctSearch = account.map(obj => {
         return obj.address
     })
     // console.log('UPDATE COINS (acctSearch)', acctSearch)
@@ -37,7 +37,7 @@ return
         const searchAddr = addrDetails.cashAddress
         // console.log('UPDATE COINS (searchAddr)', searchAddr)
 
-        const balanceSat = addrDetails.balanceSat
+        // const balanceSat = addrDetails.balanceSat
         // console.log('UPDATE COINS (addrDetails.balanceSat)', balanceSat)
 
         const txs = addrDetails.transactions
@@ -62,6 +62,11 @@ return
                 /* Set script public key. */
                 const scriptPubKey = output.scriptPubKey
 
+                /* Validate script. */
+                if (!scriptPubKey || !scriptPubKey.cashAddrs) {
+                    return
+                }
+
                 /* Set addresses. */
                 const cashAddrs = scriptPubKey.cashAddrs
                 // console.log('UPDATE COINS (cashAddrs)', cashAddrs)
@@ -73,13 +78,13 @@ return
                 let wif = null
 
                 /* Find the WIF. */
-                for (let i = 0; i < accounts.length; i++) {
-                    if (accounts[i].address === searchAddr) {
+                for (let i = 0; i < account.length; i++) {
+                    if (account[i].address === searchAddr) {
                         /* Set chain id. */
-                        chainId = accounts[i].chainId
+                        chainId = account[i].chainId
 
                         /* Set WIF. */
-                        wif = accounts[i].wif
+                        wif = account[i].wif
 
                         break
                     }
@@ -92,16 +97,17 @@ return
                         status: 'active',
                         txid: txDetails.txid,
                         vout: index,
-                        amountSatoshis: satoshis, // DEPRECATED
                         satoshis,
-                        privateKeyWif: wif,
+                        amountSatoshis: satoshis, // DEPRECATED
+                        wif,
+                        privateKeyWif: wif, // DEPRECATED
                         cashAddress: searchAddr,
                         legacyAddress: bitbox.Address.toLegacyAddress(searchAddr),
                     }
                     // console.log('UPDATE COINS (coin)', coin)
 
-                    const coins = getters.getCoinsBySession(sessionId)
-                    // console.log('COINS', coins)
+                    const coins = getters.getCoinsBySessionId(sessionId)
+                    // console.log('COINS', sessionId, coins)
 
                     /* Validate new coin. */
                     if (coins && !coins[`${coin.txid}:${coin.vout}`]) {
