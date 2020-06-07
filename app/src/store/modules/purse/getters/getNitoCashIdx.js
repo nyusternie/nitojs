@@ -3,8 +3,7 @@
  */
 const getNitoCashIdx = (state) => {
     /* Return Nito Cash index. */
-    // return state.nitoCashIdx
-    return 0
+    return state.nitoCashIdx
 }
 
 /* Export module. */

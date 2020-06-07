@@ -1,13 +1,13 @@
 /* Initialize BITBOX. */
 const bitbox = new window.BITBOX()
 
-/* Initialize accounts. */
-const accounts = []
+/* Initialize account. */
+const account = []
 
 /**
- * Load Accounts
+ * Load (Derivation) Path
  */
-const loadAccounts = (_getters, _sessionId, _chainId, _acctIdx) => {
+const loadPath = (_getters, _sessionId, _chainId, _acctIdx) => {
     /* Initialize HD node. */
     const hdNode = _getters.getHDNode
 
@@ -26,7 +26,7 @@ const loadAccounts = (_getters, _sessionId, _chainId, _acctIdx) => {
     // console.log('GET ACCOUNTS (address)', address)
 
     /* Add to all receiving (pool). */
-    accounts.push({
+    account.push({
         sessionId: _sessionId,
         chainId: _chainId,
         address,
@@ -36,11 +36,12 @@ const loadAccounts = (_getters, _sessionId, _chainId, _acctIdx) => {
 }
 
 /**
- * Get ALL Session Accounts
+ * Get Account by Session Id
  *
- * Returns account (address, index, WIF) for ALL (in-use) sessions.
+ * Returns the full account for a session id. This will return coin details
+ * (incl. index and WIF) for ALL derivation paths in-use for a session.
  */
-const getAccounts = (state, getters) => (_sessionId) => {
+const getAccountBySessionId = (state, getters) => (_sessionId) => {
     /* Validate sessions. */
     if (!getters.getSessions) {
         return null
@@ -48,36 +49,36 @@ const getAccounts = (state, getters) => (_sessionId) => {
 
     /* Initialize sessions. */
     const sessions = getters.getSessions
-    console.log('GET ACCOUNTS (sessions):', sessions)
+    console.log('GET ACCOUNT BY SESSION (sessions):', sessions)
 
     /* Set session. */
     const session = sessions[_sessionId]
-    console.log('GET ACCOUNTS (session):', session)
+    console.log('GET ACCOUNT BY SESSION (session):', session)
 
     /* Loop through ALL (deposit) indexes (inclusive). */
     for (let i = 0; i <= session.accounts.deposit; i++) {
-        loadAccounts(getters, _sessionId, 0, i)
+        loadPath(getters, _sessionId, 0, i)
     }
 
     /* Loop through ALL (change) indexes (inclusive). */
     for (let i = 0; i <= session.accounts.change; i++) {
-        loadAccounts(getters, _sessionId, 1, i)
+        loadPath(getters, _sessionId, 1, i)
     }
 
     /* Loop through ALL (Nito Cash) indexes (inclusive). */
     for (let i = 0; i <= getters.getNitoCashIdx; i++) {
-        loadAccounts(getters, 0, 7867, i)
+        loadPath(getters, 0, 7867, i)
     }
 
     /* Loop through ALL (Nito Xchg) indexes (inclusive). */
     for (let i = 0; i <= session.accounts.xchg; i++) {
-        loadAccounts(getters, _sessionId, 7888, i)
+        loadPath(getters, _sessionId, 7888, i)
     }
-    console.log('GET ACCOUNTS (accounts):', accounts)
+    console.log('GET ACCOUNT BY SESSION (account):', account)
 
     /* Return accounts. */
-    return accounts
+    return account
 }
 
 /* Export module. */
-export default getAccounts
+export default getAccountBySessionId

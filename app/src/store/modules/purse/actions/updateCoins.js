@@ -7,21 +7,22 @@ const bitbox = new window.BITBOX()
 const updateCoins = async ({ dispatch, getters }) => {
     /* Set session id. */
     const sessionId = getters.getActiveSessionId
+    // console.log('UPDATE COINS (sessionId)', sessionId)
 
     /* Validate session id. */
-    if (!sessionId) {
+    if (sessionId === null) {
         return
     }
 
-    /* Retrieve accounts. */
-    const accounts = getters.getAccountsBySession(sessionId)
-    // console.log('UPDATE COINS (accounts)', accounts)
+    /* Retrieve account. */
+    const account = getters.getAccountBySessionId(sessionId)
+    console.log('UPDATE COINS (account)', account)
 
-    /* Validate accounts. */
-    if (!accounts) {
+    /* Validate account. */
+    if (account === null) {
         return
     }
-
+return
     /* Build search array. */
     const acctSearch = accounts.map(obj => {
         return obj.address

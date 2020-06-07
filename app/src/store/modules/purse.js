@@ -1,11 +1,11 @@
 /* Import modules (getters). */
-import getAccountBySession from './purse/getters/getAccountBySession'
-import getAccountsBySession from './purse/getters/getAccountsBySession'
+import getAccountBySessionId from './purse/getters/getAccountBySessionId'
 import getActiveSessionId from './purse/getters/getActiveSessionId'
+import getAddressBySessionId from './purse/getters/getAddressBySessionId'
 import getBalance from './purse/getters/getBalance'
-import getBalanceBySession from './purse/getters/getBalanceBySession'
+import getBalanceBySessionId from './purse/getters/getBalanceBySessionId'
 import getCoinById from './purse/getters/getCoinById'
-import getCoinsBySession from './purse/getters/getCoinsBySession'
+import getCoinsBySessionId from './purse/getters/getCoinsBySessionId'
 import getDerivationPath from './purse/getters/getDerivationPath'
 import getDustAmount from './purse/getters/getDustAmount'
 import getHDNode from './purse/getters/getHDNode'
@@ -28,9 +28,11 @@ import updateMeta from './purse/actions/updateMeta'
 import updateOutbox from './purse/actions/updateOutbox'
 
 /* Import modules (mutations). */
+import setActiveSessionId from './purse/mutations/setActiveSessionId'
 import setEmptyPurse from './purse/mutations/setEmptyPurse'
 import setMasterSeed from './purse/mutations/setMasterSeed'
 import setMeta from './purse/mutations/setMeta'
+import setNitoCashIdx from './purse/mutations/setNitoCashIdx'
 import setOutbox from './purse/mutations/setOutbox'
 import setSessions from './purse/mutations/setSessions'
 
@@ -60,6 +62,9 @@ const state = {
      *
      * Manages a single `session` and `chain` for this wallet type.
      * eg. m/44'/145'/0'/7867/<index>
+     *
+     * NOTE: This is for better compatability and portability with
+     *       Nito-based wallets (eg. Nito.cash).
      */
     nitoCashIdx: null,
 
@@ -72,7 +77,7 @@ const state = {
      * Sessions
      *
      * Every new session is created on a separate derivation path.
-     * The `session` chain is equivalent to the `account` chain.
+     * The `session` index is equivalent to the `account` level of BIP-32.
      *
      * A standard BCH derivation path is used,
      *     m/44'/145'/<session>'/0/<index>
@@ -83,13 +88,13 @@ const state = {
 
 /* Getters. */
 const getters = {
-    getAccountBySession,
-    getAccountsBySession,
+    getAccountBySessionId,
     getActiveSessionId,
+    getAddressBySessionId,
     getBalance,
     getCoinById,
-    getBalanceBySession,
-    getCoinsBySession,
+    getBalanceBySessionId,
+    getCoinsBySessionId,
     getDerivationPath,
     getDustAmount,
     getHDNode,
@@ -110,14 +115,17 @@ const actions = {
     // nextCoin,
     rebuildPurse,
     updateCoins,
+    updateMeta,
     updateOutbox,
 }
 
 /* Mutations. */
 const mutations = {
+    setActiveSessionId,
     setEmptyPurse,
     setMasterSeed,
     setMeta,
+    setNitoCashIdx,
     setOutbox,
     setSessions,
 }

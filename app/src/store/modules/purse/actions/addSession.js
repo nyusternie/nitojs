@@ -1,11 +1,37 @@
 /**
- * Add a New Session
+ * Add Session
+ *
+ * Adds a new session to the current purse.
  */
 const addSession = ({ commit, getters }) => {
     console.info('Creating a NEW session...') // eslint-disable-line no-console
 
+    /**
+     * Account Model
+     *
+     * Manages the indexes of accounts (addresses) and their respective
+     * derivation paths.
+     *
+     * Deposit   : m/44'/145'/<session>'/0/<index>
+     * Change    : m/44'/145'/<session>'/1/<index>
+     * Nito Cash : m/44'/145'/0'/7867/<index>
+     * Nito Xchg : m/44'/145'/<session>'/7888/<index>
+     *
+     * NOTE: Change is considered "toxic waste", and will have to be
+     *       discarded or re-combined (using CashFusion) once it falls
+     *       below the lowest threshold for CashShuffle.
+     *
+     * NOTE: Nito Cash will be a single `session` and `chain` to allow
+     *       for better support with Nito-based wallets.
+     */
+    const accountModel = {
+        deposit: 0,
+        change: 0,
+        nitoxchg: 0, // FOR FUTURE COMPATIBILITY
+    }
+
     /* Initialize session model. */
-    let sessionsModel = null
+    let sessionModel = null
 
     try {
         /* Initialize sessions. */
@@ -14,7 +40,7 @@ const addSession = ({ commit, getters }) => {
         /* Validate sessions. */
         if (sessions) {
             /* Set current (active index). */
-            const currentIndex = Math.max(...Object.keys(sessionCoins))
+            const currentIndex = Math.max(...Object.keys(sessions))
 
             /* Set next coin index. */
             const nextIndex = currentIndex + 1
@@ -22,33 +48,10 @@ const addSession = ({ commit, getters }) => {
             /* Add new session to model. */
             sessionModel[nextIndex] = {
                 status: 'active',
+                account: accountModel,
                 coins: {},
             }
         } else {
-            /**
-             * Accounts Model
-             *
-             * Manages the indexes of accounts (addresses) and their respective
-             * derivation paths.
-             *
-             * Deposit   : m/44'/145'/<session>'/0/<index>
-             * Change    : m/44'/145'/<session>'/1/<index>
-             * Nito Cash : m/44'/145'/0'/7867/<index>
-             * Nito Xchg : m/44'/145'/<session>'/7888/<index>
-             *
-             * NOTE: Change is considered "toxic waste", and will be
-             *       discarded (read. donated to Causes Cash) once it reaches
-             *       below the lowest threshold for shuffles & fusions.
-             *
-             * NOTE: Nito Cash will be a single `session` and `chain` to allow
-             *       for better support using Nito Cash wallet.
-             */
-            const accountsModel = {
-                deposit: 0,
-                change: 0,
-                nitoxchg: 0, // FOR FUTURE COMPATIBILITY
-            }
-
             /**
              * Session Model
              *
@@ -67,17 +70,17 @@ const addSession = ({ commit, getters }) => {
              *     - cashAddress
              *     - legacyAddress
              */
-            sessionsModel = {
+            sessionModel = {
                 0: {
                     status: 'active',
-                    accounts: accountsModel,
+                    account: accountModel,
                     coins: {}
                 }
             }
         }
 
         /* Initialize sessions. */
-        commit('setSessions', sessionsModel)
+        commit('setSessions', sessionModel)
     } catch (err) {
         console.error(err) // eslint-disable-line no-console
 

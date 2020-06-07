@@ -1,8 +1,10 @@
 /**
- * Add New Coin
+ * Add Coin
+ *
+ * Adds new coin details to its respective session.
  */
 const addCoin = ({ commit, getters }, _pkg) => {
-    console.info('Adding new coin...', _pkg)
+    console.info('Adding new coin...', _pkg) // eslint-disable-line no-console
 
     /* Set session id. */
     const sessionId = _pkg.sessionId
@@ -31,15 +33,19 @@ const addCoin = ({ commit, getters }, _pkg) => {
     /* Increment deposit account. */
     switch(chainId) {
     case 0:
+        /* Increment deposit index. */
         sessions[sessionId].accounts.deposit++
         break
     case 1:
+        /* Increment change index. */
         sessions[sessionId].accounts.change++
         break
     case 7867:
-        sessions[sessionId].accounts.nito++
+        /* Commit Nito Cash index. */
+        commit('setNitoCashIdx', getters.getNitoCashIdx + 1)
         break
     case 7888:
+        /* Increment Nito Exchange index. */
         sessions[sessionId].accounts.xchg++
         break
     }

@@ -2,14 +2,14 @@
 const bitbox = new window.BITBOX()
 
 /**
-* Get Balance by Session
+* Get Balance by Session Id
 *
 * Retrieves the current (total) session balance.
 *
 * NOTE: Optional (market price) parameter is used to calculate fiat value,
 *       and return a "formatted" value package.
 */
-const getBalanceBySession = (
+const getBalanceBySessionId = (
     state, getters, rootState, rootGetters
 ) => async (_sessionId, _currency) => {
     /* Validate (session) accounts. */
@@ -103,4 +103,4 @@ const getBalanceBySession = (
 }
 
 /* Export module. */
-export default getBalanceBySession
+export default getBalanceBySessionId

@@ -2,11 +2,11 @@
 const bitbox = new window.BITBOX()
 
 /**
- * Get Session Account
+ * Get Address by Session Id
  *
  * Returns the next avaialble "receiving" account, for the session.
  */
-const getAccount = (state, getters) => (_sessionId) => {
+const getAddressBySessionId = (state, getters) => (_sessionId) => {
     console.log('GET ACCOUNT BY SESSION (sessionid)', _sessionId)
     /* Validate sessions. */
     if (!getters.getSessions) {
@@ -43,4 +43,4 @@ const getAccount = (state, getters) => (_sessionId) => {
 }
 
 /* Export module. */
-export default getAccount
+export default getAddressBySessionId
