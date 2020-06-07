@@ -1,4 +1,5 @@
-const debug = require('debug')('nitojs:wallet')
+/* Import modules. */
+const debug = require('debug')('nitojs:purse')
 const EventEmitter = require('events').EventEmitter
 
 /**
@@ -9,6 +10,8 @@ const EventEmitter = require('events').EventEmitter
 class Purse extends EventEmitter {
     constructor() {
         super()
+
+        debug('Purse class has been initialized.')
     }
 
     init(_auth) {

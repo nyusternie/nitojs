@@ -1,3 +1,4 @@
+/* Import modules. */
 const debug = require('debug')('nitojs:privacy')
 const EventEmitter = require('events').EventEmitter
 

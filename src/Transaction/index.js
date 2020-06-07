@@ -1,3 +1,4 @@
+/* Import modules. */
 const debug = require('debug')('nitojs:transaction')
 const EventEmitter = require('events').EventEmitter
 

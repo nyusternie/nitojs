@@ -13,7 +13,7 @@ const getBalanceBySessionId = (
     state, getters, rootState, rootGetters
 ) => async (_sessionId, _currency) => {
     /* Validate (session) accounts. */
-    if (!getters.getCoinsBySession(_sessionId)) {
+    if (!getters.getCoinsBySessionId(_sessionId)) {
         return null
     }
 
@@ -24,7 +24,7 @@ const getBalanceBySessionId = (
     // FIXME: We are seeing duplicate counts.
     const countedAccts = []
 
-    const coins = getters.getCoinsBySession(_sessionId)
+    const coins = getters.getCoinsBySessionId(_sessionId)
     // console.log('GET BALANCE BY SESSION (coins)', coins)
 
     /* Add all active receiving account (searchAccts) to pool. */

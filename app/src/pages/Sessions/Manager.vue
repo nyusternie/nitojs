@@ -91,6 +91,10 @@
 
                     <p class="setting-tip">
                         Will automatically start shuffling when change is added to the session.
+                        <br />
+                        <small class="text-danger">
+                            <strong class="text-danger">NOTE:</strong> Minimum amount is <strong class="text-danger">10,270</strong> satoshis.
+                        </small>
                     </p>
                 </div>
             </div>
@@ -202,7 +206,7 @@ export default {
     computed: {
         ...mapGetters('purse', [
             'getActiveSessionId',
-            'getCoinsBySession',
+            'getCoinsBySessionId',
             'getDerivationPath',
             'getHDNode',
             'getNitoCashIdx',
@@ -413,7 +417,7 @@ export default {
          * Start Shuffle
          */
         startShuffle() {
-            const coins = this.getCoinsBySession(this.getActiveSessionId)
+            const coins = this.getCoinsBySessionId(this.getActiveSessionId)
             console.log('MANAGER (coins):', coins)
 
             if (coins) {
@@ -512,7 +516,7 @@ export default {
         this.session.phase = 'INACTIVE'
 
         /* Retrieve coins. */
-        this.coins = this.getCoinsBySession(this.getActiveSessionId)
+        this.coins = this.getCoinsBySessionId(this.getActiveSessionId)
         console.log('COINS', this.coins)
 
     }

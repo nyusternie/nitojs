@@ -1,3 +1,4 @@
+/* Import modules. */
 const debug = require('debug')('nitojs:markets')
 const EventEmitter = require('events').EventEmitter
 

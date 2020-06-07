@@ -7,7 +7,7 @@ const bitbox = new window.BITBOX()
  * Returns the next avaialble "receiving" account, for the session.
  */
 const getAddressBySessionId = (state, getters) => (_sessionId) => {
-    console.log('GET ACCOUNT BY SESSION (sessionid)', _sessionId)
+    // console.log('GET ADDRESS BY SESSION (sessionid)', _sessionId)
     /* Validate sessions. */
     if (!getters.getSessions) {
         return null
@@ -15,18 +15,18 @@ const getAddressBySessionId = (state, getters) => (_sessionId) => {
 
     /* Initialize sessions. */
     const sessions = getters.getSessions
-    console.log('GET ACCOUNT (sessions):', sessions)
+    // console.log('GET ADDRESS BY SESSION (sessions):', sessions)
 
     /* Initialize current (coin) index. */
     const currentIndex = sessions[_sessionId].accounts.deposit
-    console.log('GET ACCOUNT (currentIndex):', currentIndex)
+    // console.log('GET ADDRESS BY SESSION (currentIndex):', currentIndex)
 
     /* Set chain. */
     const chain = 0 // receiving account
 
     /* Set derivation path. */
     const path = getters.getDerivationPath(_sessionId, chain, currentIndex)
-    console.log('GET ACCOUNT (path)', path)
+    // console.log('GET ADDRESS BY SESSION (path)', path)
 
     /* Initialize HD node. */
     const hdNode = getters.getHDNode
@@ -34,12 +34,12 @@ const getAddressBySessionId = (state, getters) => (_sessionId) => {
     /* Initialize child node. */
     const childNode = hdNode.derivePath(path)
 
-    /* Set (receiving) account. */
-    const account = bitbox.HDNode.toCashAddress(childNode)
-    // console.log('GET ACCOUNT (receiving account)', account)
+    /* Set (receiving) addresss. */
+    const addresss = bitbox.HDNode.toCashAddress(childNode)
+    // console.log('GET ADDRESS BY SESSION (receiving addresss)', addresss)
 
-    /* Return account. */
-    return account
+    /* Return addresss. */
+    return addresss
 }
 
 /* Export module. */

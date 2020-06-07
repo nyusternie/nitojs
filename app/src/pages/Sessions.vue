@@ -48,7 +48,7 @@ export default {
     },
     created: function () {
         console.log('SESSIONS:', this.getSessions)
-        console.log('SESSION ID:', this.getActiveSessionId)
+        console.log('ACTIVE SESSION ID:', this.getActiveSessionId)
     },
 }
 </script>

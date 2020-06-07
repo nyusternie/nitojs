@@ -3,8 +3,7 @@
  */
 const getActiveSessionId = (state) => {
     /* Return active session id. */
-    // return state.activeSessionId
-    return 0 // TEMPORARY
+    return state.activeSessionId
 }
 
 /* Export module. */
