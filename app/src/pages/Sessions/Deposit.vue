@@ -80,7 +80,7 @@
 /* Initialize vuex. */
 import { mapActions, mapGetters } from 'vuex'
 
-/* Import components. */
+/* Import modules. */
 import Nito from 'nitojs'
 import QRCode from 'qrcode'
 
@@ -348,7 +348,7 @@ export default {
             console.log('DEPOSIT (watching):', watching)
         },
     },
-    created: async function () {
+    created: function () {
         /* Initialize BITBOX. */
         this.initBitbox()
 
@@ -357,14 +357,14 @@ export default {
 
         /* Update balance. */
         this.updateBalance()
-
     },
     beforeDestroy() {
-        /* Wait 60 seconds, then close the real-time blockchain connection. */
-        // setTimeout(() => {
-            // this.closeConn()
-        // }, 60000)
-    }
+        /* Validate blockchain. */
+        if (this.blockchain) {
+            /* Stop blockchain. */
+            this.blockchain.stop()
+        }
+    },
 }
 </script>
 

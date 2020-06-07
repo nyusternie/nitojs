@@ -48,7 +48,7 @@ class Insomnia extends EventEmitter {
         super()
 
         /* Initialize watch addresses. */
-        this.watchList = {}
+        this.watchList = null
 
         /* Initialize interval monitor. */
         this.intervalMonitor = null
@@ -108,6 +108,22 @@ class Insomnia extends EventEmitter {
     }
 
     /**
+     * Stop
+     *
+     * Performs a cleanup of the instance.
+     */
+    stop() {
+        /* Clear interval monitor. */
+        clearInterval(this.intervalMonitor)
+
+        /* Destroy interval monitor. */
+        this.intervalMonitor = null
+
+        /* Destroy watch list. */
+        this.watchList = null
+    }
+
+    /**
      * Watch Address
      *
      * Watches an address and reports ANY on-chain activity.
@@ -123,6 +139,11 @@ class Insomnia extends EventEmitter {
         }
 
         /* Validate watch list. */
+        if (!this.watchList) {
+            this.watchList = {}
+        }
+
+        /* Validate watch list address. */
         if (!this.watchList[_address]) {
             /* Register new address. */
             this._registration(_address)
@@ -134,8 +155,8 @@ class Insomnia extends EventEmitter {
                     this._checkActivity,
                     ACTIVITY_INTERVAL
                 )
-                debug('A new interval monitor has been created.')
-                console.log('A new interval monitor has been created.')
+                debug('Insomnia created a new interval monitor.')
+                console.log('Insomnia created a new interval monitor.')
             }
         }
 
@@ -146,101 +167,108 @@ class Insomnia extends EventEmitter {
     /**
      * Check Activity
      *
+     * FIXME: Watch list may get destroyed during execution. Consider adding
+     *        a delay (with `isRunning` flag) to the `stop` method.
+     *
      * FIXME: Until we can batch our requests with BitDB, we should keep
      *        these requests slow, as there could be multiple addresses
      *        per activity check.
      */
     _checkActivity() {
-        // console.log('INSOMNIA CHECK ACTIVITY (watchlist):', this.watchList)
+        try {
+            console.log('INSOMNIA CHECK ACTIVITY (watchlist):', this.watchList)
 
-        /* Validate watch list. */
-        if (!this.watchList || Object.keys(this.watchList).length === 0) {
-            return
+            /* Validate watch list. */
+            if (!this.watchList || Object.keys(this.watchList).length === 0) {
+                return
+            }
+
+            Object.keys(this.watchList).forEach(async _address => {
+                /* Initialize updates list. */
+                const updates = []
+
+                /* Set query. */
+                const query = `address/utxos/${_address}`
+                // console.log('INSOMNIA CHECK ACTIVITY (query):', query)
+
+                /* Request query. */
+                const response = await _request(query)
+                // console.log('INSOMNIA CHECK ACTIVITY (response):', response)
+
+                /* Validate response. */
+                if (!response || !response.body) {
+                    return
+                }
+
+                /* Set data. */
+                const data = response.body
+
+                /* Validate data. */
+                if (!data || !data.success || !data.utxos) {
+                    return
+                }
+
+                /* Initialize UTXOs. */
+                const utxos = {}
+
+                /* Process all UTXOs. */
+                data.utxos.forEach(utxo => {
+                    /* Set id. */
+                    const id = `${utxo.tx_hash}:${utxo.tx_pos}`
+
+                    /* Add to UTXOs. */
+                    utxos[id] = utxo
+                })
+                // console.log('INSOMNIA CHECK ACTIVITY (UTXOs):', utxos)
+
+                /* Handle additions. */
+                Object.keys(utxos).forEach(_id => {
+                    /* Search for UTXO. */
+                    if (!this.watchList[_address].utxos[_id]) {
+                        console.log('INSOMNIA ADDING UTXO:', _id)
+
+                        /* Add UTXO to watch list. */
+                        this.watchList[_address].utxos[_id] = utxos[_id]
+
+                        /* Add address (for convenience). */
+                        utxos[_id].address = _address
+
+                        /* Add UTXO to updates. */
+                        updates.push(utxos[_id])
+                        // console.log('INSOMNIA ADDING UTXO (updates):', updates)
+                    }
+                })
+
+                /* Handle removals. */
+                Object.keys(this.watchList[_address].utxos).forEach(_id => {
+                    /* Search for UTXO. */
+                    if (!utxos[_id]) {
+                        console.log('INSOMNIA REMOVING UTXO', _id)
+
+                        /* Add address (for convenience). */
+                        this.watchList[_address].utxos[_id].address = _address
+
+                        /* Negate value (for convenience). */
+                        this.watchList[_address].utxos[_id].value *= -1
+
+                        /* Add UTXO to updates. */
+                        // FIXME: Do we need to clone to prevent deletion??
+                        updates.push(this.watchList[_address].utxos[_id])
+
+                        /* Remove UTXO from watch list. */
+                        delete this.watchList[_address].utxos[_id]
+                    }
+                })
+
+                /* Validate updates. */
+                if (updates.length > 0) {
+                    /* Emit update */
+                    this.emit('update', updates)
+                }
+            })
+        } catch (err) {
+            console.error(err)
         }
-
-        Object.keys(this.watchList).forEach(async _address => {
-            /* Initialize updates list. */
-            const updates = []
-
-            /* Set query. */
-            const query = `address/utxos/${_address}`
-            // console.log('INSOMNIA CHECK ACTIVITY (query):', query)
-
-            /* Request query. */
-            const response = await _request(query)
-            // console.log('INSOMNIA CHECK ACTIVITY (response):', response)
-
-            /* Validate response. */
-            if (!response || !response.body) {
-                return
-            }
-
-            /* Set data. */
-            const data = response.body
-
-            /* Validate data. */
-            if (!data || !data.success || !data.utxos) {
-                return
-            }
-
-            /* Initialize UTXOs. */
-            const utxos = {}
-
-            /* Process all UTXOs. */
-            data.utxos.forEach(utxo => {
-                /* Set id. */
-                const id = `${utxo.tx_hash}:${utxo.tx_pos}`
-
-                /* Add to UTXOs. */
-                utxos[id] = utxo
-            })
-            // console.log('INSOMNIA CHECK ACTIVITY (UTXOs):', utxos)
-
-            /* Handle additions. */
-            Object.keys(utxos).forEach(_id => {
-                /* Search for UTXO. */
-                if (!this.watchList[_address].utxos[_id]) {
-                    // console.log('INSOMNIA ADDING UTXO:', _id)
-
-                    /* Add UTXO to watch list. */
-                    this.watchList[_address].utxos[_id] = utxos[_id]
-
-                    /* Add address (for convenience). */
-                    utxos[_id].address = _address
-
-                    /* Add UTXO to updates. */
-                    updates.push(utxos[_id])
-                    // console.log('INSOMNIA ADDING UTXO (updates):', updates)
-                }
-            })
-
-            /* Handle removals. */
-            Object.keys(this.watchList[_address].utxos).forEach(_id => {
-                /* Search for UTXO. */
-                if (!utxos[_id]) {
-                    // console.log('INSOMNIA REMOVING UTXO', _id)
-
-                    /* Add address (for convenience). */
-                    this.watchList[_address].utxos[_id].address = _address
-
-                    /* Negate value (for convenience). */
-                    this.watchList[_address].utxos[_id].value *= -1
-
-                    /* Add UTXO to updates. */
-                    // FIXME: Do we need to clone to prevent deletion??
-                    updates.push(this.watchList[_address].utxos[_id])
-
-                    /* Remove UTXO from watch list. */
-                    delete this.watchList[_address].utxos[_id]
-                }
-            })
-
-            /* Validate updates. */
-            if (updates.length > 0) {
-                /* Emit update */
-                this.emit('update', updates)
-            }
-        })
     }
 
     /**
@@ -283,8 +311,8 @@ class Insomnia extends EventEmitter {
             createdAt: moment().unix(),
         }
 
-        debug(`Now watching [ ${_address} ]`)
-        console.log(`Now watching [ ${_address} ]`)
+        debug(`Insomnia is now watching [ ${_address} ]`)
+        console.log(`Insomnia is now watching [ ${_address} ]`)
     }
 
 }

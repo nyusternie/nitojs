@@ -35,32 +35,6 @@
                 </div>
             </div>
 
-            <!-- <div class="row mt-3">
-                <div class="col-md-5">
-                    <fg-input type="text"
-                        label="Address Label"
-                        :disabled="true"
-                        placeholder="loading..."
-                        :value="displayAddress"
-                    ></fg-input>
-                </div>
-
-                <div class="col-md-3">
-                    <fg-input type="text"
-                        label="Value"
-                        placeholder="loading..."
-                        v-model="output.satoshis"
-                    ></fg-input>
-                </div>
-
-                <div class="col-md-4">
-                    <fg-input type="text"
-                        label="Pct"
-                        placeholder="Email"
-                    ></fg-input>
-                </div>
-            </div> -->
-
             <div class="row">
                 <div class="col-md-9">
                     <fg-input type="text"
@@ -130,14 +104,47 @@ export default {
     },
     data() {
         return {
+            blockchain: null,
+
             output: {
                 address: null,
                 satoshis: null,
-                // destinations: null,
                 notes: null,
             },
-
         }
+    },
+    watch: {
+        getOutbox: function (_outbox) {
+            console.log('OUTBOX HAS CHANGED, HANDLE IT!!', _outbox)
+
+            const outbox = this.getOutbox
+            console.log('OUTBOX (outbox):', outbox)
+
+            /* Validate outbox. */
+            if (!outbox) {
+                /* Validate blockchain. */
+                if (this.blockchain) {
+                    /* Stop blockchain. */
+                    this.blockchain.stop()
+                }
+
+                return
+            }
+
+            Object.keys(outbox).forEach(async _coinId => {
+                /* Initialize coin. */
+                const coin = outbox[_coinId]
+
+                /* Set address. */
+                const address = coin.cashAddress
+                console.log('OUTBOX (address):', address)
+
+                /* Subscribe to address updates. */
+                const watching = this.blockchain
+                    .subscribe('address', address)
+                console.log('OUTBOX (watching):', watching)
+            })
+        },
     },
     computed: {
         ...mapGetters('purse', [
@@ -198,6 +205,24 @@ export default {
         addAddress() {
             // this.output.satoshis = 19395
             // this.output.satoshis = (19395 - 270)
+        },
+
+        /**
+         * Initialize Blockchain
+         */
+        initBlockchain() {
+            /* Initialize Nito blockchain. */
+            this.blockchain = new Nito.Blockchain()
+            console.log('NITO BLOCKCHAIN', this.blockchain)
+
+            /* Handle blockchain updates. */
+            this.blockchain.on('update', (_msg) => {
+                console.log('OUTBOX RECEIVED BLOCKCHAIN UPDATE (msg):', _msg)
+
+                /* Update coins. */
+                // FIXME: Why is this blocking the entire initial UI setup??
+                this.updateCoins()
+            })
         },
 
         /**
@@ -285,6 +310,15 @@ export default {
                             // timeout: 0, // 0: persistent | 5000: default
                         })
 
+                        /* Wait a bit then update coins. */
+                        // FIXME: How long should we wait?
+                        //        Probably better to update coins w/out on-chain query?
+                        setTimeout(() => {
+                            /* Update coins. */
+                            // FIXME: Why is this blocking the entire initial UI setup??
+                            this.updateCoins()
+                        }, 2000)
+
                     } else {
                         /* Set message. */
                         const message = `Oops! Something went wrong and your coin(s) were NOT sent.`
@@ -341,7 +375,18 @@ export default {
                 // timeout: 0, // 0: persistent | 5000: default
             })
         },
-    }
+    },
+    created: function () {
+        /* Initialize blockchain. */
+        this.initBlockchain()
+    },
+    beforeDestroy() {
+        /* Validate blockchain. */
+        if (this.blockchain) {
+            /* Stop blockchain. */
+            this.blockchain.stop()
+        }
+    },
 }
 </script>
 
