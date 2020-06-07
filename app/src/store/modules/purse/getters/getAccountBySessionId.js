@@ -5,7 +5,6 @@ const bitbox = new window.BITBOX()
  * Load (Derivation) Path
  */
 const loadPath = (_getters, _account, _sessionId, _chainId, _acctIdx) => {
-    console.log('LOAD PATH', _sessionId, _chainId, _acctIdx)
     /* Initialize HD node. */
     const hdNode = _getters.getHDNode
 
@@ -50,11 +49,11 @@ const getAccountBySessionId = (state, getters) => (_sessionId) => {
 
     /* Initialize sessions. */
     const sessions = getters.getSessions
-    console.log('GET ACCOUNT BY SESSION (sessions):', sessions)
+    // console.log('GET ACCOUNT BY SESSION (sessions):', sessions)
 
     /* Set session. */
     const session = sessions[_sessionId]
-    console.log('GET ACCOUNT BY SESSION (session):', session)
+    // console.log('GET ACCOUNT BY SESSION (session):', session)
 
     /* Loop through ALL (deposit) indexes (inclusive). */
     for (let i = 0; i <= session.accounts.deposit; i++) {
@@ -75,7 +74,7 @@ const getAccountBySessionId = (state, getters) => (_sessionId) => {
     for (let i = 0; i <= session.accounts.xchg; i++) {
         loadPath(getters, account, _sessionId, 7888, i)
     }
-    console.log('GET ACCOUNT BY SESSION (account):', account)
+    // console.log('GET ACCOUNT BY SESSION (account):', account)
 
     /* Return accounts. */
     return account

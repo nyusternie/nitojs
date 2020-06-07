@@ -43,15 +43,26 @@ class Blockchain extends EventEmitter {
         switch(_type) {
         case 'account':
             throw new Error('Account subscriptions are currently unavailable.')
-        case 'address':
+        case 'address': {
             /* Initialize Insomnia. */
-            // NOTE: Returns an instance of Insomnia (for event monitoring).
-            return new this.Insomnia().watchAddress(_params)
+            const insomnia = new this.Insomnia()
+
+            /* Relay emit. */
+            insomnia.on('update', (_msg) => this.emit('update', _msg))
+
+            /* Return response. */
+            return insomnia.watchAddress(_params)
+        }
         case 'block':
             throw new Error('Block subscriptions are currently unavailable.')
         default:
             throw new Error('Unknown subscription type.')
         }
+    }
+
+    /* Unsubscribe */
+    unsubscribe(_type, _params) {
+        debug('TODO: Unsubscribe', _type, _params)
     }
 
     /***************************************************************************
