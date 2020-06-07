@@ -110,6 +110,9 @@ export default {
             'getFormattedValue',
         ]),
 
+        /**
+         * Coins Table
+         */
         coinsTable() {
             /* Set table data. */
             const tableData = {
@@ -177,10 +180,16 @@ export default {
             return tableData
         },
 
+        /**
+         * Nito Cash
+         */
         nitoCash() {
             return true
         },
 
+        /**
+         * Extended Public Key
+         */
         xPubKey() {
             return false
         },

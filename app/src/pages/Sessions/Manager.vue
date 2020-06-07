@@ -117,13 +117,28 @@
 
         <hr v-if="sessionCoins.data" />
 
-        <card v-if="sessionCoins.data" class="card-plain" :title="sessionCoins.title" :subTitle="sessionCoins.subTitle">
-            <div class="table-full-width table-responsive">
-                <paper-table type="hover" :title="sessionCoins.title" :sub-title="sessionCoins.subTitle" :data="sessionCoins.data"
-                    :columns="sessionCoins.columns">
-                </paper-table>
+        <card class="card" :title="sessionCoins.title" :subTitle="sessionCoins.subTitle">
+            <div
+                class="row coinRow"
+                v-for="coin of sessionCoins.data"
+                :key="coin.id"
+                @click="showDetails(coin)"
+            >
+                <div class="col-1">
+                    {{coin.status}}
+                </div>
+
+                <div class="col-7">
+                    {{coin.label}}
+                </div>
+
+                <div class="col-4">
+                    {{getFormattedValue(coin.value).rounded}}
+                    {{getFormattedValue(coin.value).unit}}
+                </div>
             </div>
         </card>
+
     </main>
 </template>
 
@@ -134,51 +149,9 @@ import { mapActions, mapGetters } from 'vuex'
 /* Import modules. */
 import Nito from 'nitojs'
 
-import { PaperTable } from '@/components'
-
-const tableColumns = ['Id', 'Name', 'Salary', 'Country', 'City']
-
-const tableData = [
-    {
-        id: 1,
-        name: 'Dakota Rice',
-        salary: '$36.738',
-        country: 'Niger',
-        city: 'Oud-Turnhout'
-    },
-    {
-        id: 2,
-        name: 'Minerva Hooper',
-        salary: '$23,789',
-        country: 'Curaçao',
-        city: 'Sinaai-Waas'
-    },
-    {
-        id: 3,
-        name: 'Sage Rodriguez',
-        salary: '$56,142',
-        country: 'Netherlands',
-        city: 'Baileux'
-    },
-    {
-        id: 4,
-        name: 'Philip Chaney',
-        salary: '$38,735',
-        country: 'Korea, South',
-        city: 'Overland Park'
-    },
-    {
-        id: 5,
-        name: 'Doris Greene',
-        salary: '$63,542',
-        country: 'Malawi',
-        city: 'Feldkirchen in Kärnten'
-    }
-]
-
 export default {
     components: {
-        PaperTable,
+        //
     },
     data() {
         return {
@@ -213,15 +186,80 @@ export default {
             'getSessions',
         ]),
 
+        ...mapGetters('utils', [
+            'getFormattedValue',
+        ]),
+
+        /**
+         * Session Coins
+         */
         sessionCoins() {
-            return {
+            /* Set table data. */
+            const tableData = {
                 title: 'Session Coins',
                 subTitle: 'List of ALL coins added to this session.',
-                columns: [...tableColumns],
-                data: [...tableData],
+                columns: ['Label', 'Status', 'Value'],
+                data: []
             }
+
+            /* Validate sessions. */
+            if (this.getSessions) {
+                Object.keys(this.getSessions).forEach(sessionId => {
+                    /* Initialize sessions. */
+                    const sessions = this.getSessions
+                    console.log('COINS (sessions):', sessions)
+
+                    Object.keys(sessions).forEach(sessionIdx => {
+                        /* Initialize session. */
+                        const session = sessions[sessionIdx]
+
+                        /* Initialize coins. */
+                        const coins = session.coins
+                        // console.log('COINS (coins):', coins)
+
+                        Object.keys(coins).forEach(async coinId => {
+                            /* Initialize coin. */
+                            const coin = coins[coinId]
+                            // console.log('COINS (coin):', coin)
+
+                            /* Set id. */
+                            const id = `${coin.txid}:${coin.vout}`
+
+                            /* Set label. */
+                            const label = `${coin.txid.slice(0, 8)} ... ${coin.txid.slice(-8)} : ${coin.vout}`
+
+                            /* Set status. */
+                            // TODO: Will probably develop a rating scale??
+                            const status = coin.status === 'active' ? '✓' : 'ⅹ'
+
+                            /* Set value. */
+                            const value = coin.amountSatoshis
+
+                            /* Build coin data. */
+                            const coinData = {
+                                id,
+                                label,
+                                status,
+                                value,
+                            }
+
+                            /* Add coin data to table. */
+                            tableData.data.push(coinData)
+                        })
+
+                    })
+
+                })
+
+            }
+
+            // console.log('TABLE DATA:', tableData)
+            return tableData
         },
 
+        /**
+         * Log Display
+         */
         logDisplay() {
             /* Map note details. */
             const notes = this.session.logs.map((_note) => {
@@ -237,10 +275,16 @@ export default {
             return notes.reverse()
         },
 
+        /**
+         * Auto Start
+         */
         autoStart() {
             return false
         },
 
+        /**
+         * Auto Re-shuffle
+         */
         autoReshuffle() {
             return false
         },
@@ -301,6 +345,18 @@ export default {
                 type: 'info', // info | danger | warning
                 // timeout: 0, // 0: persistent | 5000: default
             })
+        },
+
+        /**
+         * Show Details
+         */
+        showDetails(_coin) {
+            /* Set transaction id. */
+            const txid = _coin.id.split(':')[0]
+
+            /* Open new window to explorer. */
+            // TODO: Create in-app transaction details.
+            window.open(`https://explorer.bitcoin.com/bch/tx/${txid}`)
         },
 
         /**
@@ -533,5 +589,13 @@ export default {
 .setting-tip {
     margin-left: 40px;
     font-size: 0.9em;
+}
+
+.coinRow {
+    padding: 10px;
+    cursor: pointer;
+}
+.coinRow:hover {
+    background-color: rgba(255, 0, 0, 0.2);
 }
 </style>
