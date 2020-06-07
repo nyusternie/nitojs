@@ -51,10 +51,10 @@ const _request = async (_query) => {
 class Insomnia {
     constructor() {
         /* Initialize watch addresses. */
-        this.watching = []
+        this.watchList = []
 
-        /* Initialize (interval) monitor. */
-        this.monitor = null
+        /* Initialize interval monitor. */
+        this.intervalMonitor = null
     }
 
     /**
@@ -117,8 +117,8 @@ class Insomnia {
             return null
         }
 
-        /* Add address to watching. */
-        this.watching.push({
+        /* Add address to watch list. */
+        this.watchList.push({
             address: _address,
             utxos: response.utxos,
         })
@@ -138,20 +138,23 @@ class Insomnia {
             throw new Error(`Address [ ${_address} ] is invalid!`)
         }
 
-        /* Validate watching. */
-        if (!this.watching.includes(_address)) {
+        /* Validate watch list. */
+        if (!this.watchList.includes(_address)) {
             /* Register new address. */
             this._registration(_address)
 
-            /* Validate monitor. */
-            if (!this.monitor) {
-                this.monitor = setInterval(this.checkActivity, ACTIVITY_INTERVAL)
-                debug('A new monitor has been created.')
+            /* Validate interval monitor. */
+            if (!this.intervalMonitor) {
+                this.intervalMonitor = setInterval(
+                    _checkActivity,
+                    ACTIVITY_INTERVAL
+                )
+                debug('A new interval monitor has been created.')
             }
 
             debug(`Now watching [ ${_address} ]`)
             /* Return current watching list. */
-            return this.watching
+            return this.watchList
         }
     }
 

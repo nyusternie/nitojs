@@ -2,11 +2,11 @@ const debug = require('debug')('nitojs:wallet')
 const EventEmitter = require('events').EventEmitter
 
 /**
- * Wallet Class
+ * Purse Class
  *
- * Provides a complete (mutli-currency) wallet.
+ * A coin management system that can be used for creating custom wallets.
  */
-class Wallet extends EventEmitter {
+class Purse extends EventEmitter {
     constructor() {
         super()
     }
@@ -32,4 +32,4 @@ class Wallet extends EventEmitter {
 }
 
 /* Export module. */
-module.exports = Wallet
+module.exports = Purse

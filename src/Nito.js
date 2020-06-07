@@ -98,6 +98,16 @@ class Nito extends EventEmitter {
         return require('./Privacy')
     }
 
+    /* Purse */
+    get Purse() {
+        return require('./Purse')
+    }
+
+    /* (Static) Purse */
+    static get Purse() {
+        return require('./Purse')
+    }
+
     /* Transaction */
     get Transaction() {
         return require('./Transaction')
@@ -106,16 +116,6 @@ class Nito extends EventEmitter {
     /* (Static) Transaction */
     static get Transaction() {
         return require('./Transaction')
-    }
-
-    /* Wallet */
-    get Wallet() {
-        return require('./Wallet')
-    }
-
-    /* (Static) Wallet */
-    static get Wallet() {
-        return require('./Wallet')
     }
 
 }

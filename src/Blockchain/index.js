@@ -37,10 +37,21 @@ class Blockchain extends EventEmitter {
         return this.Query.getBlockHeight()
     }
 
-    /* Watch Address */
-    // NOTE: Returns an instance of Insomnia (for event monitoring).
-    watchAddress(_address) {
-        return this.Insomnia.watchAddress(_address)
+    /* Subscribe */
+    subscribe(_type, _params) {
+        /* Handle subscription type. */
+        switch(_type) {
+        case 'account':
+            throw new Error('Account subscriptions are currently unavailable.')
+        case 'address':
+            /* Initialize Insomnia. */
+            // NOTE: Returns an instance of Insomnia (for event monitoring).
+            return new this.Insomnia().watchAddress(_params)
+        case 'block':
+            throw new Error('Block subscriptions are currently unavailable.')
+        default:
+            throw new Error('Unknown subscription type.')
+        }
     }
 
     /***************************************************************************
