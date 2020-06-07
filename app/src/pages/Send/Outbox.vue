@@ -191,7 +191,6 @@ export default {
     methods: {
         ...mapActions('purse', [
             'rebuildPurse',
-            'sendCrypto',
             'updateCoins',
             'updateOutbox',
         ]),
@@ -261,12 +260,17 @@ export default {
                     /* Set validation flag. */
                     const doValidation = false
 
-                    const results = await Nito.sendCoin(coin, outs, doValidation)
-                    console.log('SEND RESULTS', results)
+                    const results = await Nito.Transaction
+                        .sendCoin(coin, outs, doValidation)
+                        .catch(err => console.error(err))
+                    console.log('OUTBOX SEND COIN (results):', results)
 
                     if (results) {
                         /* Update outbox. */
                         this.updateOutbox(null)
+
+                        /* Clear output address. */
+                        this.output.address = null
 
                         /* Set message. */
                         const message = `Your coins have been sent successfully!`
