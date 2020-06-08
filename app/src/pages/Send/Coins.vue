@@ -274,18 +274,13 @@ export default {
 
         },
 
+        /**
+         * Add All Coins
+         */
         addAllCoins() {
-            /* Set message. */
-            const message = `Oops! This feature is not available yet, but our team is working on it!`
-
-            /* Display notification. */
-            this.$notify({
-                message,
-                icon: 'ti-alert', // ti-info-alt | ti-alert
-                verticalAlign: 'top',
-                horizontalAlign: 'right',
-                type: 'danger', // info | danger
-                // timeout: 0, // 0: persistent | 5000: default
+            /* Loop through listed coins. */
+            this.coinsTable.data.forEach(coin => {
+                this.addToOutbox(coin)
             })
         },
 

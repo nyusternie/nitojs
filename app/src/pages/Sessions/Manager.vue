@@ -115,9 +115,14 @@
             </div>
         </card>
 
-        <hr v-if="sessionCoins.data" />
+        <hr v-if="sessionCoins.data.length" />
 
-        <card class="card" :title="sessionCoins.title" :subTitle="sessionCoins.subTitle">
+        <card
+            v-if="sessionCoins.data.length"
+            class="card"
+            :title="sessionCoins.title"
+            :subTitle="sessionCoins.subTitle"
+        >
             <div
                 class="row coinRow"
                 v-for="coin of sessionCoins.data"

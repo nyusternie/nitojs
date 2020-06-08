@@ -96,6 +96,19 @@ export default {
             // coins: null,
         }
     },
+    watch: {
+        depositAddress: function (_address) {
+            console.log('DEPOSIT ADDRESS HAS CHANGED, REGISTER IT!!', _address)
+
+            /* Subscribe to address updates. */
+            const watching = this.blockchain
+                .subscribe('address', this.depositAddress)
+            console.log('DEPOSIT (watching):', watching)
+
+            /* Update the balance. */
+            this.updateBalance()
+        },
+    },
     computed: {
         ...mapGetters('blockchain', [
             'getConn',
@@ -336,16 +349,6 @@ export default {
                 /* Bugsnag alert. */
                 throw new Error(err)
             }
-        },
-    },
-    watch: {
-        depositAddress: function (_address) {
-            console.log('DEPOSIT ADDRESS HAS CHANGED, REGISTER IT!!', _address)
-
-            /* Subscribe to address updates. */
-            const watching = this.blockchain
-                .subscribe('address', this.depositAddress)
-            console.log('DEPOSIT (watching):', watching)
         },
     },
     created: function () {
