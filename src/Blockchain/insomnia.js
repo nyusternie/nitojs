@@ -176,7 +176,7 @@ class Insomnia extends EventEmitter {
      */
     _checkActivity() {
         try {
-            console.log('INSOMNIA CHECK ACTIVITY (watchlist):', this.watchList)
+            // console.log('INSOMNIA CHECK ACTIVITY (watchlist):', this.watchList)
 
             /* Validate watch list. */
             if (!this.watchList || Object.keys(this.watchList).length === 0) {

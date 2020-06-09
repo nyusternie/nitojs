@@ -1,6 +1,6 @@
 {
   "name": "nitojs",
-  "version": "20.6.6",
+  "version": "20.6.9",
   "license": "MIT",
   "author": "Shomari Prince <s.prince@bchplease.org>",
   "description": "Nito JavaScript Library and Software Development Kit (SDK).",
@@ -21,6 +21,7 @@
     "orbit-db": "0.23.1",
     "protobufjs": "6.9.0",
     "qrcode-terminal": "0.12.0",
+    "superagent": "5.2.2",
     "ws": "7.2.5"
   },
   "devDependencies": {

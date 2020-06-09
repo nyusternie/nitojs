@@ -162,6 +162,7 @@ export default {
         return {
             bitbox: null,
             nito: null,
+            privacy: null,
             shuffleManager: null,
             isShuffling: false,
 
@@ -503,9 +504,13 @@ export default {
                     this.session.logs.push(_notice)
                 })
 
+                /* Initialize Nito privacy. */
+                this.privacy = new Nito.Privacy()
+                console.log('NITO PRIVACY', this.privacy)
+
                 /* Start shuffle manager. */
-                this.shuffleManager = this.nito
-                    .getShuffleManager(coin, this.change, this.target, false)
+                this.shuffleManager = this.privacy
+                    .shuffleManager(coin, this.change, this.target, false)
 
                 /* Set message. */
                 const message = `You have STARTED shuffling your coins.`

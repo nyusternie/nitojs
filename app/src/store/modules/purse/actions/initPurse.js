@@ -44,7 +44,7 @@ const initPurse = ({ state, commit }) => {
     commit('setMeta', meta)
 
     /* Set Nito Cash index. */
-    commit('nitoCashIdx', 0)
+    commit('setNitoCashIdx', 0)
 
     /* Return success. */
     return true

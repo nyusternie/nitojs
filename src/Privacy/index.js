@@ -26,9 +26,17 @@ class Privacy extends EventEmitter {
     //     return require('./getTiers')()
     // }
 
-    /* Get Shuffle Manager */
-    get getShuffleManager() {
-        return require('./getShuffleManager')
+    /* Shuffle Manager */
+    shuffleManager(_coin, _changeFunc, _targetFunc, _disableAutoShuffle = false) {
+        /* Import shuffle manager. */
+        const ShuffleManager = require('./ShuffleManager')
+
+        /* Initialize shuffle manager. */
+        const shuffleManager = new ShuffleManager(_coin, _changeFunc, _targetFunc, _disableAutoShuffle)
+        console.log('SHUFFLE MANAGER', shuffleManager)
+
+        /* Return shuffle manager. */
+        return shuffleManager
     }
 
 }

@@ -95,32 +95,32 @@ class Blockchain extends EventEmitter {
 
     /* Insomnia */
     get Insomnia() {
-        return require('./insomnia')
+        return require('./Insomnia')
     }
 
     /* (Static) Insomnia */
     static get Insomnia() {
-        return require('./insomnia')
+        return require('./Insomnia')
     }
 
     /* BitDB Query */
     get Query() {
-        return require('./query')
+        return require('./Query')
     }
 
     /* (Static) BitDB Query */
     static get Query() {
-        return require('./query')
+        return require('./Query')
     }
 
     /* BitDB Socket */
     get Socket() {
-        return require('./socket')
+        return require('./Socket')
     }
 
     /* Utilities */
     static get Utils() {
-        return require('./utils')
+        return require('./Utils')
     }
 
 }

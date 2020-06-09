@@ -8,7 +8,7 @@ We've provided a Software Development Kit (SDK) and Integrated Development Envir
 
 1. Vue.js application (storefront)
 2. React Native application (wallet)
-3. Electron application (??)
+3. Electron application (cashnotify)
 
 ## Build Setup
 
