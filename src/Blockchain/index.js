@@ -40,6 +40,12 @@ class Blockchain extends EventEmitter {
         return this.Query.getBlockHeight()
     }
 
+    /* Is Spent */
+    // NOTE: Returns a promise.
+    static isSpent(_txid, _vout) {
+        return this.Query.isSpent(_txid, _vout)
+    }
+
     /* Stop */
     stop() {
         /* Validate Insomnia. */

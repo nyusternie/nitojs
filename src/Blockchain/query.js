@@ -144,11 +144,12 @@ const dbQuery = async (_params) => {
 
     /* Validate response. */
     if (response && response.body) {
+        debug('DB QUERY (response.body):', response.body)
+        // console.log('DB QUERY (response.body):',
+        //     util.inspect(response.body, false, null, true))
+
         /* Return body. */
         return response.body
-    } else if (response && response.text) {
-        /* Return text. */
-        return response.text
     } else {
         return null
     }
@@ -215,7 +216,82 @@ class Query {
         debug('Request balance for:', _address)
     }
 
+    /**
+     * Is Spent
+     *
+     * Searches for a specific transaction output and determines if it
+     * has already been spent.
+     */
+    static async isSpent(_txid, _vout) {
+        /* Validate transaction id. */
+        if (!_txid) {
+            throw new Error('A transaction id is required!')
+        }
+
+        /* Validate output index. */
+        if (_vout === null || typeof _vout === 'undefined') {
+            throw new Error('An output index is required!')
+        }
+
+        /* Initialize query. */
+        const query = {
+            v: 3,
+            q: { find: { 'in.e.h': _txid } },
+            r: { f: '[ .[] | .in ]' }
+        }
+        debug('isSpent (query):', query)
+
+        /* Request query. */
+        const response = await dbQuery(query)
+
+        /* Validate query. */
+        if (response && response.u && response.c) {
+            /* Initialize found. */
+            // NOTE: `find` returns `undefined` when NOT found.
+            let found = null
+
+            /* Search unconfirmed. */
+            response.u.forEach((items) => {
+                /* Validate found. */
+                if (found === null || typeof found === 'undefined') {
+                    found = items.find(item => {
+                        return (item.e.h === _txid && item.e.i === _vout)
+                    })
+                }
+            })
+
+            /* Search confirmed. */
+            response.c.forEach((items) => {
+                /* Validate found. */
+                if (found === null || typeof found === 'undefined') {
+                    found = items.find(item => {
+                        return (item.e.h === _txid && item.e.i === _vout)
+                    })
+                }
+            })
+
+            /* Validate found. */
+            if (found === null || typeof found === 'undefined') {
+                debug('Found NO spent UTXO.')
+                /* Return false. */
+                return false
+            } else {
+                debug('FOUND a spent UTXO', found)
+                /* Return true. */
+                return true
+            }
+        } else {
+            /* Return false. */
+            return false
+        }
+    }
+
 }
+
+// ;(async () => {
+//     console.log(await Query
+//         .isSpent('40fdfed94dd78b12659b400bb7616fee60535d23e557c6bf38652caed26575f3', 9))
+// })()
 
 /* Export module. */
 module.exports = Query
