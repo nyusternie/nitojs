@@ -390,7 +390,7 @@ export default {
          */
         change() {
             /* Set chain. */
-            const chain = 1 // change account
+            const chain = 1 // change address
 
             /* Set sessions. */
             const sessions = this.getSessions
@@ -412,15 +412,15 @@ export default {
             const hdNode = this.getHDNode
 
             /* Initialize child node. */
-            const childNode = hdNode.derivePath(path)
+            const childNode = hdNode.deriveChild(path)
 
-            /* Set (change) account. */
-            const account = this.bitbox.HDNode.toCashAddress(childNode)
-            console.log('MANAGER (change account)', account)
+            /* Set (change) address. */
+            const address = Nito.Address.toCashAddress(childNode)
+            console.log('MANAGER (change address)', address)
 
             return {
-                cashAddress: account,
-                legacyAddress: this.bitbox.Address.toLegacyAddress(account),
+                cashAddress: address,
+                legacyAddress: Nito.Address.toLegacyAddress(address),
             }
         },
 
@@ -429,15 +429,11 @@ export default {
          */
         target() {
             /* Set chain. */
-            const chain = 7867 // Nito Cash account
+            const chain = 7867 // Nito Cash address
 
             /* Set sessions. */
             const sessions = this.getSessions
             // console.log('TARGET (sessions):', sessions)
-
-            /* Set accounts. */
-            // const accounts = sessions[this.getActiveSessionId].accounts
-            // console.log('TARGET (accounts):', accounts)
 
             /* Set derivation path. */
             const path = this.getDerivationPath(0, chain, this.getNitoCashIdx)
@@ -447,15 +443,15 @@ export default {
             const hdNode = this.getHDNode
 
             /* Initialize child node. */
-            const childNode = hdNode.derivePath(path)
+            const childNode = hdNode.deriveChild(path)
 
-            /* Set (receiving) account. */
-            const account = this.bitbox.HDNode.toCashAddress(childNode)
-            console.log('MANAGER (nito cash account)', account)
+            /* Set (receiving) address. */
+            const address = Nito.Address.toCashAddress(childNode)
+            console.log('MANAGER (nito cash address)', address)
 
             return {
-                cashAddress: account,
-                legacyAddress: this.bitbox.Address.toLegacyAddress(account),
+                cashAddress: address,
+                legacyAddress: Nito.Address.toLegacyAddress(address),
             }
         },
 

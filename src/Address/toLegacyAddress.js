@@ -1,4 +1,5 @@
 /* Import modules. */
+const bch = require('bitcore-lib-cash')
 const bchaddr = require('bchaddrjs')
 const debug = require('debug')('nitojs:address:tolegacyaddr')
 
@@ -8,7 +9,19 @@ const debug = require('debug')('nitojs:address:tolegacyaddr')
  * Converts a Bitcoin Cash address to its legacy address format.
  */
 const toLegacyAddress = function (_address) {
-    debug(`Converting [ ${_address} ] to its legacy address format.`)
+    /* Validate address. */
+    if (typeof(_address) === 'object') {
+        /* Validate public key. */
+        if (_address.publicKey) {
+            /* Set public key. */
+            const pubkey = bch.PublicKey(_address.publicKey.toString())
+
+            /* Convert to cash address. */
+            _address = bch.Address(pubkey).toString()
+        }
+    } else {
+        debug(`Converting [ ${_address} ] to its legacy address format.`)
+    }
 
     /* Validate address. */
     if (!_address || !bchaddr.isValidAddress(_address)) {

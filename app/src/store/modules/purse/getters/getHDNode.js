@@ -1,6 +1,3 @@
-/* Initialize BITBOX. */
-const bitbox = new window.BITBOX()
-
 /**
  * Get HD Node
  */
@@ -9,13 +6,8 @@ const getHDNode = (state, getters) => {
     const mnemonic = getters.getMnemonic
     // console.log('MNEMONIC', mnemonic)
 
-    /* Initialize seed buffer. */
-    const seedBuffer = bitbox.Mnemonic.toSeed(mnemonic)
-    // console.log('SEED BUFFER', seedBuffer)
-
     /* Initialize HD node. */
-    const hdNode = bitbox.HDNode.fromSeed(seedBuffer)
-    // console.log('HD NODE', hdNode)
+    const hdNode = mnemonic.toHDPrivateKey()
 
     /* Return HD node. */
     return hdNode

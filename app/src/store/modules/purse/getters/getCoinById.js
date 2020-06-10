@@ -1,6 +1,3 @@
-/* Initialize BITBOX. */
-const bitbox = new window.BITBOX()
-
 /**
  * Get Coin by Id
  *

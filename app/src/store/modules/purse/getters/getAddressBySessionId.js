@@ -32,7 +32,7 @@ const getAddressBySessionId = (state, getters) => (_sessionId) => {
     const hdNode = getters.getHDNode
 
     /* Initialize child node. */
-    const childNode = hdNode.derivePath(path)
+    const childNode = hdNode.deriveChild(path)
 
     /* Set (receiving) addresss. */
     const addresss = bitbox.HDNode.toCashAddress(childNode)

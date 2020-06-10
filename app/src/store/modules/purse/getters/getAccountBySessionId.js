@@ -1,5 +1,5 @@
-/* Initialize BITBOX. */
-const bitbox = new window.BITBOX()
+/* Import modules. */
+const Nito = require('nitojs')
 
 /**
  * Load (Derivation) Path
@@ -16,10 +16,10 @@ const loadPath = (_getters, _account, _sessionId, _chainId, _acctIdx) => {
     const childNode = hdNode.derivePath(path)
 
     /* Set WIF. */
-    const wif = bitbox.HDNode.toWIF(childNode)
+    const wif = childNode.privateKey.toWIF()
 
     /* Set account (address). */
-    const address = bitbox.HDNode.toCashAddress(childNode)
+    const address = Nito.Address.toCashAddress(childNode)
     // console.log('GET ACCOUNTS (address)', address)
 
     /* Add to all receiving (pool). */

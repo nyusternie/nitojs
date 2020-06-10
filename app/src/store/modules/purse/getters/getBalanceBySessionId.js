@@ -1,5 +1,5 @@
-/* Initialize BITBOX. */
-const bitbox = new window.BITBOX()
+/* Import modules. */
+const Nito = require('nitojs')
 
 /**
 * Get Balance by Session Id
@@ -77,8 +77,7 @@ const getBalanceBySessionId = (
         }
 
         /* Retrieve market price. */
-        const marketPrice =
-            await rootGetters['blockchain/getTicker'](_currency)
+        const marketPrice = await Nito.Markets.getTicker(_currency)
         console.info(`Market price (${_currency})`, marketPrice) // eslint-disable-line no-console
 
         /* Validate market price. */
