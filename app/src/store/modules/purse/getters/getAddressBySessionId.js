@@ -1,5 +1,5 @@
-/* Initialize BITBOX. */
-const bitbox = new window.BITBOX()
+/* Import modules. */
+const Nito = require('nitojs')
 
 /**
  * Get Address by Session Id
@@ -35,7 +35,7 @@ const getAddressBySessionId = (state, getters) => (_sessionId) => {
     const childNode = hdNode.deriveChild(path)
 
     /* Set (receiving) addresss. */
-    const addresss = bitbox.HDNode.toCashAddress(childNode)
+    const addresss = Nito.Address.toCashAddress(childNode)
     // console.log('GET ADDRESS BY SESSION (receiving addresss)', addresss)
 
     /* Return addresss. */

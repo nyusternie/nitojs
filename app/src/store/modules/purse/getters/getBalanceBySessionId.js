@@ -17,25 +17,21 @@ const getBalanceBySessionId = (
         return null
     }
 
-    /* Initialize search accounts. */
-    const searchAccts = []
-
-    /* Initialize counted accounts. */
-    // FIXME: We are seeing duplicate counts.
-    const countedAccts = []
+    /* Initialize (search) addresses. */
+    const addresses = []
 
     const coins = getters.getCoinsBySessionId(_sessionId)
     // console.log('GET BALANCE BY SESSION (coins)', coins)
 
-    /* Add all active receiving account (searchAccts) to pool. */
+    /* Add all active receiving account (addresses) to pool. */
     Object.keys(coins).forEach(txid => {
         /* Add to all receiving (pool). */
-        searchAccts.push(coins[txid].cashAddress)
+        addresses.push(coins[txid].cashAddress)
     })
-    // console.log('GET BALANCE BY SESSION (all accounts)', searchAccts)
+    // console.log('GET BALANCE BY SESSION (all accounts)', addresses)
 
     /* Validate search accounts. */
-    if (!searchAccts && searchAccts.length) {
+    if (!addresses && addresses.length) {
         return 0
     }
 
@@ -43,38 +39,18 @@ const getBalanceBySessionId = (
         /* Initialize balance. */
         let balance = 0
 
-        /* Retrieve (ALL) account(s) details. */
-        const addrDetails = await bitbox.Address.details(searchAccts)
-        // console.log('ALL ACCOUNTS DETAILS', JSON.stringify(addrDetails, null, 4))
+        /* Loop through all address. */
+        addresses.forEach(async address => {
+            /* Retrieve (address) balances. */
+            const balances = await Nito.Address.balance(address)
 
-        /* Validate (use of) unconfirmed transactions. */
-        if (rootGetters['getFlags'] && rootGetters['getFlags'].unconfirmed) {
-            addrDetails.forEach((address) => {
-                /* Handlle duplicate counts. */
-                // NOTE: Is this the best way to handle this??
-                if (countedAccts.includes(address.cashAddress)) {
-                    return
-                } else {
-                    countedAccts.push(address.cashAddress)
-                }
-
-                /* Both confirmed and unconfirmed. */
-                balance += (address.balanceSat + address.unconfirmedBalanceSat)
-            })
-        } else {
-            addrDetails.forEach((address) => {
-                /* Handlle duplicate counts. */
-                // NOTE: Is this the best way to handle this??
-                if (countedAccts.includes(address.cashAddress)) {
-                    return
-                } else {
-                    countedAccts.push(address.cashAddress)
-                }
-
-                /* Confirmed ONLY. */
-                balance += address.balanceSat
-            })
-        }
+            /* Check unconfirmed flag. */
+            if (rootGetters['getFlags'].unconfirmed) {
+                balance += balances.confirmed + balances.unconfirmed
+            } else {
+                balance += balances.confirmed
+            }
+        })
 
         /* Retrieve market price. */
         const marketPrice = await Nito.Markets.getTicker(_currency)

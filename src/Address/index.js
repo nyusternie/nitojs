@@ -16,6 +16,11 @@ class Address extends EventEmitter {
         debug('Address class has been initialized.')
     }
 
+    /* Balance */
+    static balance(_address) {
+        return require('./balance')(_address)
+    }
+
     /* To Cash Address */
     static toCashAddress(_address) {
         return require('./toCashAddress')(_address)

@@ -43,4 +43,16 @@ describe('Address', () => {
         expect(utxos.scriptPubKey).toEqual('76a914c92bf3cec7e19f344a4730a541b655b3d2efb1f688ac')
     })
 
+    test('it should retrieve both confirmed and unconfirmed address balances', async () => {
+        /* Initialize legacy address. */
+        const address = 'bitcoincash:qqm43s4w69pn4uuf0yzfnqeqrw6lajvdaqkpjwkwgw'
+
+        /* Request address balances. */
+        const balances = await Nito.Address.balance(address)
+
+        /* Evaluate test. */
+        expect(balances.confirmed).toBeGreaterThanOrEqual(0)
+        expect(balances.unconfirmed).toBeGreaterThanOrEqual(0)
+    })
+
 })

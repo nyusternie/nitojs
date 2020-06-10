@@ -59,6 +59,37 @@ class Insomnia extends EventEmitter {
     }
 
     /**
+     * Balance
+     *
+     * Returns balances (confirmed and unconfirmed) for address.
+     */
+    static async balance(_address) {
+        /* Validate address. */
+        if (!_address) {
+            return null
+        }
+
+        /* Set target. */
+        const target = ENDPOINT + 'address/balance/' + _address
+
+        /* Call remote API. */
+        const response = await superagent
+            .get(target)
+            .catch(err => console.error(err)) // eslint-disable-line no-console
+
+        /* Validate response. */
+        if (response && response.body && response.body.success) {
+            /* Return response. */
+            return {
+                confirmed: response.body.confirmed,
+                unconfirmed: response.body.unconfirmed,
+            }
+        } else {
+            return null
+        }
+    }
+
+    /**
      * Broadcast
      *
      * Submits a raw transaction to the network.
