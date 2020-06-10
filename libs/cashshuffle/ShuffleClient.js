@@ -1,8 +1,8 @@
 /* Import core modules. */
 const _ = require('lodash')
-const axios = require('axios')
 const debug = require('debug')('cashshuffle:client')
 const EventEmitter = require('events').EventEmitter
+const superagent = require('superagent')
 const URL = require('url')
 
 const ShuffleRound = require('./ShuffleRound.js')
@@ -511,7 +511,7 @@ class ShuffleClient extends EventEmitter {
         let serverStats
 
         try {
-            serverStats = await axios
+            serverStats = await superagent
                 .get(newServerUri || this.serverStatsUri)
         } catch (nope) {
             // If we fail to reach the server, try again with
@@ -528,7 +528,8 @@ class ShuffleClient extends EventEmitter {
         /* Validate server statistics. */
         if (serverStats) {
             /* Update server statistics. */
-            Object.assign(this.serverStats, serverStats.data)
+            // Object.assign(this.serverStats, serverStats.data) // axios
+            Object.assign(this.serverStats, serverStats.body)
 
             /* Reset server back-off. */
             this.serverBackoffMs = 0
