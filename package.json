@@ -11,6 +11,7 @@
     "test:unit": "jest"
   },
   "dependencies": {
+    "bchaddrjs": "0.4.8",
     "big-integer": "1.6.48",
     "bitcore-lib-cash": "8.19.0",
     "ipfs": "0.43.0",

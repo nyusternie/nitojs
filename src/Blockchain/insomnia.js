@@ -113,11 +113,11 @@ class Insomnia extends EventEmitter {
     }
 
     /**
-     * Get Unspent Transaction Outputs (UTXOs)
+     * Unspent Transaction Outputs (UTXOs)
      *
-     * Returns all available "coins".
+     * Returns all available unspent coins.
      */
-    static async getUnspent(_address) {
+    static async utxos(_address) {
         /* Set query. */
         const query = `address/utxos/${_address}`
 
@@ -126,9 +126,9 @@ class Insomnia extends EventEmitter {
         // console.log('INSOMNIA UNSPENT (response):', response)
 
         /* Validate query. */
-        if (response) {
+        if (response && response.body && response.body.success) {
             /* Return result. */
-            return response
+            return response.body.utxos
         } else {
             /* Return null. */
             return null

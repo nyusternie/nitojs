@@ -72,6 +72,12 @@ class Nito extends EventEmitter {
         return 0
     }
 
+    /* Address */
+    // NOTE: This class is read-only and ONLY supports static methods.
+    static get Address() {
+        return require('./Address')
+    }
+
     /* Blockchain */
     get Blockchain() {
         return require('./Blockchain')
