@@ -14,11 +14,24 @@ class Transaction extends EventEmitter {
         debug('Transaction class has been initialized.')
     }
 
+    /*Get Raw Transaction */
+    // NOTE: Returns a promise.
+    static getRawTransaction(_txid, _verbose) {
+        return require('./getRawTransaction')(_txid, _verbose)
+    }
+
     /* Send Coin */
+    // NOTE: Returns a promise.
     static sendCoin(_coin, _outs, _doValidation) {
-        // return await require('./sendCoin')(_coin, _outs, _doValidation)
         return require('./sendCoin')(_coin, _outs, _doValidation)
     }
+
+    /* Send Raw Transaction */
+    // NOTE: Returns a promise.
+    static sendRawTransaction(_rawTx) {
+        return require('./sendRawTransaction')(_rawTx)
+    }
+
 }
 
 /* Export module. */

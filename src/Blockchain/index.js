@@ -21,12 +21,6 @@ class Blockchain extends EventEmitter {
         debug(`Blockchain class has been initialized for [ ${_symbol} ] on [ ${_network} ]`)
     }
 
-    /* Broadcast Transaction */
-    // NOTE: Returns a promise.
-    static broadcast(_rawTx) {
-        return this.Insomnia.broadcast(_rawTx)
-    }
-
     /* Estimate Fee */
     static estimateFee(_symbol) {
         debug('Reqeusting fee estimate for:', _symbol)

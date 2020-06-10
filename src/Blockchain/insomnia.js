@@ -85,6 +85,34 @@ class Insomnia extends EventEmitter {
     }
 
     /**
+     * Transaction
+     *
+     * Returns raw (or optionally formatted) transaction data.
+     */
+    static async transaction(_txid, _verbose = null) {
+        /* Validate transaction id. */
+        if (!_txid) {
+            return null
+        }
+
+        /* Set target. */
+        const target = ENDPOINT + 'tx/data/' + _txid + (_verbose ? '?verbose=true' : '')
+
+        /* Call remote API. */
+        const response = await superagent
+            .get(target)
+            .catch(err => console.error(err)) // eslint-disable-line no-console
+
+        /* Validate response. */
+        if (response && response.body && response.body.success) {
+            /* Return response. */
+            return response.body.tx
+        } else {
+            return null
+        }
+    }
+
+    /**
      * Get Unspent Transaction Outputs (UTXOs)
      *
      * Returns all available "coins".

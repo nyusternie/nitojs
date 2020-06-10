@@ -3,6 +3,7 @@ const _ = require('lodash')
 const bch = require('bitcore-lib-cash')
 const debug = require('debug')('cashshuffle:round')
 const EventEmitter = require('events').EventEmitter
+const Nito = require('nitojs')
 
 /* Import local modules. */
 const cryptoUtils = require('./cryptoUtils.js')
@@ -485,6 +486,13 @@ class ShuffleRound extends EventEmitter {
      */
     processWsError (someError) {
         console.error('Oh goodness, something is amiss!', someError) // eslint-disable-line no-console
+    }
+
+    /**
+     * Write Debug File
+     */
+    writeDebugFile () {
+        this.comms.writeDebugFile(true)
     }
 
     /***************************************************************************
@@ -1275,11 +1283,7 @@ class ShuffleRound extends EventEmitter {
             if (!signer.isMe) {
                 // debug(`Applying signature to input${sigVerifyResults.inputIndex}!`);
 
-                // let signedInput
-
                 try {
-                    // signedInput = this.shuffleTx.tx.inputs[sigVerifyResults.inputIndex]
-                    //     .addSignature(this.shuffleTx.tx, sigVerifyResults.signature)
                     this.shuffleTx.tx.inputs[sigVerifyResults.inputIndex]
                         .addSignature(this.shuffleTx.tx, sigVerifyResults.signature)
                 } catch (nope) {
@@ -1312,17 +1316,27 @@ class ShuffleRound extends EventEmitter {
 
             let submissionResults
 
+            // debug('Broadcasting raw tx:',
+            //     this.shuffleTx.tx.toBuffer('hex').toString('hex'))
             debug('Broadcasting raw tx:',
+                this.shuffleTx.tx.toBuffer('hex'))
+            console.log('Broadcasting raw tx:',
+                this.shuffleTx.tx.toBuffer('hex'))
+            console.log('\n\nBroadcasting raw tx (toString):',
                 this.shuffleTx.tx.toBuffer('hex').toString('hex'))
 
             try {
-                submissionResults = await this
-                    .util
-                    .coin
-                    .bitbox
-                    .RawTransactions
-                    .sendRawTransaction(
-                        this.shuffleTx.tx.toBuffer('hex').toString('hex'))
+                // submissionResults = await this
+                //     .util
+                //     .coin
+                //     .bitbox
+                //     .RawTransactions
+                //     .sendRawTransaction(
+                //         this.shuffleTx.tx.toBuffer('hex').toString('hex'))
+
+                /* Send raw transaction. */
+                submissionResults = await Nito.Transaction
+                    .sendRawTransaction(this.shuffleTx.tx.toBuffer('hex'))
             } catch (nope) {
                 console.error('Error broadcasting transaction to the network:', nope) // eslint-disable-line no-console
 
@@ -1398,13 +1412,6 @@ class ShuffleRound extends EventEmitter {
 
         /* Write debug file. */
         this.writeDebugFile()
-    }
-
-    /**
-     * Write Debug File
-     */
-    writeDebugFile () {
-        this.comms.writeDebugFile(true)
     }
 
     /**
