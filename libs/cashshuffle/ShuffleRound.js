@@ -1320,20 +1320,12 @@ class ShuffleRound extends EventEmitter {
             //     this.shuffleTx.tx.toBuffer('hex').toString('hex'))
             debug('Broadcasting raw tx:',
                 this.shuffleTx.tx.toBuffer('hex'))
-            console.log('Broadcasting raw tx:',
+            console.log('\n\nBroadcasting raw tx:',
                 this.shuffleTx.tx.toBuffer('hex'))
             console.log('\n\nBroadcasting raw tx (toString):',
                 this.shuffleTx.tx.toBuffer('hex').toString('hex'))
 
             try {
-                // submissionResults = await this
-                //     .util
-                //     .coin
-                //     .bitbox
-                //     .RawTransactions
-                //     .sendRawTransaction(
-                //         this.shuffleTx.tx.toBuffer('hex').toString('hex'))
-
                 /* Send raw transaction. */
                 submissionResults = await Nito.Transaction
                     .sendRawTransaction(this.shuffleTx.tx.toBuffer('hex'))

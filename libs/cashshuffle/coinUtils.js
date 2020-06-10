@@ -2,20 +2,7 @@
 const _ = require('lodash')
 const bch = require('bitcore-lib-cash')
 const debug = require('debug')('cashshuffle:utils')
-
-/* Initialize BITBOX. */
-let bitbox = null
-
-/* Set BITBOX. */
-if (typeof window !== 'undefined') {
-    bitbox = new window.BITBOX() // eslint-disable-line no-undef
-} else {
-    /* Import BITBOX. */
-    const BITBOX = require('bitbox-sdk').BITBOX
-
-    bitbox = new BITBOX()
-}
-
+const Nito = require('nitojs')
 
 const PublicKey = bch.PublicKey
 const PrivateKey = bch.PrivateKey
@@ -41,7 +28,7 @@ const getKeypairFromWif = function (somePrivateKeyWif) {
     debug('Get keypair from WIF (cashAddress):', coin.cashAddress)
 
     /* Set legacy address. */
-    coin.legacyAddress = bitbox.Address.toLegacyAddress(coin.cashAddress)
+    coin.legacyAddress = Nito.Address.toLegacyAddress(coin.cashAddress)
     debug('Get keypair from WIF (legacyAddress):', coin.legacyAddress)
 
     /* Return coin. */
@@ -68,7 +55,7 @@ const getCoinDetails = async function (someTxid, someVout) {
     let txData
 
     try {
-        txData = await bitbox.RawTransactions
+        txData = await Nito.Transaction
             .getRawTransaction(someTxid, true)
     } catch (nope) {
         console.error('Something went wrong fetching transaction data') // eslint-disable-line no-console
@@ -89,8 +76,8 @@ const getCoinDetails = async function (someTxid, someVout) {
     let utxoData
 
     try {
-        utxoData = await bitbox.Address
-            .utxo(coinInQuestion.scriptPubKey.addresses[0])
+        utxoData = await Nito.Address
+            .utxo(coinInQuestion.scriptPubKey.addresses[0], true)
     } catch (nope) {
         console.error('Something went wrong fetching utxo data:', nope.message) // eslint-disable-line no-console
         throw new Error('BAD_COIN')
@@ -106,9 +93,9 @@ const getCoinDetails = async function (someTxid, someVout) {
     const coinData = {
         txid: someTxid,
         vout: Number(someVout),
-        legacyAddress: bitbox.Address
+        legacyAddress: Nito.Address
             .toLegacyAddress(coinInQuestion.scriptPubKey.addresses[0]),
-        cashAddress: bitbox.Address
+        cashAddress: Nito.Address
             .toCashAddress(coinInQuestion.scriptPubKey.addresses[0]),
         script: coinInQuestion.scriptPubKey.hex,
         spent: !outputInQuestion
@@ -238,7 +225,7 @@ const prepareShuffleInsAndOuts = async function (options) {
         Object.assign(onePlayer.coin, {
             vout: Number(onePlayer.coin.vout),
             pubKey: pubKey,
-            legacyAddress: bitbox.Address.toLegacyAddress(pubKey.toAddress().toString()),
+            legacyAddress: Nito.Address.toLegacyAddress(pubKey.toAddress().toString()),
             cashAddress: pubKey.toAddress().toString()
         })
         // debug('One player:', onePlayer)
@@ -256,8 +243,8 @@ const prepareShuffleInsAndOuts = async function (options) {
     let utxoData
 
     try {
-        utxoData = await bitbox.Address
-            .utxo(addressesToFetch)
+        utxoData = await Nito.Address
+            .utxo(addressesToFetch, true)
     } catch (nope) {
         console.error('Something went wrong fetching utxo data:', nope) // eslint-disable-line no-console
         throw nope
@@ -358,7 +345,7 @@ const prepareShuffleInsAndOuts = async function (options) {
         allOutputs.push({
             vout: n,
             legacyAddress: finalOutputAddresses[n],
-            cashAddress: bitbox.Address.toCashAddress(finalOutputAddresses[n]),
+            cashAddress: Nito.Address.toCashAddress(finalOutputAddresses[n]),
             amountSatoshis: shuffleAmountSatoshis
         })
     }
@@ -382,7 +369,7 @@ const prepareShuffleInsAndOuts = async function (options) {
                 player: onePlayer,
                 verificationKey: onePlayer.verificationKey,
                 legacyAddress: onePlayer.change.legacyAddress,
-                cashAddress: bitbox.Address.toCashAddress(onePlayer.change.legacyAddress),
+                cashAddress: Nito.Address.toCashAddress(onePlayer.change.legacyAddress),
                 amountSatoshis: playerInput.amountSatoshis - (shuffleAmountSatoshis + feeSatoshis)
             })
         }
@@ -559,7 +546,6 @@ const buildShuffleTransaction = async function (options) {
 
 /* Export module. */
 module.exports = {
-    bitbox,
     getKeypairFromWif,
     checkSufficientFunds,
     getCoinDetails,

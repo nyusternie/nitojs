@@ -8,8 +8,8 @@ const debug = require('debug')('nitojs:address:tocashaddr')
  *
  * Encodes an address to a public key hash.
  */
-const toPubKeyScript = function (_address) {
-    debug(`Converting [ ${_address} ] to its pubKeyHash.`)
+const toPubKeyHash = function (_address) {
+    debug(`Converting [ ${_address} ] to its public key (script) hash.`)
 
     /* Validate address. */
     if (!_address || !bchaddr.isValidAddress(_address)) {
@@ -27,4 +27,4 @@ const toPubKeyScript = function (_address) {
 }
 
 /* Export module. */
-module.exports = toPubKeyScript
+module.exports = toPubKeyHash
