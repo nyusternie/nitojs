@@ -336,9 +336,6 @@ export default {
         },
     },
     created: function () {
-        /* Initialize BITBOX. */
-        this.initBitbox()
-
         /* Initialize blockchain. */
         this.initBlockchain()
 

@@ -552,9 +552,6 @@ export default {
         },
     },
     created: function () {
-        /* Initialize BITBOX. */
-        this.initBitbox()
-
         /* Set session status. */
         this.session.status = 'INACTIVE'
 

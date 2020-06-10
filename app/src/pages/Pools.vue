@@ -188,9 +188,6 @@ export default {
         },
     },
     created: async function () {
-        /* Initialize BITBOX. */
-        this.initBitbox()
-
         /* Update USD. */
         await this.updatePrice()
 

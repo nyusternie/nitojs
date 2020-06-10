@@ -27,7 +27,7 @@ const mnemonic = (_entropy, _language) => {
     const mnemonic = Mnemonic(_entropy, language)
 
     /* Return mnemonic word phrase. */
-    return mnemonic.toString()
+    return mnemonic
 }
 
 /* Export module. */

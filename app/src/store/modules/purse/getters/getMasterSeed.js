@@ -2,8 +2,12 @@
  * Get Master Seed
  */
 const getMasterSeed = (state) => {
-    /* Return master seed. */
-    return state.masterSeed
+    /* Legacy wallet format compatiblity. */
+    if (state.masterSeed.length === 64) { // DEPRECATED on 2020.6.10
+        return Buffer.from(state.masterSeed, 'hex')
+    } else {
+        return Buffer.from(state.masterSeed)
+    }
 }
 
 /* Export module. */
