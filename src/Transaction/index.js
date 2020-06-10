@@ -28,8 +28,8 @@ class Transaction extends EventEmitter {
 
     /* Send Coin */
     // NOTE: Returns a promise.
-    static sendCoin(_coin, _outs, _doValidation) {
-        return require('./sendCoin')(_coin, _outs, _doValidation)
+    static sendCoin(_coin, _receivers, _autoFee) {
+        return require('./sendCoin')(_coin, _receivers, _autoFee)
     }
 
     /* Send Raw Transaction */

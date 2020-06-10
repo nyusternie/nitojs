@@ -1,1 +1,1 @@
-module.exports = require('./src/Nito.js')
+module.exports = require('./src')

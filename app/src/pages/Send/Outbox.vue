@@ -275,18 +275,19 @@ export default {
                     /* Add satoshis. */
                     coin.satoshis = coin.amountSatoshis
 
-                    const outs = [
+                    /* Build receivers. */
+                    const receivers = [
                         {
-                            receiver: this.output.address,
-                            satoshis: coin.satoshis - 270,
+                            address: this.output.address,
+                            satoshis: coin.satoshis,
                         }
                     ]
 
-                    /* Set validation flag. */
-                    const doValidation = false
+                    /* Set auto fee (flag). */
+                    const autoFee = true
 
                     const results = await Nito.Transaction
-                        .sendCoin(coin, outs, doValidation)
+                        .sendCoin(coin, receivers, autoFee)
                         .catch(err => console.error(err))
                     console.log('OUTBOX SEND COIN (results):', results)
 
