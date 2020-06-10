@@ -10,18 +10,34 @@ const debug = require('debug')('nitojs:address:tocashaddr')
  */
 const toCashAddress = function (_address) {
     /* Validate address. */
+    if (!_address) {
+        throw new Error('Invalid address.')
+    }
+
+    /* Validate object. */
     if (typeof(_address) === 'object') {
         /* Validate public key. */
         if (_address.publicKey) {
-            /* Set public key. */
+            /* Initialize public key. */
             const pubkey = bch.PublicKey(_address.publicKey.toString())
 
             /* Convert to cash address. */
             _address = bch.Address(pubkey).toString()
         }
-    } else {
-        debug(`Converting [ ${_address} ] to its cash address format.`)
     }
+
+    /* Validate public script hash. */
+    if (_address.length === 50) {
+        if (_address.slice(0, 4) === '76a9' && _address.slice(-4) === '88ac') {
+            /* Initialize public script hash. */
+            const scriptPubKey = bch.Script(_address)
+
+            /* Convert to cash address. */
+            _address = bch.Address(scriptPubKey).toString()
+        }
+    }
+
+    debug(`Converting [ ${_address} ] to its cash address format.`)
 
     /* Validate address. */
     if (!_address || !bchaddr.isValidAddress(_address)) {

@@ -14,6 +14,12 @@ class Transaction extends EventEmitter {
         debug('Transaction class has been initialized.')
     }
 
+    /* Details */
+    // NOTE: Returns a promise.
+    static details(_txid) {
+        return require('./getRawTransaction')(_txid, true)
+    }
+
     /* Get Raw Transaction */
     // NOTE: Returns a promise.
     static getRawTransaction(_txid, _verbose) {

@@ -21,6 +21,11 @@ class Address extends EventEmitter {
         return require('./balance')(_address)
     }
 
+    /* Details */
+    static details(_address) {
+        return require('./details')(_address)
+    }
+
     /* To Cash Address */
     static toCashAddress(_address) {
         return require('./toCashAddress')(_address)

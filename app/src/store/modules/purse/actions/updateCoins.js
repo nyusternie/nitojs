@@ -1,9 +1,6 @@
 /* Import components. */
 const Nito = require('nitojs')
 
-/* Initialize BITBOX. */
-const bitbox = new window.BITBOX()
-
 /**
  * Update Status
  */
@@ -21,11 +18,7 @@ const updateStatus = (_coins, dispatch) => {
         const isSpent = await Nito.Blockchain.Query.isSpent(txid, vout)
         console.log('UPDATE STATUS (isSpent)', isSpent, txid, vout)
 
-        // const txDetails = await bitbox.Transaction.details(txid)
-        // console.log('UPDATE STATUS (txDetails)', txDetails)
-
         /* Validate spent. */
-        // if (txDetails.vout[vout].spentTxId !== null) {
         if (isSpent) {
             // FIXME: FOR DEVELOPMENT PURPOSES ONLY
             const sessionId = 0
@@ -91,51 +84,72 @@ const updateCoins = async ({ dispatch, getters }) => {
     }
 
     /* Build search array. */
-    const acctSearch = account.map(obj => {
+    const addresses = account.map(obj => {
         return obj.address
     })
-    // console.log('UPDATE COINS (acctSearch)', acctSearch)
+    // console.log('UPDATE COINS (addresses)', addresses)
 
-    /* Retrieve address details. */
-    const searchDetails = await bitbox.Address.details(acctSearch)
-    // console.log('UPDATE COINS (address details)', searchDetails)
+    /* Initialize search details. */
+    const searchDetails = []
 
+    /* Compile addresses. */
+    addresses.forEach(async address => {
+        /* Retrieve address details. */
+        const details = await Nito.Address.details(address)
+        // console.log('UPDATE COINS (address details)', details)
+
+        /* Validate details. */
+        if (!details) {
+            return
+        }
+
+        /* Map transactions. */
+        const transactions = details.map(detail => {
+            return detail.tx_hash
+        })
+
+        searchDetails.push({
+            transactions,
+            legacyAddress: Nito.Address.toLegacyAddress(address),
+            cashAddress: address,
+
+        })
+    })
+
+    /* Process search details. */
     searchDetails.forEach(addrDetails => {
         const searchAddr = addrDetails.cashAddress
         // console.log('UPDATE COINS (searchAddr)', searchAddr)
 
-        // const balanceSat = addrDetails.balanceSat
-        // console.log('UPDATE COINS (addrDetails.balanceSat)', balanceSat)
-
         const txs = addrDetails.transactions
         // console.log('UPDATE COINS (addrDetails.txs)', txs)
 
-        txs.forEach(async tx => {
+        txs.forEach(async txid => {
             /* Retrieve transaction details. */
-            const txDetails = await bitbox.Transaction.details(tx)
+            const txDetails = await Nito.Transaction.details(txid)
             // console.log('UPDATE COINS (tx details)', txDetails)
 
             /* Set outputs. */
-            const outputs = txDetails.vout
+            const outputs = txDetails.outputs
 
             /* Handle all transaction outputs. */
             outputs.forEach((output, index) => {
                 // console.log('UPDATE COINS (output)', output)
 
                 /* Set satoshi (amount). */
-                const satoshis = parseInt(output.value * 100000000)
+                const satoshis = output.satoshis
                 // console.log('UPDATE COINS (satoshis)', satoshis)
 
                 /* Set script public key. */
-                const scriptPubKey = output.scriptPubKey
+                const scriptPubKey = output.script
 
                 /* Validate script. */
-                if (!scriptPubKey || !scriptPubKey.cashAddrs) {
+                if (!scriptPubKey) {
                     return
                 }
 
-                /* Set addresses. */
-                const cashAddrs = scriptPubKey.cashAddrs
+                /* Set cash addresses. */
+                const cashAddrs = Nito.Address.toCashAddress(scriptPubKey)
                 // console.log('UPDATE COINS (cashAddrs)', cashAddrs)
 
                 /* Initialize WIF. */
@@ -171,14 +185,14 @@ const updateCoins = async ({ dispatch, getters }) => {
                      */
                     const coin = {
                         status: 'active',
-                        txid: txDetails.txid,
+                        txid,
                         vout: index,
                         satoshis,
                         amountSatoshis: satoshis, // DEPRECATED
                         wif,
                         privateKeyWif: wif, // DEPRECATED
                         cashAddress: searchAddr,
-                        legacyAddress: bitbox.Address.toLegacyAddress(searchAddr),
+                        legacyAddress: Nito.Address.toLegacyAddress(searchAddr),
                     }
                     // console.log('UPDATE COINS (coin)', coin)
 

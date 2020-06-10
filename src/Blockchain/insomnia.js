@@ -116,6 +116,62 @@ class Insomnia extends EventEmitter {
     }
 
     /**
+     * History
+     *
+     * Returns address history.
+     */
+    static async history(_address) {
+        /* Validate address. */
+        if (!_address) {
+            return null
+        }
+
+        /* Set target. */
+        const target = ENDPOINT + 'address/history/' + _address
+
+        /* Call remote API. */
+        const response = await superagent
+            .get(target)
+            .catch(err => console.error(err)) // eslint-disable-line no-console
+
+        /* Validate response. */
+        if (response && response.body && response.body.success) {
+            /* Return response. */
+            return response.body.txs
+        } else {
+            return null
+        }
+    }
+
+    /**
+     * Memory Pool
+     *
+     * Returns address memory pool.
+     */
+    static async mempool(_address) {
+        /* Validate address. */
+        if (!_address) {
+            return null
+        }
+
+        /* Set target. */
+        const target = ENDPOINT + 'address/mempool/' + _address
+
+        /* Call remote API. */
+        const response = await superagent
+            .get(target)
+            .catch(err => console.error(err)) // eslint-disable-line no-console
+
+        /* Validate response. */
+        if (response && response.body && response.body.success) {
+            /* Return response. */
+            return response.body.txs
+        } else {
+            return null
+        }
+    }
+
+    /**
      * Transaction
      *
      * Returns raw (or optionally formatted) transaction data.

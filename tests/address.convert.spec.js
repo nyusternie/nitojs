@@ -24,6 +24,17 @@ describe('Address', () => {
         expect(address).toEqual('bitcoincash:qryjhu7wclse7dz2guc22sdk2kea9ma37c6q0gzsrp')
     })
 
+    test('it should convert a public script hash to a cash address', async () => {
+        /* Initialize public key (script) hash. */
+        const scriptPubKey = '76a9148fb0c71c80a56e583f22567a34f0135fdc7c2a9488ac'
+
+        /* Convert to cash address. */
+        const cashAddress = Nito.Address.toCashAddress(scriptPubKey)
+
+        /* Evaluate test. */
+        expect(cashAddress).toEqual('bitcoincash:qz8mp3cuszjkukplyft85d8szd0aclp2jslnhezsze')
+    })
+
     test('it should retrieve UTXOs and provide address data', async () => {
         /* Initialize address. */
         const address = 'bitcoincash:qryjhu7wclse7dz2guc22sdk2kea9ma37c6q0gzsrp'
