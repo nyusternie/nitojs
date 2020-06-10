@@ -1,5 +1,5 @@
 /* Import modules. */
-const Nito = require('../index')
+const Nito = require('..')
 
 describe('Status evaluation', () => {
     test('it should report the current server status', () => {

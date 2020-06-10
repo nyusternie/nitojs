@@ -1,5 +1,5 @@
 /* Import modules. */
-const Nito = require('../index')
+const Nito = require('..')
 
 ;(async () => {
     const txid = '5cd9fdf3cbed66305daf736b0c2ad1e01773b9a64b1d2d35cb4a0256c6b20092'

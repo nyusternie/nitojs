@@ -30,7 +30,7 @@ const utxo = async (_address, _compatibility = false) => {
         })
 
         /* Import Address class. */
-        const Address = require('./index')
+        const Address = require('.')
 
         /* Map additional address properties. */
         utxos = {

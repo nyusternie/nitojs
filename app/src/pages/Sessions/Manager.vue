@@ -160,7 +160,6 @@ export default {
     },
     data() {
         return {
-            bitbox: null,
             nito: null,
             privacy: null,
             shuffleManager: null,
@@ -300,21 +299,6 @@ export default {
         ...mapActions('purse', [
             'addSession',
         ]),
-
-        /**
-         * Initialize BITBOX
-         */
-        initBitbox() {
-            console.info('Initializing BITBOX..')
-
-            try {
-                /* Initialize BITBOX. */
-                // this.bitbox = new BITBOX()
-                this.bitbox = new window.BITBOX()
-            } catch (err) {
-                console.error(err)
-            }
-        },
 
         /**
          * Create Session

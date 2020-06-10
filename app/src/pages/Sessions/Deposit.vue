@@ -87,7 +87,6 @@ import QRCode from 'qrcode'
 export default {
     data() {
         return {
-            bitbox: null,
             blockchain: null,
 
             // sessionId: null,
@@ -252,21 +251,6 @@ export default {
         ...mapActions('purse', [
             'updateCoins',
         ]),
-
-        /**
-         * Initialize BITBOX
-         */
-        initBitbox() {
-            console.info('Initializing BITBOX..')
-
-            try {
-                /* Initialize BITBOX. */
-                // this.bitbox = new BITBOX()
-                this.bitbox = new window.BITBOX()
-            } catch (err) {
-                console.error(err)
-            }
-        },
 
         /**
          * Initialize Blockchain

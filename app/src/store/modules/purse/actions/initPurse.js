@@ -1,8 +1,6 @@
 /* Import modules. */
 const moment = require('moment')
-
-/* Initialize BITBOX. */
-const bitbox = new window.BITBOX()
+const Nito = require('nitojs')
 
 /**
  * Initialize Purse
@@ -29,7 +27,7 @@ const initPurse = ({ state, commit }) => {
      * We MUST properly evaluate ANY and ALL weaknesses with
      * using randomBytes via a ("mobile") web browser.
      */
-    const masterSeed = bitbox.Crypto.randomBytes(32).toString('hex')
+    const masterSeed = Nito.Crypto.randomBytes(32)
 
     /* Set new master (private) key. */
     commit('setMasterSeed', masterSeed)

@@ -88,6 +88,11 @@ class Nito extends EventEmitter {
         return require('./Blockchain')
     }
 
+    /* (Static) Crypto */
+    static get Crypto() {
+        return require('./Crypto')
+    }
+
     /* Markets */
     // NOTE: This class is read-only and ONLY supports static methods.
     static get Markets() {
@@ -122,6 +127,11 @@ class Nito extends EventEmitter {
     /* (Static) Transaction */
     static get Transaction() {
         return require('./Transaction')
+    }
+
+    /* (Static) Utilities */
+    static get Utils() {
+        return require('./Utils')
     }
 
 }

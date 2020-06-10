@@ -1,5 +1,5 @@
 /* Import modules. */
-const Nito = require('../index')
+const Nito = require('..')
 
 describe('Connection evaluation', () => {
     test('it should report the current connection status', () => {

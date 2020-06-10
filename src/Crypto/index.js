@@ -12,11 +12,14 @@ class Utils extends EventEmitter {
         super()
     }
 
-    /**
-     * Estimate Fee
-     */
-    estimateFee() {
-        debug('Estimating fee...')
+    /* Mnemonic */
+    static mnemonic(_entropy, _language) {
+        return require('./mnemonic')(_entropy, _language)
+    }
+
+    /* Random Bytes */
+    static randomBytes(_size) {
+        return require('./randomBytes')(_size)
     }
 
 }

@@ -118,11 +118,6 @@ class Blockchain extends EventEmitter {
         return require('./Socket')
     }
 
-    /* Utilities */
-    static get Utils() {
-        return require('./Utils')
-    }
-
 }
 
 /* Export module. */

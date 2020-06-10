@@ -51,6 +51,7 @@
 
 <script>
 /* Import modules. */
+import Nito from 'nitojs'
 import numeral from 'numeral'
 import superagent from 'superagent'
 
@@ -63,7 +64,6 @@ export default {
     },
     data() {
         return {
-            bitbox: null,
             usd: 0,
 
             pools: {
@@ -166,25 +166,10 @@ export default {
          */
         formatPrice: function (_satoshis) {
             /* Set value. */
-            const value = (_satoshis / 10000000000) * this.usd
+            const value = (_satoshis / 100000000) * this.usd
 
             /* Return formatted value. */
             return numeral(value).format('$0,0.00[00]')
-        },
-
-        /**
-         * Initialize BITBOX
-         */
-        initBitbox() {
-            console.info('Initializing BITBOX..')
-
-            try {
-                /* Initialize BITBOX. */
-                // this.bitbox = new BITBOX()
-                this.bitbox = new window.BITBOX()
-            } catch (err) {
-                console.error(err)
-            }
         },
 
         /**
@@ -193,8 +178,7 @@ export default {
         async updatePrice() {
             try {
                 /* Request current price. */
-                const current = await this.bitbox.Price.current('usd')
-                // console.log('CURRENT PRICE', current)
+                const current = await Nito.Markets.getTicker('usd')
 
                 /* Set current price. */
                 this.usd = current

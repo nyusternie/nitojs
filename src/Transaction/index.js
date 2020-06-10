@@ -14,7 +14,7 @@ class Transaction extends EventEmitter {
         debug('Transaction class has been initialized.')
     }
 
-    /*Get Raw Transaction */
+    /* Get Raw Transaction */
     // NOTE: Returns a promise.
     static getRawTransaction(_txid, _verbose) {
         return require('./getRawTransaction')(_txid, _verbose)

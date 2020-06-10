@@ -1,5 +1,5 @@
 /* Import modules. */
-const Nito = require('../index')
+const Nito = require('..')
 
 describe('Class:Sub-class', () => {
     test('it should <do something useful>', async () => {

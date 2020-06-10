@@ -1,5 +1,5 @@
-/* Initialize BITBOX. */
-const bitbox = new window.BITBOX()
+/* Import modules. */
+const Nito = require('nitojs')
 
 /**
  * Get Mnemonic
@@ -33,14 +33,14 @@ const getMnemonic = (state, getters) => {
     /* Handle language selection. */
     switch(locale) {
     case 'en-US':
-        language = bitbox.Mnemonic.wordLists()['english']
+        language = 'English'
         break
     default:
-        language = bitbox.Mnemonic.wordLists()['english']
+        language = 'English'
     }
 
     /* Initialize mnemonic. */
-    const mnemonic = bitbox.Mnemonic.fromEntropy(masterSeed, language)
+    const mnemonic = Nito.Crypto.mnemonic(masterSeed, language)
     // console.log('MNEMONIC', mnemonic)
 
     /* Return mnemonic. */
