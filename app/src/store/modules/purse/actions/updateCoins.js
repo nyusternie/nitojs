@@ -16,7 +16,7 @@ const updateStatus = (_coins, dispatch) => {
 
         /* Query spent status. */
         const isSpent = await Nito.Blockchain.Query.isSpent(txid, vout)
-        console.log('UPDATE STATUS (isSpent)', isSpent, txid, vout)
+        // console.log('UPDATE STATUS (isSpent)', isSpent, txid, vout)
 
         /* Validate spent. */
         if (isSpent) {
@@ -60,7 +60,7 @@ const updateCoins = async ({ dispatch, getters }) => {
 
     /* Retrieve sessions. */
     const sessions = getters.getSessions
-    console.log('UPDATE COINS (sessions)', sessions)
+    // console.log('UPDATE COINS (sessions)', sessions)
 
     /* Validate (active) session. */
     if (!sessions || !sessions[sessionId].coins) {
@@ -69,14 +69,14 @@ const updateCoins = async ({ dispatch, getters }) => {
 
     /* Set coins. */
     const coins = sessions[sessionId].coins
-    console.log('UPDATE COINS (coins)', coins)
+    // console.log('UPDATE COINS (coins)', coins)
 
     /* Update status. */
     updateStatus(coins, dispatch)
 
     /* Retrieve account. */
     const account = getters.getAccountBySessionId(sessionId)
-    console.log('UPDATE COINS (account)', account)
+    // console.log('UPDATE COINS (account)', account)
 
     /* Validate account. */
     if (account === null) {
@@ -93,7 +93,10 @@ const updateCoins = async ({ dispatch, getters }) => {
     const searchDetails = []
 
     /* Compile addresses. */
-    addresses.forEach(async address => {
+    // NOTE: We do not use for-each with callback here because of async.
+    for (let i = 0; i < addresses.length; i++) {
+        const address = addresses[i]
+
         /* Retrieve address details. */
         const details = await Nito.Address.details(address)
         // console.log('UPDATE COINS (address details)', details)
@@ -107,6 +110,7 @@ const updateCoins = async ({ dispatch, getters }) => {
         const transactions = details.map(detail => {
             return detail.tx_hash
         })
+        // console.log('UPDATE COINS (transactions)', transactions)
 
         searchDetails.push({
             transactions,
@@ -114,7 +118,8 @@ const updateCoins = async ({ dispatch, getters }) => {
             cashAddress: address,
 
         })
-    })
+        // console.log('UPDATE COINS (searchDetails)', searchDetails)
+    }
 
     /* Process search details. */
     searchDetails.forEach(addrDetails => {

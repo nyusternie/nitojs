@@ -13,7 +13,7 @@ const loadPath = (_getters, _account, _sessionId, _chainId, _acctIdx) => {
     // console.log('GET ACCOUNTS (path)', path)
 
     /* Initialize child node. */
-    const childNode = hdNode.derivePath(path)
+    const childNode = hdNode.deriveChild(path)
 
     /* Set WIF. */
     const wif = childNode.privateKey.toWIF()
