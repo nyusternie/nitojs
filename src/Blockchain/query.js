@@ -7,7 +7,7 @@ const util = require('util')
 // https://github.com/fountainhead-cash/bitplaylist/blob/master/bitdb/README.md
 
 /* Set endpoint. */
-const ENDPOINT = 'https://bitdb.fountainhead.cash/q/'
+const ENDPOINT = 'https://bitdb.bch.sx/q/'
 // const ENDPOINT = 'https://bitdb.devops.cash/q/'
 
 /* Set fountainhead API key. */
@@ -231,6 +231,9 @@ class Query {
         /* Validate output index. */
         if (_vout === null || typeof _vout === 'undefined') {
             throw new Error('An output index is required!')
+        } else {
+            /* Convert to integer. */
+            _vout = parseInt(_vout)
         }
 
         /* Initialize query. */
@@ -290,7 +293,7 @@ class Query {
 
 // ;(async () => {
 //     console.log(await Query
-//         .isSpent('40fdfed94dd78b12659b400bb7616fee60535d23e557c6bf38652caed26575f3', 9))
+//         .isSpent('5cd9fdf3cbed66305daf736b0c2ad1e01773b9a64b1d2d35cb4a0256c6b20092', 0))
 // })()
 
 /* Export module. */

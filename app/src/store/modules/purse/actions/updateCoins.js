@@ -1,3 +1,6 @@
+/* Import components. */
+const Nito = require('nitojs')
+
 /* Initialize BITBOX. */
 const bitbox = new window.BITBOX()
 
@@ -8,33 +11,42 @@ const updateStatus = (_coins, dispatch) => {
     Object.keys(_coins).forEach(async coinId => {
         /* Set txid. */
         const txid = coinId.split(':')[0]
-        console.log('UPDATE STATUS (txid)', txid)
+        // console.log('UPDATE STATUS (txid)', txid)
 
         /* Set vout. */
         const vout = coinId.split(':')[1]
-        console.log('UPDATE STATUS (vout)', vout)
+        // console.log('UPDATE STATUS (vout)', vout)
 
-        const txDetails = await bitbox.Transaction.details(txid)
-        console.log('UPDATE STATUS (txDetails)', txDetails)
+        /* Query spent status. */
+        const isSpent = await Nito.Blockchain.Query.isSpent(txid, vout)
+        console.log('UPDATE STATUS (isSpent)', isSpent, txid, vout)
 
-        if (txDetails.vout[vout].spentTxId !== null) {
-            console.log('UPDATE STATUS AS SPENT FOR:', coinId)
+        // const txDetails = await bitbox.Transaction.details(txid)
+        // console.log('UPDATE STATUS (txDetails)', txDetails)
 
-            // FOR DEVELOPMENT ONLY
+        /* Validate spent. */
+        // if (txDetails.vout[vout].spentTxId !== null) {
+        if (isSpent) {
+            // FIXME: FOR DEVELOPMENT PURPOSES ONLY
             const sessionId = 0
 
+            /* Set coin. */
             const coin = _coins[coinId]
 
-            coin.status = 'disabled'
+            /* Validate status. */
+            if (coin && coin.status !== 'disabled') {
+                /* Set status. */
+                coin.status = 'disabled'
 
-            /* Create coin package. */
-            const pkg = {
-                sessionId,
-                coin,
+                /* Create coin package. */
+                const pkg = {
+                    sessionId,
+                    coin,
+                }
+
+                /* Request coin update. */
+                dispatch('updateCoin', pkg)
             }
-
-            /* Add new coin. */
-            dispatch('updateCoin', pkg)
         }
     })
 
