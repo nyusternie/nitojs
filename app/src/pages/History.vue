@@ -73,7 +73,7 @@ export default {
 
                     const session = this.getSessions[sessionId]
 
-                    const id = parseInt(sessionId) + 1
+                    const id = Number(sessionId) + 1
 
                     const name = 'Session #1'
 

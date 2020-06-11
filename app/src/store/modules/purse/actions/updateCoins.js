@@ -193,9 +193,7 @@ const updateCoins = async ({ dispatch, getters }) => {
                         txid,
                         vout: index,
                         satoshis,
-                        amountSatoshis: satoshis, // DEPRECATED
                         wif,
-                        privateKeyWif: wif, // DEPRECATED
                         cashAddress: searchAddr,
                         legacyAddress: Nito.Address.toLegacyAddress(searchAddr),
                     }

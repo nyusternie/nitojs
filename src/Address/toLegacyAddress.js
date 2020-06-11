@@ -28,7 +28,9 @@ const toLegacyAddress = function (_address) {
 
     /* Validate public script hash. */
     if (_address.length === 50) {
-        if (_address.slice(0, 4) === '76a9' && _address.slice(-4) === '88ac') {
+        /* Detect public script hash. */
+        // FIXME: Is this a valid matching query??
+        if (_address.slice(0, 6) === '76a914' && _address.slice(-4) === '88ac') {
             /* Initialize public script hash. */
             const scriptPubKey = bch.Script(_address)
 

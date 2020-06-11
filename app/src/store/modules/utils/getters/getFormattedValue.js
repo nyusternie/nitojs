@@ -14,7 +14,7 @@ const getFormattedValue = () => (_satoshis, _marketPrice, _currency) => {
 
     let unit = 'sats'
 
-    let fiat = ((_satoshis / 100000000) * (_marketPrice / 100.0))
+    let fiat = ((_satoshis / 100000000) * (_marketPrice))
     fiat = numeral(fiat).format('$0,0.00[00]') + ' ' + _currency
 
     // const fiat = !_marketPrice

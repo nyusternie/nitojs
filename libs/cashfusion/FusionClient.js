@@ -64,7 +64,7 @@ class ShuffleClient extends EventEmitter {
 
         /* Add unshuffled coins. */
         this.addUnshuffledCoins(
-            _.orderBy(coinsToPopulate, ['amountSatoshis'], ['desc']))
+            _.orderBy(coinsToPopulate, ['satoshis'], ['desc']))
 
         /* Initialize rounds. */
         this.rounds = []
@@ -248,7 +248,7 @@ class ShuffleClient extends EventEmitter {
 
         debug(
             'Attempting to mix a',
-            newShuffleRound.coin.amountSatoshis,
+            newShuffleRound.coin.satoshis,
             'satoshi coin on',
             newShuffleRound.serverUri
         )
@@ -330,12 +330,12 @@ class ShuffleClient extends EventEmitter {
                     // shuffle.
 
                     /* Set coin to shuffle. */
-                    const coinToShuffle = _.maxBy(this.coins, 'amountSatoshis')
+                    const coinToShuffle = _.maxBy(this.coins, 'satoshis')
 
                     /* Determine the pools this coin is eligible for. */
                     const eligiblePools = _.partition(this.serverPoolAmounts, (onePoolAmount) => {
                         /* Set amount after fee. */
-                        const amountAfterFee = coinToShuffle.amountSatoshis - this.shuffleFee
+                        const amountAfterFee = coinToShuffle.satoshis - this.shuffleFee
 
                         /* Validate eligibility. */
                         return amountAfterFee >= onePoolAmount
@@ -442,7 +442,7 @@ class ShuffleClient extends EventEmitter {
 
         /* Loop through ALL coins. */
         for (let oneCoin of oneOrMoreCoins) {
-            if (!oneCoin.amountSatoshis || oneCoin.amountSatoshis < 10000 + this.shuffleFee) {
+            if (!oneCoin.satoshis || oneCoin.satoshis < 10000 + this.shuffleFee) {
                 debug(`Skipping coin ${oneCoin} because it's just dust`)
                 this.skipped.push(_.extend(oneCoin, { shuffled: false, error: 'size' }))
             }
@@ -451,7 +451,7 @@ class ShuffleClient extends EventEmitter {
                 // Extend the coin object with `PublicKey` and `PrivateKey`
                 // instances from the `bitcoinjs-fork` library.  They will
                 // be used for transaction signing and verification.
-                const keypair = coinUtils.getKeypairFromWif(oneCoin.privateKeyWif)
+                const keypair = coinUtils.getKeypairFromWif(oneCoin.wif)
 
                 _.extend(oneCoin, {
                     publicKey: keypair.publicKey,

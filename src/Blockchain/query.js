@@ -232,8 +232,8 @@ class Query {
         if (_vout === null || typeof _vout === 'undefined') {
             throw new Error('An output index is required!')
         } else {
-            /* Convert to integer. */
-            _vout = parseInt(_vout)
+            /* Convert to (valid) number. */
+            _vout = Number(_vout)
         }
 
         /* Initialize query. */

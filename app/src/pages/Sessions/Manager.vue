@@ -238,7 +238,7 @@ export default {
                             const status = coin.status === 'active' ? '✓' : 'ⅹ'
 
                             /* Set value. */
-                            const value = coin.amountSatoshis
+                            const value = coin.satoshis
 
                             /* Build coin data. */
                             const coinData = {

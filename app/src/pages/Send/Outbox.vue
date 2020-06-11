@@ -269,12 +269,6 @@ export default {
 
                 /* Validate coin. */
                 if (coin) {
-                    /* Add WIF. */
-                    coin.wif = coin.privateKeyWif
-
-                    /* Add satoshis. */
-                    coin.satoshis = coin.amountSatoshis
-
                     /* Build receivers. */
                     const receivers = [
                         {

@@ -35,45 +35,42 @@ const getBalanceBySessionId = (
         return 0
     }
 
-    try {
-        /* Initialize balance. */
-        let balance = 0
+    /* Initialize balance. */
+    let balance = 0
 
-        /* Loop through all address. */
-        addresses.forEach(async address => {
-            /* Retrieve (address) balances. */
-            const balances = await Nito.Address.balance(address)
+    /* Loop through all address. */
+    // NOTE: We do not use for-each with callback here because of async.
+    for (let i = 0; i < addresses.length; i++) {
+        /* Set address. */
+        const address = addresses[i]
 
-            /* Check unconfirmed flag. */
-            if (rootGetters['getFlags'].unconfirmed) {
-                balance += balances.confirmed + balances.unconfirmed
-            } else {
-                balance += balances.confirmed
-            }
-        })
+        /* Retrieve (address) balances. */
+        const balances = await Nito.Address.balance(address)
 
-        /* Retrieve market price. */
-        const marketPrice = await Nito.Markets.getTicker(_currency)
-        console.info(`Market price (${_currency})`, marketPrice) // eslint-disable-line no-console
-
-        /* Validate market price. */
-        if (marketPrice) {
-            /* Format balance (for display). */
-            // TODO: Support additional currencies.
-            const formattedBalance =
-                rootGetters['utils/getFormattedValue'](balance, marketPrice, 'USD')
-
-            /* Return (formatted) balance. */
-            return formattedBalance
+        /* Check unconfirmed flag. */
+        if (rootGetters['getFlags'].unconfirmed) {
+            balance += (balances.confirmed + balances.unconfirmed)
         } else {
-            /* Return (empty) balance. */
-            return null
+            balance += balances.confirmed
         }
-    } catch (err) {
-        console.error(err) // eslint-disable-line no-console
+    }
 
-        /* Bugsnag alert. */
-        throw new Error(err)
+    /* Retrieve market price. */
+    const marketPrice = await Nito.Markets.getTicker('BCH', _currency)
+    console.info(`Market price (${_currency})`, marketPrice) // eslint-disable-line no-console
+
+    /* Validate market price. */
+    if (marketPrice) {
+        /* Format balance (for display). */
+        // TODO: Support additional currencies.
+        const formattedBalance =
+            rootGetters['utils/getFormattedValue'](balance, marketPrice, 'USD')
+
+        /* Return (formatted) balance. */
+        return formattedBalance
+    } else {
+        /* Return (empty) balance. */
+        return null
     }
 }
 

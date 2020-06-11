@@ -612,7 +612,7 @@ class ShuffleRound extends EventEmitter {
         /* Validate coin details. */
         // NOTE: Check that the coin is there and big enough
         //       before adding the player.
-        if (!coinDetails.amountSatoshis || this.shuffleFee + this.poolAmount > coinDetails.amountSatoshis) {
+        if (!coinDetails.satoshis || this.shuffleFee + this.poolAmount > coinDetails.satoshis) {
             debug('Insufficient funds for player (coinDetails):', coinDetails)
 
             /* Assign blame. */
@@ -633,7 +633,7 @@ class ShuffleRound extends EventEmitter {
         if (playerToAdd.isMe) {
             Object.assign(grabPlayer.coin, {
                 amount: coinDetails.amount,
-                amountSatoshis: coinDetails.amountSatoshis,
+                satoshis: coinDetails.satoshis,
                 confirmations: coinDetails.confirmations,
                 spent: coinDetails.spent
             })
@@ -1320,9 +1320,9 @@ class ShuffleRound extends EventEmitter {
             //     this.shuffleTx.tx.toBuffer('hex').toString('hex'))
             debug('Broadcasting raw tx:',
                 this.shuffleTx.tx.toBuffer('hex'))
-            console.log('\n\nBroadcasting raw tx:',
+            console.log('\n\nBroadcasting raw tx:', // eslint-disable-line no-console
                 this.shuffleTx.tx.toBuffer('hex'))
-            console.log('\n\nBroadcasting raw tx (toString):',
+            console.log('\n\nBroadcasting raw tx (toString):', // eslint-disable-line no-console
                 this.shuffleTx.tx.toBuffer('hex').toString('hex'))
 
             try {
