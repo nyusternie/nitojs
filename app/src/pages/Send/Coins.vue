@@ -197,8 +197,6 @@ export default {
     },
     methods: {
         ...mapActions('purse', [
-            'rebuildPurse',
-            'updateCoins',
             'updateOutbox',
         ]),
 

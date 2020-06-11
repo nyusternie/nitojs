@@ -210,6 +210,7 @@ class Insomnia extends EventEmitter {
 
         /* Request query. */
         const response = await _request(query)
+            .catch(err => console.error(err)) // eslint-disable-line no-console
         // console.log('INSOMNIA UNSPENT (response):', response)
 
         /* Validate query. */
@@ -308,6 +309,7 @@ class Insomnia extends EventEmitter {
 
                 /* Request query. */
                 const response = await _request(query)
+                    .catch(err => console.error(err)) // eslint-disable-line no-console
                 // console.log('INSOMNIA CHECK ACTIVITY (response):', response)
 
                 /* Validate response. */
@@ -392,6 +394,7 @@ class Insomnia extends EventEmitter {
     async _registration(_address) {
         const query = `address/utxos/${_address}`
         const response = await _request(query)
+            .catch(err => console.error(err)) // eslint-disable-line no-console
         // console.log('INSOMNIA REGISTRATION (response):', response)
 
         /* Validate response. */

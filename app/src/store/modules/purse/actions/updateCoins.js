@@ -93,7 +93,7 @@ const updateCoins = async ({ dispatch, getters }) => {
     const searchDetails = []
 
     /* Compile addresses. */
-    // NOTE: We do not use for-each with callback here because of async.
+    // FIXME: We do not use for-each with callback here because of async.
     for (let i = 0; i < addresses.length; i++) {
         const address = addresses[i]
 

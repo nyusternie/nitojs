@@ -15,7 +15,7 @@ const getBalance = (state, getters) => async (_currency) => {
         return null
     }
 
-    console.log('TICKER', Nito.Markets.getTicker(_currency))
+    console.log('TICKER', Nito.Markets.getTicker('BCH', _currency))
 
     // TODO: ...
 }

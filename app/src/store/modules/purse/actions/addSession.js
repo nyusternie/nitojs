@@ -27,7 +27,7 @@ const addSession = ({ commit, getters }) => {
     const accountModel = {
         deposit: 0,
         change: 0,
-        nitoxchg: 0, // NOTE: For "possible" future compatability with Nito Exchange.
+        nitoxchg: 0, // NOTE: For "possible" future compatibility with Nito Exchange.
     }
 
     /**

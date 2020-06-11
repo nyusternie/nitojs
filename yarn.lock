@@ -1667,7 +1667,7 @@ bitcore-lib@^8.20.4:
     inherits "=2.0.1"
     lodash "=4.17.15"
 
-bitcore-mnemonic@^8.20.4:
+bitcore-mnemonic@8.20.4:
   version "8.20.4"
   resolved "https://registry.yarnpkg.com/bitcore-mnemonic/-/bitcore-mnemonic-8.20.4.tgz#90b1277c4027408d795d336f3cba0e3bdcec7d14"
   integrity sha512-5wNVwalTZWsCuHAPtpk1RU6uf30nB8OYBaHfnPppYam/XOc1LIxvgobchHRQ6n1doGO8EI5x0QxauRYgrQFlNg==

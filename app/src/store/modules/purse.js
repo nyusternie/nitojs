@@ -63,7 +63,7 @@ const state = {
      * Manages a single `session` and `chain` for this wallet type.
      * eg. m/44'/145'/0'/7867/<index>
      *
-     * NOTE: This is for better compatability and portability with
+     * NOTE: This is for better compatibility and portability with
      *       Nito-based wallets (eg. Nito.cash).
      */
     nitoCashIdx: null,

@@ -178,7 +178,7 @@ export default {
         async updatePrice() {
             try {
                 /* Request current price. */
-                const current = await Nito.Markets.getTicker('usd')
+                const current = await Nito.Markets.getTicker('BCH', 'USD')
 
                 /* Set current price. */
                 this.usd = current

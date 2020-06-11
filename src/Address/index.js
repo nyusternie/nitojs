@@ -43,7 +43,10 @@ class Address extends EventEmitter {
 
     /* Unspent Transaction Outputs */
     static utxo(_address, _compatibility) {
-        return require('./utxo')(_address, _compatibility)
+        return require('./utxos')(_address, _compatibility)
+    }
+    static utxos(_address, _compatibility) {
+        return require('./utxos')(_address, _compatibility)
     }
 
 }

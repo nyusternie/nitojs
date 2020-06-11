@@ -463,7 +463,33 @@ export default {
             console.log('MANAGER (coins):', coins)
 
             if (coins) {
-                const coin = coins[Object.keys(coins)[0]]
+                // const coin = coins[Object.keys(coins)[0]]
+                /* Find an available coin id. */
+                const coinId = Object.keys(coins).find(coin => {
+                    return coins[coin].status === 'active'
+                })
+
+                /* Validate coin. */
+                if (typeof(coinId) === 'undefined') {
+                    /* Set message. */
+                    const message = `Oops! You don't have any coins available to shuffle.`
+
+                    /* Display notification. */
+                    this.$notify({
+                        message,
+                        icon: 'ti-alert', // ti-info-alt | ti-alert | ti-pin-alt
+                        verticalAlign: 'top',
+                        horizontalAlign: 'right',
+                        type: 'danger', // info | danger | warning
+                        // timeout: 0, // 0: persistent | 5000: default
+                    })
+
+                    return
+                }
+
+                /* Set coin. */
+                const coin = coins[coinId]
+
                 console.log('MANAGER (coin):', JSON.stringify(coin, null, 4))
 
                 console.log('MANAGER (target):', this.target())
@@ -529,7 +555,7 @@ export default {
          */
         stopShuffle() {
             /* Set flag. */
-            this.isShuffling = true
+            this.isShuffling = false
 
             /* Validate shuffle manager. */
             if (this.shuffleManager) {

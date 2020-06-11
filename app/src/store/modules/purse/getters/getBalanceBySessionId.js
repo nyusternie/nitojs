@@ -39,7 +39,7 @@ const getBalanceBySessionId = (
     let balance = 0
 
     /* Loop through all address. */
-    // NOTE: We do not use for-each with callback here because of async.
+    // FIXME: We do not use for-each with callback here because of async.
     for (let i = 0; i < addresses.length; i++) {
         /* Set address. */
         const address = addresses[i]
