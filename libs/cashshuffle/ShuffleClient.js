@@ -254,6 +254,10 @@ class ShuffleClient extends EventEmitter {
             this.emit('notice', _notice)
         })
 
+        newShuffleRound.on('complete', (_complete) => {
+            this.emit('complete', _complete)
+        })
+
         /* Handle debugging messages. */
         // NOTE: Pass any debug messages from our shuffleround instances
         //       to any listeners on the shuffleClass instance.
@@ -446,6 +450,11 @@ class ShuffleClient extends EventEmitter {
         if (this.isShuffling) {
             /* Set shuffling flag. */
             this.isShuffling = false
+
+            console.log('DEBUGGING ROUNDS:', this.rounds)
+
+            /* Stop round. */
+            this.rounds[0].stop()
         }
     }
 

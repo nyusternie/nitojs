@@ -174,12 +174,13 @@ class ShuffleRound extends EventEmitter {
 
         /* Handle disconnection. */
         this.comms.on('disconnected', (commsDisconnectMessage) => {
-            console.error('Our connection to the CashShuffle server is REKT!') // eslint-disable-line no-console
-
             /* Validate round completion. */
             if (this.roundComplete) {
                 debug('The shuffle Round has completed!')
             } else {
+                /* eslint-disable-next-line no-console */
+                console.error('Our connection to the CashShuffle server is REKT!')
+
                 /* Set success flag. */
                 this.success = false
 
@@ -397,6 +398,10 @@ class ShuffleRound extends EventEmitter {
                 'Encryption pubkey', message['message']['key']['key'],
                 'Legacy address', message['message']['address']['address']
             )
+            console.log('Act on message (incomingChangeAddress):',
+                'Encryption pubkey', message['message']['key']['key'],
+                'Legacy address', message['message']['address']['address']
+            )
 
             /* Update this player with their change address. */
             Object.assign(
@@ -594,20 +599,18 @@ class ShuffleRound extends EventEmitter {
         /* Initialize coin details. */
         // NOTE: We've already added the player to our pool but we
         //       still need to verify the data they sent us.
-        let coinDetails
+        const coinDetails = await this.util.coin
+            .getCoinDetails(playerCoin.txid, playerCoin.vout)
+            .catch(err => {
+                /* eslint-disable-next-line no-console */
+                console.error('Cannot get coin details', err)
 
-        try {
-            coinDetails = await this.util.coin
-                .getCoinDetails(playerCoin.txid, playerCoin.vout)
-        } catch (nope) {
-            console.error('Cannot get coin details', nope) // eslint-disable-line no-console
-
-            /* Assign blame. */
-            this.assignBlame({
-                reason: 'INSUFFICIENTFUNDS',
-                accused: playerToAdd.verificationKey
+                /* Assign blame. */
+                this.assignBlame({
+                    reason: 'INSUFFICIENTFUNDS',
+                    accused: playerToAdd.verificationKey
+                })
             })
-        }
 
         /* Validate coin details. */
         // NOTE: Check that the coin is there and big enough
@@ -1319,16 +1322,17 @@ class ShuffleRound extends EventEmitter {
             // debug('Broadcasting raw tx:',
             //     this.shuffleTx.tx.toBuffer('hex').toString('hex'))
             debug('Broadcasting raw tx:',
-                this.shuffleTx.tx.toBuffer('hex'))
-            console.log('\n\nBroadcasting raw tx:', // eslint-disable-line no-console
-                this.shuffleTx.tx.toBuffer('hex'))
-            console.log('\n\nBroadcasting raw tx (toString):', // eslint-disable-line no-console
                 this.shuffleTx.tx.toBuffer('hex').toString('hex'))
 
             try {
                 /* Send raw transaction. */
                 submissionResults = await Nito.Transaction
-                    .sendRawTransaction(this.shuffleTx.tx.toBuffer('hex'))
+                    .sendRawTransaction(this.shuffleTx.tx.toBuffer('hex').toString('hex'))
+
+                this.emit('complete', {
+                    txid: this.shuffleTx.tx.toBuffer('hex').toString('hex'),
+                    submissionResults,
+                })
             } catch (nope) {
                 console.error('Error broadcasting transaction to the network:', nope) // eslint-disable-line no-console
 
@@ -1366,7 +1370,7 @@ class ShuffleRound extends EventEmitter {
      * End Shuffle Round
      */
     endShuffleRound(writeDebugFileAnyway) {
-        debug(`Shuffle has ended with success ${ this.success }`);
+        debug(`Shuffle has ended with success [ ${ this.success } ]`)
         this.roundComplete = true
 
         if (!this.success || writeDebugFileAnyway) {
@@ -1380,6 +1384,19 @@ class ShuffleRound extends EventEmitter {
         const msg = `Coin ${this.coin.txid}:${this.coin.vout} has been successfully shuffled!`
         this.emit('notice', msg)
         this.emit('shuffle')
+    }
+
+    /**
+     * Stop
+     */
+    stop() {
+        /* Set complete flag. */
+        this.roundComplete = true
+
+        // Close this round's connection to the server
+        this.comms._wsClient.close()
+
+        debug(`Shuffle has stopped.`)
     }
 
     /**
@@ -1398,8 +1415,10 @@ class ShuffleRound extends EventEmitter {
         /* Validate accused. */
         if (accused.isMe) {
             debug(`I'M THE ONE BEING BLAMED. HOW RUDE!!`)
+            console.log(`I'M THE ONE BEING BLAMED. HOW RUDE!!`)
         } else {
             debug('Player', accused.verificationKey, 'is to blame!')
+            console.log('Player', accused.verificationKey, 'is to blame!')
         }
 
         /* Write debug file. */

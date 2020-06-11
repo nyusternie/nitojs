@@ -54,10 +54,10 @@ const prepareShuffleInsAndOuts = async function (options) {
     debug('Preparing to shuffle ins and outs (players):', players)
 
     /* Set address to fetch. */
-    const addressesToFetch = players.map(obj => obj['coin']['legacyAddress'])
+    const addressesToFetch = players.map(obj => obj.coin.legacyAddress)
     // debug('Address to fetch:', addressesToFetch)
 
-    /* Set compatability flag. */
+    /* Set compatibility flag. */
     // NOTE: Provides BITBOX data format.
     const comp = true
 
@@ -114,7 +114,7 @@ const prepareShuffleInsAndOuts = async function (options) {
         const coinInQuestion = addressInQuestion.utxos.find(utxo => {
             return (
                 utxo.txid === onePlayer.coin.txid &&
-                utxo.vout === onePlayer.coin.vout
+                Number(utxo.vout) === Number(onePlayer.coin.vout)
             )
         })
 
@@ -152,7 +152,8 @@ const prepareShuffleInsAndOuts = async function (options) {
             cashAddress: addressInQuestion.cashAddress,
             amountBch: coinInQuestion.amount,
             satoshis: coinInQuestion.satoshis,
-            confirmations: coinInQuestion.confirmations,
+            // confirmations: coinInQuestion.confirmations,
+            confirmations: 1, // FIXME: Any side-effects? Do we need to retrieve this value??
             scriptPubKey: addressInQuestion.scriptPubKey
         })
     }

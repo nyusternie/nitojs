@@ -42,11 +42,6 @@ const getCoinDetails = async function (_txid, _vout) {
     const coinInQuestion = outputs[vout]
     debug('Coin in question:', coinInQuestion)
 
-    /* Set coin in question. */
-    // const coinInQuestion = _.find(txData.vout, {
-    //     n: Number(_vout)
-    // })
-
     /* Validate coin in question. */
     if (!coinInQuestion) {
         throw new Error('Could not find a coin from the params provided.')
@@ -61,7 +56,7 @@ const getCoinDetails = async function (_txid, _vout) {
     /* Set legacy address. */
     const legacyAddress = Nito.Address.toLegacyAddress(script)
 
-    /* Set compatability flag. */
+    /* Set compatibility flag. */
     // NOTE: Provides BITBOX data format.
     const comp = true
 
@@ -80,14 +75,9 @@ const getCoinDetails = async function (_txid, _vout) {
 
     /* Set output in question. */
     const outputInQuestion = utxos.find(utxo => {
-        return (utxo.txid === txid && utxo.vout === vout)
+        return (utxo.txid === txid && Number(utxo.vout) === vout)
     })
-
-    /* Set output in question. */
-    // const outputInQuestion = _.find(utxoData.utxos, {
-    //     vout: Number(_vout),
-    //     txid: _txid
-    // })
+    debug('Output in question:', outputInQuestion)
 
     /* Set coin data. */
     const coinData = {

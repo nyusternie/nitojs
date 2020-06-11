@@ -495,28 +495,30 @@ export default {
                 console.log('MANAGER (target):', this.target())
                 console.log('MANAGER (change):', this.change())
 
-                /* Initialize Nito. */
-                this.nito = new Nito()
+                /* Initialize Nito privacy. */
+                const privacy = new Nito.Privacy()
 
-                /* Handle Nito phases. */
-                this.nito.on('phase', async (_phase) => {
+                /* Start shuffle manager. */
+                this.shuffleManager = privacy
+                    .shuffleManager(coin, this.change, this.target, false)
+
+                /* Handle shuffle manager phases. */
+                this.shuffleManager.on('phase', (_phase) => {
+                    console.log('MANAGER RECEIVED (_phase)', _phase)
                     /* Set session phase. */
                     this.session.phase = _phase
                 })
 
-                /* Handle Nito logs. */
-                this.nito.on('notice', async (_notice) => {
+                /* Handle shuffle manager logs. */
+                this.shuffleManager.on('notice', (_notice) => {
                     /* Set session notice. */
                     this.session.logs.push(_notice)
                 })
 
-                /* Initialize Nito privacy. */
-                this.privacy = new Nito.Privacy()
-                console.log('NITO PRIVACY', this.privacy)
-
-                /* Start shuffle manager. */
-                this.shuffleManager = this.privacy
-                    .shuffleManager(coin, this.change, this.target, false)
+                /* Handle shuffle manager completion. */
+                this.shuffleManager.on('complete', (_complete) => {
+                    alert(JSON.stringify(_complete))
+                })
 
                 /* Set message. */
                 const message = `You have STARTED shuffling your coins.`
