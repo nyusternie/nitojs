@@ -637,7 +637,7 @@ class ShuffleRound extends EventEmitter {
             Object.assign(grabPlayer.coin, {
                 amount: coinDetails.amount,
                 satoshis: coinDetails.satoshis,
-                confirmations: coinDetails.confirmations,
+                // confirmations: coinDetails.confirmations,
                 spent: coinDetails.spent
             })
         } else {

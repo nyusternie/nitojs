@@ -96,7 +96,7 @@ const getCoinDetails = async function (_txid, _vout) {
             satoshis: Number(outputInQuestion.satoshis),
             height: outputInQuestion.height,
             // confirmations: outputInQuestion.confirmations,
-            confirmations: 1, // FIXME: Any side-effects? Do we need to retrieve this value??
+            // confirmations: 1, // FIXME: Any side-effects? Do we need to retrieve this value??
         })
     }
     debug('Coin data:', coinData)

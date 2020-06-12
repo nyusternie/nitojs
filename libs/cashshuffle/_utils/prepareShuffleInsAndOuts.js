@@ -153,7 +153,7 @@ const prepareShuffleInsAndOuts = async function (options) {
             amountBch: coinInQuestion.amount,
             satoshis: coinInQuestion.satoshis,
             // confirmations: coinInQuestion.confirmations,
-            confirmations: 1, // FIXME: Any side-effects? Do we need to retrieve this value??
+            // confirmations: 1, // FIXME: Any side-effects? Do we need to retrieve this value??
             scriptPubKey: addressInQuestion.scriptPubKey
         })
     }

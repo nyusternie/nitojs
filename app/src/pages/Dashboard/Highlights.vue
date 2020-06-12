@@ -49,7 +49,7 @@ export default {
                     type: 'success',
                     icon: 'ti-server',
                     title: 'My Purse',
-                    value: '$1,345',
+                    value: '$0.00',
                     footerText: 'in 4 active sesions',
                     footerIcon: 'ti-pulse'
                 },
@@ -57,7 +57,7 @@ export default {
                     type: 'danger',
                     icon: 'ti-pulse',
                     title: 'My Sessions',
-                    value: '23',
+                    value: '0',
                     footerText: 'since May 15, 2020',
                     footerIcon: 'ti-timer'
                 },
@@ -65,7 +65,7 @@ export default {
                     type: 'info',
                     icon: 'ti-signal',
                     title: 'Peers Online',
-                    value: '28',
+                    value: 'n/a',
                     footerText: 'updated 20 seconds ago',
                     footerIcon: 'ti-reload'
                 }

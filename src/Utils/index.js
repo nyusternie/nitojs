@@ -10,6 +10,8 @@ const EventEmitter = require('events').EventEmitter
 class Utils extends EventEmitter {
     constructor() {
         super()
+
+        debug('Utilities class has been initialized.')
     }
 
     // TODO:

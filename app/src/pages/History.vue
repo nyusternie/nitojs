@@ -65,6 +65,7 @@ export default {
                 columns: ['Id', 'Name', 'Current Value', 'Num Coins', 'Status'],
                 data: []
             }
+            return tableData
 
             /* Validate sessions. */
             if (this.getSessions) {
@@ -106,6 +107,7 @@ export default {
                 columns: ['Type', 'Tx Value', 'Session', 'Confirmations', 'Time'],
                 data: []
             }
+            return tableData
 
             /* Validate sessions. */
             if (this.getSessions) {
@@ -147,6 +149,7 @@ export default {
                 columns: ['Action', 'Tx Value', 'Session', 'Confirmations', 'Time'],
                 data: []
             }
+            return tableData
 
             /* Validate sessions. */
             if (this.getSessions) {
