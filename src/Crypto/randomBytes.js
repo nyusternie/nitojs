@@ -1,6 +1,6 @@
 /* Import modules. */
 const bch = require('bitcore-lib-cash')
-const debug = require('debug')('nitojs:utils:randombytes')
+const debug = require('debug')('nitojs:crypto:randombytes')
 
 /**
  * Random Bytes

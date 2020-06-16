@@ -1,7 +1,7 @@
 /* Import modules. */
 const debug = require('debug')('nitojs:blockchain:query')
 const superagent = require('superagent')
-const util = require('util')
+// const util = require('util')
 
 // examples source:
 // https://github.com/fountainhead-cash/bitplaylist/blob/master/bitdb/README.md
@@ -19,108 +19,108 @@ const VERSION = 3
 /**
  * All (Firehose)
  */
-const all = {
-    v: VERSION,
-    q: {
-        find: {},
-        limit: 10
-    }
-}
+// const all = {
+//     v: VERSION,
+//     q: {
+//         find: {},
+//         limit: 10
+//     }
+// }
 
 /**
  * Confirmed ONLY
  */
-const confirmedOnly = {
-    v: VERSION,
-    q: {
-        db: ['c'],
-        find: {},
-        limit: 10
-    }
-}
+// const confirmedOnly = {
+//     v: VERSION,
+//     q: {
+//         db: ['c'],
+//         find: {},
+//         limit: 10
+//     }
+// }
 
 /**
  * Memo Posts
  *
  * Listen to all realtime memo.cash posts.
  */
-const memoPosts = {
-    v: VERSION,
-    q: {
-        find: { 'out.b0': { 'op': 106 }, 'out.h1': '6d02' },
-        project: { 'out.$': 1 }
-    },
-    r: {
-        f: '[ .[] | { msg: .out[0].s2 } ]'
-    }
-}
+// const memoPosts = {
+//     v: VERSION,
+//     q: {
+//         find: { 'out.b0': { 'op': 106 }, 'out.h1': '6d02' },
+//         project: { 'out.$': 1 }
+//     },
+//     r: {
+//         f: '[ .[] | { msg: .out[0].s2 } ]'
+//     }
+// }
 
 /**
  * Memo Formatted
  *
  * Listen to all realtime memo.cash posts.
  */
-const memoFormatted = {
-    v: VERSION,
-    q: {
-        find: { 'out.h1': '6d02' },
-        limit: 10
-    },
-    r: {
-        f: '[ .[] | { txid: .tx.h, block: .blk.i?, timestamp: .blk.t?, one: .out[0].s2, two: .out[1].s2 } ]'
-    }
-}
+// const memoFormatted = {
+//     v: VERSION,
+//     q: {
+//         find: { 'out.h1': '6d02' },
+//         limit: 10
+//     },
+//     r: {
+//         f: '[ .[] | { txid: .tx.h, block: .blk.i?, timestamp: .blk.t?, one: .out[0].s2, two: .out[1].s2 } ]'
+//     }
+// }
 
 // FOR DEVELPMENT PURPOSES ONLY
-const complex = {
-    v: VERSION,
-    q: {
-        db: ['c'],
-        find: { 'out.h1': '6d02' },
-        limit: 100
-    },
-    r: {
-        f: '[ group_by(.blk.h)[] | { blocks: { (.[0].blk.i | tostring): [.[] | {message: .out[1].s2, tx: .tx.h} ] } } ]'
-    }
-}
+// const complex = {
+//     v: VERSION,
+//     q: {
+//         db: ['c'],
+//         find: { 'out.h1': '6d02' },
+//         limit: 100
+//     },
+//     r: {
+//         f: '[ group_by(.blk.h)[] | { blocks: { (.[0].blk.i | tostring): [.[] | {message: .out[1].s2, tx: .tx.h} ] } } ]'
+//     }
+// }
 
 // FOR DEVELPMENT PURPOSES ONLY
-const mongoProjection = {
-    v: VERSION,
-    q: {
-        find: { 'out.h1': '6d02' },
-        limit: 10,
-        project: { 'out.$': 1 }
-    }
-}
+// const mongoProjection = {
+//     v: VERSION,
+//     q: {
+//         find: { 'out.h1': '6d02' },
+//         limit: 10,
+//         project: { 'out.$': 1 }
+//     }
+// }
 
 /**
  * Text Search
  */
-const txtSearch = {
-    v: VERSION,
-    q: {
-        find: {
-            '$text': { '$search': 'bet' },
-            'out.h1': '6d02'
-        },
-        project: { 'out.$': 1 },
-        limit: 10
-    }
-}
+// const txtSearch = {
+//     v: VERSION,
+//     q: {
+//         find: {
+//             '$text': { '$search': 'bet' },
+//             'out.h1': '6d02'
+//         },
+//         project: { 'out.$': 1 },
+//         limit: 10
+//     }
+// }
 
 // FOR DEVELPMENT PURPOSES ONLY
-const strInterpolation = {
-    v: VERSION,
-    q: {
-        find: { 'out.h1': '534c5000', 'out.s3': 'GENESIS' },
-        limit: 20,
-        project: { 'out.$': 1, '_id': 0 }
-    },
-    r: {
-        f: '[.[] | .out[0] | {title: "[\\(.s4)] \\(.s5)", document_url: .s6} ]'
-    }
-}
+// const strInterpolation = {
+//     v: VERSION,
+//     q: {
+//         find: { 'out.h1': '534c5000', 'out.s3': 'GENESIS' },
+//         limit: 20,
+//         project: { 'out.$': 1, '_id': 0 }
+//     },
+//     r: {
+//         f: '[.[] | .out[0] | {title: "[\\(.s4)] \\(.s5)", document_url: .s6} ]'
+//     }
+// }
 
 /**
  * Database Query

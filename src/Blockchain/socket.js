@@ -19,76 +19,76 @@ const VERSION = 3
 /**
  * All (Firehose)
  */
-const all = {
-    v: VERSION,
-    q: {
-        find: {},
-    },
-}
+// const all = {
+//     v: VERSION,
+//     q: {
+//         find: {},
+//     },
+// }
 
 /**
  * Address
  *
  * Watch for a transfer from certain address.
  */
-const address = {
-    v: VERSION,
-    q: {
-        find: {
-            'out.e.a': 'qq4kp3w3yhhvy4gm4jgeza4vus8vpxgrwc90n8rhxe',
-        },
-    },
-}
+// const address = {
+//     v: VERSION,
+//     q: {
+//         find: {
+//             'out.e.a': 'qq4kp3w3yhhvy4gm4jgeza4vus8vpxgrwc90n8rhxe',
+//         },
+//     },
+// }
 
 /**
  * Memo Posts
  *
  * Listen to all realtime memo.cash posts.
  */
-const memoPosts = {
-    v: VERSION,
-    q: {
-        find: { 'out.h1': '6d02' },
-    },
-    r: {
-        f: '.[] | .out[] | select(.b0.op? == 106) | .s2',
-    },
-}
+// const memoPosts = {
+//     v: VERSION,
+//     q: {
+//         find: { 'out.h1': '6d02' },
+//     },
+//     r: {
+//         f: '.[] | .out[] | select(.b0.op? == 106) | .s2',
+//     },
+// }
 
 /**
  * Memo Topic
  *
  * Listen to a specific topic.
  */
-const memoTopic = {
-    v: VERSION,
-    q: {
-        find: { 'out.h1': '6d0c', 'out.s2': 'playBCH_bot' },
-    },
-    r: {
-        f: '.[] | .out[] | select(.b0.op? == 106) | .s3'
-    }
-}
+// const memoTopic = {
+//     v: VERSION,
+//     q: {
+//         find: { 'out.h1': '6d0c', 'out.s2': 'playBCH_bot' },
+//     },
+//     r: {
+//         f: '.[] | .out[] | select(.b0.op? == 106) | .s3'
+//     }
+// }
 
 /**
  * Coinbase
  *
  * Only monitor coinbase transactions.
  */
-const coinbase = {
-    v: VERSION,
-    q: {
-        db: ['c'],
-        find: {
-            'in.0': {
-                '$exists': false,
-            }
-        }
-    },
-    r: {
-        f: '.[] | {winner: .out[0].e.a, prize: "\\(.out[0].e.v/100000000) BCH", transactionId: .tx.h, block_height: .blk.i, block_hash: .blk.h}'
-    }
-}
+// const coinbase = {
+//     v: VERSION,
+//     q: {
+//         db: ['c'],
+//         find: {
+//             'in.0': {
+//                 '$exists': false,
+//             }
+//         }
+//     },
+//     r: {
+//         f: '.[] | {winner: .out[0].e.a, prize: "\\(.out[0].e.v/100000000) BCH", transactionId: .tx.h, block_height: .blk.i, block_hash: .blk.h}'
+//     }
+// }
 
 /**
  * Transactions
@@ -96,15 +96,15 @@ const coinbase = {
  * Monitor full firehose and emit a transaction graph as event
  * for each transaction.
  */
-const transactions = {
-    v: VERSION,
-    q: {
-        find: {}
-    },
-    r: {
-        f: ".[] | { from: [.in[] | { prevTransactionId: .e.h, sender: \"bitcoincash:\\(.e.a)\" }], to: [.out[] | { receiver: \"bitcoincash:\\(.e.a?)\", amount: .e.v? }] }"
-    }
-}
+// const transactions = {
+//     v: VERSION,
+//     q: {
+//         find: {}
+//     },
+//     r: {
+//         f: ".[] | { from: [.in[] | { prevTransactionId: .e.h, sender: \"bitcoincash:\\(.e.a)\" }], to: [.out[] | { receiver: \"bitcoincash:\\(.e.a?)\", amount: .e.v? }] }"
+//     }
+// }
 
 /**
  * Transaction Explorers
@@ -112,15 +112,15 @@ const transactions = {
  * Monitor full firehose and emit a custom object made up of
  * transaction id and block explorer urls.
  */
-const txExplorers = {
-  v: VERSION,
-  q: {
-      find: {}
-  },
-  r: {
-      f: '.[] | { id: .tx.h, explorers: ["https://explorer.bitcoin.com/bch/tx/\\(.tx.h)", "https://blockchair.com/bitcoin-cash/transaction/\\(.tx.h)"] }'
-  }
-}
+// const txExplorers = {
+//     v: VERSION,
+//     q: {
+//         find: {}
+//     },
+//     r: {
+//         f: '.[] | { id: .tx.h, explorers: ["https://explorer.bitcoin.com/bch/tx/\\(.tx.h)", "https://blockchair.com/bitcoin-cash/transaction/\\(.tx.h)"] }'
+//     }
+// }
 
 /**
  * Socket Class

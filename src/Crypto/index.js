@@ -1,15 +1,17 @@
 /* Import modules. */
-const debug = require('debug')('nitojs:blockchain:socket')
+const debug = require('debug')('nitojs:crypto')
 const EventEmitter = require('events').EventEmitter
 
 /**
- * Utility Class
+ * Crypto Class
  *
- * Useful functions for blockchain management.
+ * Cryptographic functions for blockchain management.
  */
-class Utils extends EventEmitter {
+class Crypto extends EventEmitter {
     constructor() {
         super()
+
+        debug('Crypto class has been initialized.')
     }
 
     /* Mnemonic */
@@ -25,4 +27,4 @@ class Utils extends EventEmitter {
 }
 
 /* Export module. */
-module.exports = Utils
+module.exports = Crypto

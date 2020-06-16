@@ -1,5 +1,5 @@
 /* Import modules. */
-const debug = require('debug')('nitojs:utils:randombytes')
+const debug = require('debug')('nitojs:crypto:mnemonic')
 const Mnemonic = require('bitcore-mnemonic')
 
 /**
