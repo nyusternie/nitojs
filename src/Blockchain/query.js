@@ -8,7 +8,7 @@ const superagent = require('superagent')
 
 /* Set endpoint. */
 const ENDPOINT = 'https://bitdb.bch.sx/q/'
-// const ENDPOINT = 'https://bitdb.devops.cash/q/'
+const FALLBACK = 'https://bitdb.devops.cash/q/'
 
 /* Set fountainhead API key. */
 const APIKEY = '1M2PjV7yGRg4dB8N32Qhw1wrDfDfZyi8VQ'
@@ -127,30 +127,66 @@ const VERSION = 3
  *
  * Performs an on-chain BitDB query.
  */
-const dbQuery = async (_params) => {
+const dbQuery = async (_params, _endpoint = ENDPOINT, _retry = false) => {
     /* Set query. */
     const query = Buffer.from(
         JSON.stringify(_params)
     ).toString('base64')
 
     /* Set target. */
-    const target = ENDPOINT + query
+    const target = _endpoint + query
+
+    /* Initialize response. */
+    let response = null
+
+    /* Initialize error. */
+    let error = null
 
     /* Call remote API. */
-    const response = await superagent
+    response = await superagent
         .get(target)
         .set('key', APIKEY)
-        .catch(err => console.error(err)) // eslint-disable-line no-console
+        .catch(err => {
+            console.error(err) // eslint-disable-line no-console
+
+            /* Set error. */
+            error = err
+        })
+
+    /* Validate response and error. */
+    // NOTE: We will automatically retry the "fallback" before failing.
+    if ((!response || error) && !_retry) {
+        // console.log('RETRYING REQUEST (fallback)', _params)
+        response = await dbQuery(_params, FALLBACK, true)
+            .catch(err => console.error(err)) // eslint-disable-line no-console
+        // console.log('RESPONSE (fallback)', response)
+
+        /* Validate response. */
+        if (response) {
+            /* Set retry flag. */
+            _retry = true
+        }
+    }
 
     /* Validate response. */
     if (response && response.body) {
-        debug('DB QUERY (response.body):', response.body)
+        debug('DB query (response.body):', response.body)
         // console.log('DB QUERY (response.body):',
         //     util.inspect(response.body, false, null, true))
 
-        /* Return body. */
+        /* Return (response) body. */
         return response.body
+    } else if (response && _retry) {
+        debug('DB query retry (response):', response)
+        // console.log('DB QUERY (response):',
+        //     util.inspect(response, false, null, true))
+
+        /* Return response. */
+        return response
     } else {
+        debug('Failed to retrieve query response from ENDPOINT or FALLBACK.')
+
+        /* Return null. */
         return null
     }
 }
