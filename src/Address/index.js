@@ -17,11 +17,13 @@ class Address extends EventEmitter {
     }
 
     /* Balance */
+    // NOTE: Returns a promise.
     static balance(_address) {
         return require('./balance')(_address)
     }
 
     /* Details */
+    // NOTE: Returns a promise.
     static details(_address) {
         return require('./details')(_address)
     }
@@ -42,14 +44,14 @@ class Address extends EventEmitter {
     }
 
     /* Unspent Transaction Outputs */
-    static utxo(_address, _compatibility) {
-        return require('./utxos')(_address, _compatibility)
-    }
     static utxos(_address, _compatibility) {
         return require('./utxos')(_address, _compatibility)
     }
 
 }
+
+/* Initialize aliases. */
+Address.utxo = Address.utxos
 
 /* Export module. */
 module.exports = Address
