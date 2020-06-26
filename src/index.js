@@ -99,6 +99,12 @@ class Nito extends EventEmitter {
         return require('./Markets')
     }
 
+    /* Message */
+    // NOTE: This class is read-only and ONLY supports static methods.
+    static get Message() {
+        return require('./Message')
+    }
+
     /* Privacy */
     get Privacy() {
         return require('./Privacy')
