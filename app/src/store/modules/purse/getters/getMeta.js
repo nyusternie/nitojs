@@ -5,7 +5,7 @@ const msgpack = require('msgpack-lite')
  * Get Metadata
  */
 const getMeta = (state) => {
-    /* Validate state (of metadata). */
+    /* Validate state. */
     if (!state || !state.meta) {
         return null
     }

@@ -7,7 +7,7 @@ const msgpack = require('msgpack-lite')
  * Returns addresses for ALL (in-use) receiving sessions.
  */
 const getSessions = (state) => {
-    /* Validate state (of sessions). */
+    /* Validate state. */
     if (!state || !state.sessions) {
         return null
     }

@@ -5,7 +5,7 @@ const msgpack = require('msgpack-lite')
  * Get Outbox
  */
 const getOutbox = (state) => {
-    /* Validate state (of outbox). */
+    /* Validate state. */
     if (!state || !state.outbox) {
         return null
     }

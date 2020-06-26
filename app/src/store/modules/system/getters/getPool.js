@@ -4,7 +4,7 @@
  * Returns addresses for ALL (in-use) receiving pool.
  */
 const getPool = (state) => {
-    /* Validate state (of sessions). */
+    /* Validate state. */
     if (!state || !state.pool) {
         return null
     }

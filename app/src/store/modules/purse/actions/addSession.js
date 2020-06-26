@@ -7,7 +7,7 @@ const addSession = ({ commit, getters }) => {
     console.info('Creating a NEW session...') // eslint-disable-line no-console
 
     /**
-     * Account (Index) Model
+     * Accounts (Index) Model
      *
      * Manages the indexes of account (addresses) and their respective
      * derivation paths.
@@ -24,7 +24,7 @@ const addSession = ({ commit, getters }) => {
      * NOTE: Nito Cash will be a single `session` and `chain` to allow
      *       for better support with Nito-based wallets.
      */
-    const accountModel = {
+    const accountsModel = {
         deposit: 0,
         change: 0,
         nitoxchg: 0, // NOTE: For "possible" future compatibility with Nito Exchange.
@@ -50,7 +50,7 @@ const addSession = ({ commit, getters }) => {
      */
     const sessionModel = {
         status: 'active',
-        accounts: accountModel,
+        accounts: accountsModel,
         coins: {},
     }
 
