@@ -14,6 +14,11 @@ class Crypto extends EventEmitter {
         debug('Crypto class has been initialized.')
     }
 
+    /* Hashing */
+    static hash(_message, _algo) {
+        return require('./hash')(_message, _algo)
+    }
+
     /* Mnemonic */
     static mnemonic(_entropy, _language) {
         return require('./mnemonic')(_entropy, _language)
