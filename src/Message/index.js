@@ -15,13 +15,13 @@ class Message extends EventEmitter {
     }
 
     /* Sign Message */
-    static sign(_wif, _message) {
-        return require('./sign')(_wif, _message)
+    static sign(_message, _wif) {
+        return require('./sign')(_message, _wif)
     }
 
     /* Verify Message */
-    static verify(_address, _signature, _message) {
-        return require('./verify')(_address, _signature, _message)
+    static verify(_message, _address, _signature) {
+        return require('./verify')(_message, _address, _signature)
     }
 
 }

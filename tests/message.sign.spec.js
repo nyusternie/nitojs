@@ -17,7 +17,7 @@ describe('Message', () => {
         const message = 'Hello, world'
 
         /* Calculate signature. */
-        const signature = Nito.Message.sign(wif, message)
+        const signature = Nito.Message.sign(message, wif)
 
         /* Evaluate test. */
         expect(signature).toHaveLength(88)
