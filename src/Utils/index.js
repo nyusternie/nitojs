@@ -14,9 +14,29 @@ class Utils extends EventEmitter {
         debug('Utilities class has been initialized.')
     }
 
+    /* Dust Limit */
+    static get dustLimit() {
+        return 546
+    }
+
+    /* Maximum (Satoshi) Limit */
+    static get maxLimit() {
+        return 2099999997690000
+    }
+
     /* Reverse Buffer */
     static reverseBuffer(_buffer) {
         return require('./reverseBuffer')(_buffer)
+    }
+
+    /* Variable Buffer */
+    static varBuf(_buffer) {
+        return require('./varBuf')(_buffer)
+    }
+
+    /* Variable Integer */
+    static varInt(_number) {
+        return require('./varInt')(_number)
     }
 
 }
