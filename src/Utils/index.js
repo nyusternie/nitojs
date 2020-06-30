@@ -14,7 +14,10 @@ class Utils extends EventEmitter {
         debug('Utilities class has been initialized.')
     }
 
-    // TODO:
+    /* Reverse Buffer */
+    static reverseBuffer(_buffer) {
+        return require('./reverseBuffer')(_buffer)
+    }
 
 }
 

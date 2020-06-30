@@ -2,7 +2,7 @@
 const bch = require('bitcore-lib-cash')
 const Nito = require('..')
 
-describe('Message', () => {
+describe('Message:sign', () => {
     test('it should generate message signature', async () => {
         /* Set WIF. */
         const wif = 'L2zhZXz7EfEDrxatFwXmEGHBAquGemoR4X58r8BeN5NyxcS9LvPa'
