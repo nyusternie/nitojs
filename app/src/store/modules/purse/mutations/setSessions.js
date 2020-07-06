@@ -6,7 +6,7 @@ const msgpack = require('msgpack-lite')
  */
 const setSession = (state, _sessions) => {
     /* Set sessions. */
-    state.sessions = msgpack.encode(_sessions)
+    state.sessions = msgpack.encode(_sessions).toString('hex')
 }
 
 /* Export module. */

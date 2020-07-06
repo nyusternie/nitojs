@@ -10,15 +10,22 @@ const getMasterSeed = (state) => {
         return null
     }
 
-    /* Legacy wallet format compatiblity. */
-    if (state.masterSeed.length === 64) { // DEPRECATED on 2020.6.10
+    try {
+        // NOTE: This pure 32-bit hex remains unpacked.
         return Buffer.from(state.masterSeed, 'hex')
-    } else {
+    } catch (err) {
+        if (err) {
+            console.error(err) // eslint-disable-line no-console
+        }
+
         try {
-            return msgpack.decode(Buffer.from(state.masterSeed))
-        } catch (_err) {
-            console.error(_err ) // eslint-disable-line no-console
-            return Buffer.from(state.masterSeed) // DEPRECATED on 2020.6.25
+            return msgpack.decode(Buffer.from(state.masterSeed)) // DEPRECATED on 2020.6.25
+        } catch (err) {
+            if (err) {
+                console.error(err) // eslint-disable-line no-console
+            }
+
+            return msgpack.decode(Buffer.from(state.masterSeed, 'hex')) // DEPRECATED on 2020.7.6
         }
     }
 }

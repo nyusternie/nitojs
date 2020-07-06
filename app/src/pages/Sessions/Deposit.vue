@@ -88,11 +88,7 @@ export default {
     data() {
         return {
             blockchain: null,
-
-            // sessionId: null,
-
             balance: null,
-            // coins: null,
         }
     },
     watch: {

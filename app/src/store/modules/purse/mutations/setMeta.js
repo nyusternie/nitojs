@@ -6,7 +6,7 @@ const msgpack = require('msgpack-lite')
  */
 const setMeta = (state, _meta) => {
     /* Set meta. */
-    state.meta = msgpack.encode(_meta)
+    state.meta = msgpack.encode(_meta).toString('hex')
 }
 
 /* Export module. */

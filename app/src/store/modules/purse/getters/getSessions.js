@@ -13,7 +13,7 @@ const getSessions = (state) => {
     }
 
     /* Initialize sessions. */
-    const sessions = msgpack.decode(Buffer.from(state.sessions))
+    const sessions = msgpack.decode(Buffer.from(state.sessions, 'hex'))
 
     /* Return sessions. */
     return sessions

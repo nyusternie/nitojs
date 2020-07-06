@@ -16,8 +16,8 @@
                 </div>
 
                 <div class="col-4">
-                    {{getFormattedValue(coin.value).rounded}}
-                    {{getFormattedValue(coin.value).unit}}
+                    {{getFormattedValue(coin.satoshis).rounded}}
+                    {{getFormattedValue(coin.satoshis).unit}}
                 </div>
             </div>
 
@@ -152,15 +152,15 @@ export default {
                             // TODO: Will probably develop a rating scale??
                             const status = coin.status === 'active' ? '✓' : 'ⅹ'
 
-                            /* Set value. */
-                            const value = coin.satoshis
+                            /* Set satoshis. */
+                            const satoshis = coin.satoshis
 
                             /* Build coin data. */
                             const coinData = {
                                 id,
                                 label,
                                 status,
-                                value,
+                                satoshis,
                             }
 
                             // TODO: Allow display of spent coins.

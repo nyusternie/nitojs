@@ -1,7 +1,8 @@
+/* Import modules. */
+const msgpack = require('msgpack-lite')
+
 /**
- * Get (Active) Pool
- *
- * Returns addresses for ALL (in-use) receiving pool.
+ * Get Pool
  */
 const getPool = (state) => {
     /* Validate state. */
@@ -10,9 +11,17 @@ const getPool = (state) => {
     }
 
     /* Initialize pool. */
-    const pool = state.pool
+    let pool = null
 
-    /* Return sessions. */
+    /* Initialize accounts. */
+    try {
+        pool = msgpack.decode(Buffer.from(state.pool, 'hex'))
+    } catch (err) {
+        console.error(err) // eslint-disable-line no-console
+        pool = state.pool // DEPRECATED in June '20
+    }
+
+    /* Return pool. */
     return pool
 }
 

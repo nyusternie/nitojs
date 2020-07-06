@@ -22,7 +22,7 @@ const state = {
      * 1. Dark mode
      * 2. Unconfirmed transactions
      */
-    flags: {
+    flags: { // FIXME: Initialize at app start.
         darkMode: false,
         unconfirmed: true,
     },
@@ -33,7 +33,7 @@ const state = {
      * Controls the localization language.
      * (default is english)
      */
-    locale: 'en-US',
+    locale: 'en-US', // FIXME: Initialize at app start.
 
     /**
      * Notices
