@@ -20,6 +20,15 @@ class Purse extends EventEmitter {
     }
 
     /**
+     * (Static) Coin from WIF
+     *
+     * Initialize a coin from its Wallet Import Format.
+     */
+    static fromWIF(_wif) {
+        return require('./fromWIF')(_wif)
+    }
+
+    /**
      * Synchronize
      *
      * The synchronizer keeps the wallet up-to-date with its set of

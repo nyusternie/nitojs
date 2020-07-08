@@ -72,6 +72,16 @@ class Nito extends EventEmitter {
         return 0
     }
 
+    /* Account */
+    get Account() {
+        return require('./Account')
+    }
+
+    /* (Static) Account */
+    static get Account() {
+        return require('./Account')
+    }
+
     /* Address */
     // NOTE: This class is read-only and ONLY supports static methods.
     static get Address() {
