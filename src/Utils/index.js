@@ -14,9 +14,19 @@ class Utils extends EventEmitter {
         debug('Utilities class has been initialized.')
     }
 
+    /* Decode Number */
+    static decodeNumber(_bufferValue) {
+        return require('./decodeNumber')(_bufferValue)
+    }
+
     /* Dust Limit */
     static get dustLimit() {
         return 546
+    }
+
+    /* Encode Number */
+    static encodeNumber(_satoshis) {
+        return require('./encodeNumber')(_satoshis)
     }
 
     /* Maximum (Satoshi) Limit */

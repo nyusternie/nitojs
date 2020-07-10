@@ -29,7 +29,15 @@ class Crypto extends EventEmitter {
         return require('./randomBytes')(_size)
     }
 
+    /* SHA-256 */
+    static sha256(_message) {
+        return require('./hash')(_message, 'sha256')
+    }
+
 }
+
+/* Initialize aliases. */
+Crypto.sha512 = Crypto.hash
 
 /* Export module. */
 module.exports = Crypto
