@@ -57,10 +57,13 @@ const sendCoin = async (_coin, _receivers, _autoFee) => {
     let txAmount = 0
 
     /* Handle automatic fee. */
+    _receivers.forEach(_receiver => {
+        txAmount += _receiver.satoshis
+    })
+
+    /* Handle automatic fee. */
     if (_autoFee) {
-        txAmount = _receivers[0].satoshis - byteCount
-    } else {
-        txAmount = _receivers[0].satoshis
+        txAmount -= byteCount
     }
     debug('Transaction satoshis (incl. fee):', txAmount)
 
@@ -72,8 +75,15 @@ const sendCoin = async (_coin, _receivers, _autoFee) => {
     /* Build transaction. */
     const transaction = new bch.Transaction()
         .from(utxo)
-        .to(_receivers[0].address, txAmount)
-        .sign(privateKey)
+
+    /* Handle all receivers. */
+    _receivers.forEach(_receiver => {
+        /* Add receiver to transaction. */
+        transaction.to(_receiver.address, _receiver.satoshis)
+    })
+
+    /* Sign the transaction. */
+    transaction.sign(privateKey)
     debug('Raw transaction (hex):', transaction.toString())
     // console.info('Raw transaction:', transaction) // eslint-disable-line no-console
     // console.info('Raw transaction (hex):', ) // eslint-disable-line no-console
