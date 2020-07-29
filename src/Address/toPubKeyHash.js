@@ -17,10 +17,26 @@ const toPubKeyHash = function (_address) {
     }
 
     /* Initialize (Bitcoin Cash) address. */
-    const address = bchaddr.toCashAddress(_address)
+    const cashAddress = bchaddr.toCashAddress(_address)
 
-    /* Conver to public key hash. */
-    const pubKeyHash = bch.Script.buildPublicKeyHashOut(address).toHex()
+    /* Initialize public key hash. */
+    let pubKeyHash = null
+
+    /* Handle address type. */
+    if (bchaddr.isP2PKHAddress(cashAddress)) {
+        /* Convert to public key hash. */
+        pubKeyHash = bch.Script.buildPublicKeyHashOut(cashAddress).toHex()
+    } else if (bchaddr.isP2SHAddress(cashAddress)) {
+        /* Set (script) address. */
+        const address = bch.Address(cashAddress)
+
+        /* Convert to public key hash. */
+        // NOTE: Script buffers are hashed when building.
+        //       ie. `Hash.sha256ripemd160(script.toBuffer())`
+        pubKeyHash = bch.Script.buildScriptHashOut(address).toHex()
+    } else {
+        throw new Error('Invalid address.')
+    }
 
     /* Return public key hash. */
     return pubKeyHash

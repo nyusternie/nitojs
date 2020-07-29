@@ -44,6 +44,10 @@ const sendCoin = async (_coin, _receivers, _autoFee) => {
     debug('Sending (utxo):', utxo)
     // console.log('SEND COIN (utxo):', utxo)
 
+    /* Build transaction. */
+    const transaction = new bch.Transaction()
+        .from(utxo)
+
     /* Initialize (minimum) byte count. */
     // FIXME: We need to properly calculate the fee.
     //        Reference BITBOX `getByteCount` for method.
@@ -56,31 +60,41 @@ const sendCoin = async (_coin, _receivers, _autoFee) => {
     // FIXME: Recommendation is to use 1.1 sat/byte
     let txAmount = 0
 
-    /* Handle automatic fee. */
+    /* Handle all receivers. */
     _receivers.forEach(_receiver => {
-        txAmount += _receiver.satoshis
-    })
+        /* Set receipient address. */
+        const address = _receiver.address
 
-    /* Handle automatic fee. */
-    if (_autoFee) {
-        txAmount -= byteCount
-    }
+        /* Initialize satoshis. */
+        let satoshis = null
+
+        if (_autoFee) {
+            /* Calculate fee per recipient. */
+            // NOTE: Fee is split evenly between all recipients.
+            const feePerRecipient = Math.ceil(byteCount / _receivers.length)
+
+            /* Calculate satoshis. */
+            satoshis = _receiver.satoshis - feePerRecipient
+
+            /* Add receiver to transaction. */
+            transaction.to(address, satoshis)
+        } else {
+            /* Set satoshis. */
+            satoshis = _receiver.satoshis
+
+            /* Add receiver to transaction. */
+            transaction.to(address, satoshis)
+        }
+
+        /* Calculate transaction total. */
+        txAmount += satoshis
+    })
     debug('Transaction satoshis (incl. fee):', txAmount)
 
     /* Validate dust amount. */
     if (txAmount < DUST_SATOSHIS) {
         throw new Error(`Amount is too low. Minimum is [ ${DUST_SATOSHIS} ] satoshis.`)
     }
-
-    /* Build transaction. */
-    const transaction = new bch.Transaction()
-        .from(utxo)
-
-    /* Handle all receivers. */
-    _receivers.forEach(_receiver => {
-        /* Add receiver to transaction. */
-        transaction.to(_receiver.address, _receiver.satoshis)
-    })
 
     /* Sign the transaction. */
     transaction.sign(privateKey)
