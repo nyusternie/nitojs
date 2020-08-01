@@ -28,6 +28,18 @@ class Address extends EventEmitter {
         return require('./details')(_address)
     }
 
+    /* Is Cash Address */
+    // TODO: Add tests plus more methods (https://www.npmjs.com/package/bchaddrjs)
+    static isCashAddress(_address) {
+        return require('./isCashAddress')(_address)
+    }
+
+    /* Is Legacy Address */
+    // TODO: Add tests plus more methods (https://www.npmjs.com/package/bchaddrjs)
+    static isLegacyAddress(_address) {
+        return require('./isLegacyAddress')(_address)
+    }
+
     /* To Cash Address */
     static toCashAddress(_address) {
         return require('./toCashAddress')(_address)

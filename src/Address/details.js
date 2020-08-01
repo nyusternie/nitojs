@@ -4,7 +4,7 @@ const debug = require('debug')('nitojs:address:details')
 /**
  * Details
  *
- * Retrieves addres details.
+ * Retrieves address details.
  */
 const details = async (_address) => {
     debug('Requesting details for address:', _address)
