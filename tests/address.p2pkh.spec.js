@@ -1,7 +1,7 @@
 /* Import modules. */
 const Nito = require('..')
 
-describe('Address:script', () => {
+describe('Address:p2pkh', () => {
     test('it should convert a public script hash to a cash address', () => {
         /* Initialize public key (script) hash. */
         const scriptPubKey = '76a9148fb0c71c80a56e583f22567a34f0135fdc7c2a9488ac'

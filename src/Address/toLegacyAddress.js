@@ -26,11 +26,22 @@ const toLegacyAddress = function (_address) {
         }
     }
 
-    /* Validate public script hash. */
+    /* Validate public script hash (P2PKH). */
     if (_address.length === 50) {
         /* Detect public script hash. */
-        // FIXME: Is this a valid matching query??
         if (_address.slice(0, 6) === '76a914' && _address.slice(-4) === '88ac') {
+            /* Initialize public script hash. */
+            const scriptPubKey = bch.Script(_address)
+
+            /* Convert to cash address. */
+            _address = bch.Address(scriptPubKey).toString()
+        }
+    }
+
+    /* Validate public script hash (P2SH). */
+    if (_address.length === 46) {
+        /* Detect public script hash. */
+        if (_address.slice(0, 4) === 'a914' && _address.slice(-2) === '87') {
             /* Initialize public script hash. */
             const scriptPubKey = bch.Script(_address)
 
