@@ -15,8 +15,8 @@ class Crypto extends EventEmitter {
     }
 
     /* Hashing */
-    static hash(_message, _algo) {
-        return require('./hash')(_message, _algo)
+    static hash(_message, _algo, _hexFormat) {
+        return require('./hash')(_message, _algo, _hexFormat)
     }
 
     /* Mnemonic */

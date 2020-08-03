@@ -9,15 +9,17 @@ const ENDPOINT = 'https://api.telr.io/v1/ticker/quote/'
  * Get Quote
  *
  * Returns an object containing the most recent ticker data.
+ *
+ * TODO: Add support for multiple base currencies.
  */
-const getQuote = async function (_symbol) {
-    /* Validate symbol. */
-    if (!_symbol) {
+const getQuote = async function (_baseCurrency, _quoteCurrency = 'USD') {
+    /* Validate currencies. */
+    if (!_baseCurrency || !_quoteCurrency) {
         return null
     }
 
     /* Set target. */
-    const target = ENDPOINT + _symbol
+    const target = ENDPOINT + _baseCurrency
     debug('getQuote (target):', target)
 
     /* Call (remote) API. */

@@ -17,13 +17,13 @@ class Markets extends EventEmitter {
     }
 
     /* Get Quote */
-    static getQuote(_symbol) {
-        return require('./getQuote')(_symbol)
+    static getQuote(_baseCurrency, _quoteCurrency) {
+        return require('./getQuote')(_baseCurrency, _quoteCurrency)
     }
 
     /* Get Ticker */
-    static getTicker(_symbol) {
-        return require('./getTicker')(_symbol)
+    static getTicker(_baseCurrency, _quoteCurrency) {
+        return require('./getTicker')(_baseCurrency, _quoteCurrency)
     }
 
 }

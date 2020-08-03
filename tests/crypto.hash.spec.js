@@ -2,6 +2,17 @@
 const Nito = require('..')
 
 describe('Crypto:hash', () => {
+    test('it should perform an MD5 hash on a string', async () => {
+        /* Calculate hash. */
+        const hash = Nito.Crypto.hash('Hello, world', 'md5')
+
+        /* Set expected hex value. */
+        const expected = Buffer.from('bc6e6f16b8a077ef5fbc8d59d0b931b9', 'hex')
+
+        /* Evaluate test. */
+        expect(hash).toEqual(expected)
+    })
+
     test('it should perform a SHA256 hash on a string', async () => {
         /* Calculate hash. */
         const hash = Nito.Crypto.hash('Hello, world', 'sha256')

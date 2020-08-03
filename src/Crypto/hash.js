@@ -6,7 +6,7 @@ const debug = require('debug')('nitojs:crypto:hash')
 /**
  * Hashing
  */
-const hash = (_message, _algo = 'sha512') => {
+const hash = (_message, _algo = 'sha512', _hexFormat = false) => {
     debug(`Generating [ ${_algo} ] hash.`)
 
     /* Initialize digest. */
@@ -32,12 +32,16 @@ const hash = (_message, _algo = 'sha512') => {
         /* Set data. */
         const data = hash.update(_message, 'utf-8')
 
-        /* Convert to hex format. */
+        /* Convert to data digest. */
         digest = data.digest()
     }
 
     /* Return digest. */
-    return digest
+    if (_hexFormat) {
+        return digest.toString('hex')
+    } else {
+        return digest
+    }
 }
 
 /* Export module. */
