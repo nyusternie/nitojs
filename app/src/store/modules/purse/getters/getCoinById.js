@@ -20,12 +20,12 @@ const getCoinById = (state, getters) => (_coinId) => {
     /* Initialize coin. */
     let coin = null
 
-    Object.keys(sessions).forEach(_sessionId => {
+    Object.keys(sessions).forEach(_sessionid => {
         /* Validate coin. */
         if (coin) return
 
         /* Set session. */
-        const session = sessions[_sessionId]
+        const session = sessions[_sessionid]
 
         /* Set coins. */
         const coins = session.coins

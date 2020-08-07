@@ -69,12 +69,12 @@ export default {
 
             /* Validate sessions. */
             if (this.getSessions) {
-                Object.keys(this.getSessions).forEach(sessionId => {
-                    console.log(sessionId, this.getSessions[sessionId])
+                Object.keys(this.getSessions).forEach(sessionid => {
+                    console.log(sessionid, this.getSessions[sessionid])
 
-                    const session = this.getSessions[sessionId]
+                    const session = this.getSessions[sessionid]
 
-                    const id = Number(sessionId) + 1
+                    const id = Number(sessionid) + 1
 
                     const name = 'Session #1'
 
@@ -111,10 +111,10 @@ export default {
 
             /* Validate sessions. */
             if (this.getSessions) {
-                Object.keys(this.getSessions).forEach(sessionId => {
-                    console.log(sessionId, this.getSessions[sessionId])
+                Object.keys(this.getSessions).forEach(sessionid => {
+                    console.log(sessionid, this.getSessions[sessionid])
 
-                    const session = this.getSessions[sessionId]
+                    const session = this.getSessions[sessionid]
 
                     const type = 'DEPOSIT'
 
@@ -153,10 +153,10 @@ export default {
 
             /* Validate sessions. */
             if (this.getSessions) {
-                Object.keys(this.getSessions).forEach(sessionId => {
-                    console.log(sessionId, this.getSessions[sessionId])
+                Object.keys(this.getSessions).forEach(sessionid => {
+                    console.log(sessionid, this.getSessions[sessionid])
 
-                    const session = this.getSessions[sessionId]
+                    const session = this.getSessions[sessionid]
 
                     const action = 'CREATED PURSE'
 

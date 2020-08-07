@@ -288,7 +288,7 @@ class ShuffleClient extends EventEmitter {
         /* Remove the coin from the pool of available coins. */
         // TODO: Make this removal criteria more specific in case of
         //       the insanely unlikely case where the server gives us the
-        //       same sessionId for two simultaneously open rounds.
+        //       same sessionid for two simultaneously open rounds.
         _.remove(this.rounds, { session: shuffleRoundObject.session })
 
         // If successful, add the clean coin to our shuffled coin

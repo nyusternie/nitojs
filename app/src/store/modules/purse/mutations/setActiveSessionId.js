@@ -1,9 +1,9 @@
 /**
  * Set Active Session Id
  */
-const setActiveSessionId = (state, _sessionId) => {
+const setActiveSessionId = (state, _sessionid) => {
     /* Set active session id. */
-    state.activeSessionId = _sessionId
+    state.activeSessionId = _sessionid
 }
 
 /* Export module. */

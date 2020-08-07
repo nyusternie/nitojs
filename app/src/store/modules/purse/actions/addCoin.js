@@ -7,12 +7,12 @@ const addCoin = ({ commit, getters }, _pkg) => {
     console.info('Adding new coin...', _pkg) // eslint-disable-line no-console
 
     /* Set session id. */
-    const sessionId = _pkg.sessionId
-    // console.log('ADD NEW COIN (sessionid):', sessionId)
+    const sessionid = _pkg.sessionid
+    // console.log('ADD NEW COIN (sessionid):', sessionid)
 
     /* Set chain id. */
-    const chainId = _pkg.chainId
-    // console.log('ADD NEW COIN (chainid):', chainId)
+    const chainid = _pkg.chainid
+    // console.log('ADD NEW COIN (chainid):', chainid)
 
     /* Set coin. */
     const coin = _pkg.coin
@@ -23,22 +23,22 @@ const addCoin = ({ commit, getters }, _pkg) => {
     // console.log('ADD NEW COIN (sessions):', sessions)
 
     /* Validate session id. */
-    if (!sessions[sessionId]) {
+    if (!sessions[sessionid]) {
         return
     }
 
     /* Add coin to session. */
-    sessions[sessionId].coins[`${coin.txid}:${coin.vout}`] = coin
+    sessions[sessionid].coins[`${coin.txid}:${coin.vout}`] = coin
 
     /* Increment deposit account. */
-    switch(chainId) {
+    switch(chainid) {
     case 0:
         /* Increment deposit index. */
-        sessions[sessionId].accounts.deposit++
+        sessions[sessionid].accounts.deposit++
         break
     case 1:
         /* Increment change index. */
-        sessions[sessionId].accounts.change++
+        sessions[sessionid].accounts.change++
         break
     case 7867:
         /* Commit Nito Cash index. */
@@ -46,7 +46,7 @@ const addCoin = ({ commit, getters }, _pkg) => {
         break
     case 7888:
         /* Increment Nito Exchange index. */
-        sessions[sessionId].accounts.xchg++
+        sessions[sessionid].accounts.xchg++
         break
     }
 

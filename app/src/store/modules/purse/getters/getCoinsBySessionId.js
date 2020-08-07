@@ -3,8 +3,8 @@
  *
  * Returns UTXOs for ALL (in-use) session coins.
  */
-const getCoinsBySessionId = (state, getters) => (_sessionId) => {
-    // console.log('GET COINS BY SESSION (sessionid)', _sessionId)
+const getCoinsBySessionId = (state, getters) => (_sessionid) => {
+    // console.log('GET COINS BY SESSION (sessionid)', _sessionid)
     /* Validate sessions. */
     if (!getters.getSessions) {
         return null
@@ -15,12 +15,12 @@ const getCoinsBySessionId = (state, getters) => (_sessionId) => {
     // console.log('GET COINS BY SESSION (sessions)', sessions)
 
     /* Validate session. */
-    if (!sessions[_sessionId]) {
+    if (!sessions[_sessionid]) {
         return null
     }
 
     /* Initialize (session) coins. */
-    const coins = sessions[_sessionId].coins
+    const coins = sessions[_sessionid].coins
 
     /* Return (session) coins. */
     return coins

@@ -124,14 +124,14 @@ export default {
 
             /* Validate sessions. */
             if (this.getSessions) {
-                Object.keys(this.getSessions).forEach(sessionId => {
+                Object.keys(this.getSessions).forEach(sessionid => {
                     /* Initialize sessions. */
                     const sessions = this.getSessions
                     console.log('COINS (sessions):', sessions)
 
-                    Object.keys(sessions).forEach(sessionIdx => {
+                    Object.keys(sessions).forEach(sessionidx => {
                         /* Initialize session. */
-                        const session = sessions[sessionIdx]
+                        const session = sessions[sessionidx]
 
                         /* Initialize coins. */
                         const coins = session.coins

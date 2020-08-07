@@ -131,7 +131,7 @@ class CommChannel extends EventEmitter {
                 // debug('Checking signature for',
                 //     message.pruned.messageType.toUpperCase(),
                 //     'message from',
-                //     (sender ? sender.session + ' ( ' + sender.verificationKey + ' ) ' : 'player with sessionId ' + message.pruned.message.session)
+                //     (sender ? sender.session + ' ( ' + sender.verificationKey + ' ) ' : 'player with sessionid ' + message.pruned.message.session)
                 // )
             }
 

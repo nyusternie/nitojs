@@ -11,16 +11,16 @@ const Nito = require('nitojs')
 */
 const getBalanceBySessionId = (
     state, getters, rootState, rootGetters
-) => async (_sessionId, _currency) => {
+) => async (_sessionid, _currency) => {
     /* Validate (session) accounts. */
-    if (!getters.getCoinsBySessionId(_sessionId)) {
+    if (!getters.getCoinsBySessionId(_sessionid)) {
         return null
     }
 
     /* Initialize (search) addresses. */
     const addresses = []
 
-    const coins = getters.getCoinsBySessionId(_sessionId)
+    const coins = getters.getCoinsBySessionId(_sessionid)
     // console.log('GET BALANCE BY SESSION (coins)', coins)
 
     /* Add all active receiving account (addresses) to pool. */

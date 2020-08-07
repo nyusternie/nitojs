@@ -6,8 +6,8 @@ const Nito = require('nitojs')
  *
  * Returns the next avaialble "receiving" account, for the session.
  */
-const getAddressBySessionId = (state, getters) => (_sessionId) => {
-    // console.log('GET ADDRESS BY SESSION (sessionid)', _sessionId)
+const getAddressBySessionId = (state, getters) => (_sessionid) => {
+    // console.log('GET ADDRESS BY SESSION (sessionid)', _sessionid)
     /* Validate sessions. */
     if (!getters.getSessions) {
         return null
@@ -18,14 +18,14 @@ const getAddressBySessionId = (state, getters) => (_sessionId) => {
     // console.log('GET ADDRESS BY SESSION (sessions):', sessions)
 
     /* Initialize current (coin) index. */
-    const currentIndex = sessions[_sessionId].accounts.deposit
+    const currentIndex = sessions[_sessionid].accounts.deposit
     // console.log('GET ADDRESS BY SESSION (currentIndex):', currentIndex)
 
     /* Set chain. */
     const chain = 0 // receiving account
 
     /* Set derivation path. */
-    const path = getters.getDerivationPath(_sessionId, chain, currentIndex)
+    const path = getters.getDerivationPath(_sessionid, chain, currentIndex)
     // console.log('GET ADDRESS BY SESSION (path)', path)
 
     /* Initialize HD node. */

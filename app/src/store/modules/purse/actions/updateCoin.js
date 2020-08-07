@@ -7,8 +7,8 @@ const updateCoin = ({ commit, getters }, _pkg) => {
     console.info('Updating coin...', _pkg) // eslint-disable-line no-console
 
     /* Set session id. */
-    const sessionId = _pkg.sessionId
-    console.log('UPDATE COIN (sessionid):', sessionId)
+    const sessionid = _pkg.sessionid
+    console.log('UPDATE COIN (sessionid):', sessionid)
 
     /* Set coin. */
     const coin = _pkg.coin
@@ -19,12 +19,12 @@ const updateCoin = ({ commit, getters }, _pkg) => {
     console.log('UPDATE COIN (sessions):', sessions)
 
     /* Validate session id. */
-    if (!sessions[sessionId]) {
+    if (!sessions[sessionid]) {
         return
     }
 
     /* Add coin to session. */
-    sessions[sessionId].coins[`${coin.txid}:${coin.vout}`] = coin
+    sessions[sessionid].coins[`${coin.txid}:${coin.vout}`] = coin
 
     /* Commit updated sessions. */
     commit('setSessions', sessions)
