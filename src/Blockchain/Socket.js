@@ -185,7 +185,7 @@ class Socket extends EventEmitter {
             /* Set message. */
             const msg = `Started listening for [ ${JSON.stringify(params)} ]`
             debug(msg)
-            console.log(msg) // FOR DEBUGGING PURPOSES ONLY
+            // console.log(msg) // FOR DEBUGGING PURPOSES ONLY
 
             /* Emit message. */
             this.emit('open', msg)
@@ -196,7 +196,7 @@ class Socket extends EventEmitter {
             /* Set message. */
             const msg = `Stopped listening for [ ${JSON.stringify(params)} ]`
             debug(msg)
-            console.log(msg) // FOR DEBUGGING PURPOSES ONLY
+            // console.log(msg) // FOR DEBUGGING PURPOSES ONLY
 
             /* Emit message. */
             this.emit('close', msg)
@@ -204,7 +204,7 @@ class Socket extends EventEmitter {
 
         /* Handle message. */
         this.bitsocket.onmessage = (_evt) => {
-            console.log('ONMESSAGE (evt):', util.inspect(_evt, false, null, true))
+            // console.log('ONMESSAGE (evt):', util.inspect(_evt, false, null, true))
             try {
                 /* Parse data. */
                 const data = JSON.parse(_evt.data)
@@ -215,7 +215,7 @@ class Socket extends EventEmitter {
                 // console.log(msg, util.inspect(data, false, null, true))
 
                 /* Emit data. */
-                this.emit('data', data)
+                this.emit('update', data)
             } catch (err) {
                 /* Emit error. */
                 this.emit('error', err)

@@ -18,6 +18,9 @@ class Blockchain extends EventEmitter {
         /* Initialize Insomnia. */
         this.insomnia = null
 
+        /* Initialize Socket. */
+        this.socket = null
+
         debug(`Blockchain class has been initialized for [ ${_symbol} ] on [ ${_network} ]`)
     }
 
@@ -40,18 +43,6 @@ class Blockchain extends EventEmitter {
         return this.Query.isSpent(_txid, _vout)
     }
 
-    /* Stop */
-    stop() {
-        /* Validate Insomnia. */
-        if (this.insomnia) {
-            /* Stop all processes. */
-            this.insomnia.stop()
-        }
-
-        debug('Blockchain has been stopped.')
-        console.log('Blockchain has been stopped.')
-    }
-
     /* Subscribe */
     subscribe(_type, _params) {
         /* Handle subscription type. */
@@ -59,16 +50,16 @@ class Blockchain extends EventEmitter {
         case 'account':
             throw new Error('Account subscriptions are currently unavailable.')
         case 'address': {
-            if (!this.insomnia) {
-                /* Initialize Insomnia. */
-                this.insomnia = new this.Insomnia()
+            if (!this.socket) {
+                /* Initialize Socket. */
+                this.socket = new this.Socket()
 
                 /* Relay emit. */
-                this.insomnia.on('update', (_msg) => this.emit('update', _msg))
+                this.socket.on('update', (_msg) => this.emit('update', _msg))
             }
 
             /* Return response. */
-            return this.insomnia.watchAddress(_params)
+            return this.socket.watchAddress(_params)
         }
         case 'block':
             throw new Error('Block subscriptions are currently unavailable.')
@@ -78,8 +69,18 @@ class Blockchain extends EventEmitter {
     }
 
     /* Unsubscribe */
+    // FIXME: Handle the 2 parameters to limit the scope of the unsubscription.
     unsubscribe(_type, _params) {
-        debug('TODO: Unsubscribe', _type, _params)
+        console.log(`FIXME: Unsubscribe from ${_type} for ${_params}`)
+
+        /* Validate Insomnia. */
+        if (this.socket) {
+            /* Close the socket connection. */
+            this.socket.close()
+        }
+
+        debug('Socket has been closed.')
+        console.log('Socket has been closed.')
     }
 
     /***************************************************************************

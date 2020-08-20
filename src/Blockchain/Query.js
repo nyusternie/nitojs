@@ -219,7 +219,8 @@ class Query {
 
         /* Request query. */
         const response = await dbQuery(query)
-        console.log('DB QUERY RESPONSE', response)
+        debug('Database query response:', response)
+        // console.log('Database query response:', response)
 
         /* Validate query. */
         if (response && response.c) {
