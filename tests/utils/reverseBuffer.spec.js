@@ -1,5 +1,5 @@
 /* Import modules. */
-const Nito = require('..')
+const Nito = require('../..')
 
 describe('Utils:reverseBuffer', () => {
     test('it should reverse bytes of a buffer', async () => {

@@ -1,5 +1,5 @@
 /* Import modules. */
-const Nito = require('..')
+const Nito = require('../..')
 
 describe('Crypto:randomBytes', () => {
     test('it should check the length of random bytes', async () => {

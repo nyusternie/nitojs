@@ -1,5 +1,5 @@
 /* Import modules. */
-const Nito = require('..')
+const Nito = require('../..')
 const util = require('util')
 
 ;(async () => {

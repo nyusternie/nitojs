@@ -1,6 +1,6 @@
 /* Import modules. */
 const bch = require('bitcore-lib-cash')
-const Nito = require('..')
+const Nito = require('../..')
 
 describe('Message:sign', () => {
     test('it should generate message signature', async () => {

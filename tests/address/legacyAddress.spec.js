@@ -1,5 +1,5 @@
 /* Import modules. */
-const Nito = require('..')
+const Nito = require('../..')
 
 describe('Address:legacyAddress', () => {
     test('it should convert cash address to legacy format', () => {

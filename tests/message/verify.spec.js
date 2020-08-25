@@ -1,5 +1,5 @@
 /* Import modules. */
-const Nito = require('..')
+const Nito = require('../..')
 
 describe('Message:verify', () => {
     test('it should verify message signature', async () => {

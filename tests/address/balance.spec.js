@@ -1,5 +1,5 @@
 /* Import modules. */
-const Nito = require('..')
+const Nito = require('../..')
 
 describe('Address:balance', () => {
     test('it should retrieve both confirmed and unconfirmed address balances', async () => {

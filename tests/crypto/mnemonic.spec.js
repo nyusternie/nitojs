@@ -1,5 +1,5 @@
 /* Import modules. */
-const Nito = require('..')
+const Nito = require('../..')
 
 describe('Crypto:mnemonic', () => {
     test('it should generate a 24 word mnemonic phrase', async () => {

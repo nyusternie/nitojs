@@ -1,5 +1,5 @@
 /* Import modules. */
-const Nito = require('..')
+const Nito = require('../..')
 
 describe('Crypto:hash', () => {
     test('it should perform an MD5 hash on a string', async () => {

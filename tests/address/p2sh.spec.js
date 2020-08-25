@@ -1,5 +1,5 @@
 /* Import modules. */
-const Nito = require('..')
+const Nito = require('../..')
 
 describe('Address:p2sh', () => {
     test('it should convert a public script hash to a cash address', () => {

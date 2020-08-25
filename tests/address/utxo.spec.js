@@ -1,5 +1,5 @@
 /* Import modules. */
-const Nito = require('..')
+const Nito = require('../..')
 
 describe('Address:UTXO', () => {
     test('it should retrieve UTXOs and provide address data', async () => {

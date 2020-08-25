@@ -1,5 +1,5 @@
 /* Import modules. */
-const Nito = require('..')
+const Nito = require('../..')
 
 describe('Purse:fromWIF', () => {
     test('it should initialize a coin from its WIF', async () => {

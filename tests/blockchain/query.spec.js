@@ -1,5 +1,5 @@
 /* Import modules. */
-const Nito = require('..')
+const Nito = require('../..')
 
 describe('Blockchain:query', () => {
     test('it should report the UTXO is spent', async () => {

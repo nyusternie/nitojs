@@ -1,5 +1,5 @@
 /* Import modules. */
-const Nito = require('..')
+const Nito = require('../..')
 
 describe('Utils:encodeNumber', () => {
     test('it should encode an output value', async () => {
