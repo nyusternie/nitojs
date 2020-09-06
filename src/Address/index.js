@@ -40,6 +40,11 @@ class Address extends EventEmitter {
         return require('./isLegacyAddress')(_address)
     }
 
+    /* From Extended Public Key */
+    static fromXPub(_xpub, _path) {
+        return require('./fromXPub')(_xpub, _path)
+    }
+
     /* To Cash Address */
     static toCashAddress(_address) {
         return require('./toCashAddress')(_address)

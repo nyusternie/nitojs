@@ -7,7 +7,7 @@ const debug = require('debug')('nitojs:address:iscashaddress')
  *
  * Validates address.
  */
-const isCashAddress = async (_address) => {
+const isCashAddress = (_address) => {
     debug('Validating address:', _address)
 
     /* Return validation result. */

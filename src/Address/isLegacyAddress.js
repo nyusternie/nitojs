@@ -7,7 +7,7 @@ const debug = require('debug')('nitojs:address:islegacyaddress')
  *
  * Validates address.
  */
-const isLegacyAddress = async (_address) => {
+const isLegacyAddress = (_address) => {
     debug('Validating address:', _address)
 
     /* Return validation result. */
