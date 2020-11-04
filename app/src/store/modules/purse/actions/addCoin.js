@@ -10,13 +10,13 @@ const addCoin = ({ commit, getters }, _pkg) => {
     const sessionid = _pkg.sessionid
     // console.log('ADD NEW COIN (sessionid):', sessionid)
 
-    /* Set chain id. */
-    const chainid = _pkg.chainid
-    // console.log('ADD NEW COIN (chainid):', chainid)
-
     /* Set coin. */
     const coin = _pkg.coin
     // console.log('ADD NEW COIN (coin):', coin)
+
+    /* Set chain id. */
+    const chainid = coin.chainid
+    // console.log('ADD NEW COIN (chainid):', chainid)
 
     /* Set sessions. */
     const sessions = getters.getSessions
@@ -27,8 +27,11 @@ const addCoin = ({ commit, getters }, _pkg) => {
         return
     }
 
+    /* Set coin id. */
+    const coinid = `${coin.txid}:${coin.vout}`
+
     /* Add coin to session. */
-    sessions[sessionid].coins[`${coin.txid}:${coin.vout}`] = coin
+    sessions[sessionid].coins[coinid] = coin
 
     /* Increment deposit account. */
     switch(chainid) {
@@ -52,6 +55,19 @@ const addCoin = ({ commit, getters }, _pkg) => {
 
     /* Commit updated sessions. */
     commit('setSessions', sessions)
+
+    try {
+        /* Initialize coins. */
+        const coins = new Audio(require('@/assets/audio/coins.wav'))
+
+        /* Play coins. */
+        // WARNING: This action may fail on several browsers;
+        //          so it's best to do this last to avoid any
+        //          unforseen side-effects.
+        coins.play()
+    } catch (err) {
+        console.error(err) // eslint-disable-line no-console
+    }
 }
 
 /* Export module. */

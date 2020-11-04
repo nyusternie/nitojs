@@ -1,14 +1,14 @@
 /* Import modules. */
-const debug = require('debug')('nitojs:blockchain:query')
+const debug = require('debug')('nitojs:slp:query')
 const superagent = require('superagent')
 // const util = require('util')
 
 // examples source:
-// https://github.com/fountainhead-cash/bitplaylist/blob/master/bitdb/README.md
+// https://slp.dev/tooling/slpdb_examples/
 
 /* Set endpoint. */
-const ENDPOINT = 'https://bitdb.bch.sx/q/'
-const FALLBACK = 'https://bitdb.devops.cash/q/'
+const ENDPOINT = 'https://slpdb.fountainhead.cash/q/'
+const FALLBACK = 'https://slpdb.devops.cash/q/'
 
 /* Set fountainhead API key. */
 const APIKEY = '1M2PjV7yGRg4dB8N32Qhw1wrDfDfZyi8VQ'

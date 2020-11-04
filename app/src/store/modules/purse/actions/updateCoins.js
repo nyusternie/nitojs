@@ -3,20 +3,19 @@ const Nito = require('nitojs')
 
 /**
  * Update Status
+ *
+ * Will mark "spent" coins as disabled.
  */
-const updateStatus = (_coins, dispatch) => {
-    Object.keys(_coins).forEach(async coinId => {
+const updateStatus = (_coins, _meta, dispatch) => {
+    Object.keys(_coins).forEach(async coinid => {
         /* Set txid. */
-        const txid = coinId.split(':')[0]
-        // console.log('UPDATE STATUS (txid)', txid)
+        const txid = coinid.split(':')[0]
 
         /* Set vout. */
-        const vout = coinId.split(':')[1]
-        // console.log('UPDATE STATUS (vout)', vout)
+        const vout = coinid.split(':')[1]
 
         /* Query spent status. */
         const isSpent = await Nito.Blockchain.Query.isSpent(txid, vout)
-        // console.log('UPDATE STATUS (isSpent)', isSpent, txid, vout)
 
         /* Validate spent. */
         if (isSpent) {
@@ -24,7 +23,7 @@ const updateStatus = (_coins, dispatch) => {
             const sessionid = 0
 
             /* Set coin. */
-            const coin = _coins[coinId]
+            const coin = _coins[coinid]
 
             /* Validate status. */
             if (coin && coin.status !== 'disabled') {
@@ -40,9 +39,28 @@ const updateStatus = (_coins, dispatch) => {
                 /* Request coin update. */
                 dispatch('updateCoin', pkg)
             }
+        } else {
+            /* Validate metadata coins. */
+            if (!_meta || !_meta.coins || !_meta.coins[coinid]) {
+                return
+            }
+
+            if (_meta.coins[coinid].lock && _meta.coins[coinid].lock.isActive === true) {
+                /* Set coin. */
+                const coin = _coins[coinid]
+
+                /* Validate status. */
+                if (coin && coin.status !== 'locked') {
+                    /* Set status. */
+                    coin.status = 'locked'
+
+                    /* Request coin update. */
+                    dispatch('updateCoin', coin)
+                }
+            }
+
         }
     })
-
 }
 
 /**
@@ -70,6 +88,10 @@ const updateCoins = async ({ dispatch, getters }) => {
     /* Set coins. */
     const coins = sessions[sessionid].coins
     // console.log('UPDATE COINS (coins)', coins)
+
+    /* Retrieve metadata. */
+    const meta = await getters.getMeta
+    console.log('UPDATE COINS (meta):', meta)
 
     /* Update status. */
     updateStatus(coins, dispatch)
@@ -145,8 +167,15 @@ const updateCoins = async ({ dispatch, getters }) => {
                 const satoshis = output.satoshis
                 // console.log('UPDATE COINS (satoshis)', satoshis)
 
+                /* Validate satoshis. */
+                if (satoshis === 0) {
+                    // FIXME: Is it okay to skip zero value outputs??
+                    return
+                }
+
                 /* Set script public key. */
                 const scriptPubKey = output.script
+                // console.log('UPDATE COINS (scriptPubKey)', scriptPubKey)
 
                 /* Validate script. */
                 if (!scriptPubKey) {
@@ -193,6 +222,7 @@ const updateCoins = async ({ dispatch, getters }) => {
                         txid,
                         vout: index,
                         satoshis,
+                        chainid,
                         wif,
                         cashAddress: searchAddr,
                         legacyAddress: Nito.Address.toLegacyAddress(searchAddr),
@@ -207,27 +237,14 @@ const updateCoins = async ({ dispatch, getters }) => {
                         /* Create coin package. */
                         const pkg = {
                             sessionid,
-                            chainid,
                             coin,
                         }
 
                         /* Add new coin. */
                         dispatch('addCoin', pkg)
-
-                        try {
-                            /* Initialize coins. */
-                            const coins = new Audio(require('@/assets/audio/coins.wav'))
-
-                            /* Play coins. */
-                            // WARNING: This action may fail on several browsers;
-                            //          so it's best to do this last to avoid any
-                            //          unforseen side-effects.
-                            coins.play()
-                        } catch (err) {
-                            console.error(err) // eslint-disable-line no-console
-                        }
                     } else {
-                        console.error('Coin already exists in the purse.')
+                        // FIXME: We need a better way to search (BitDB??)
+                        console.error('Coin already exists in the purse.') // eslint-disable-line no-console
                     }
                 }
             })

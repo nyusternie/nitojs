@@ -31,7 +31,7 @@
             <div class="copyright d-flex flex-wrap">
                 &copy; {{curYear}}.
                 <a href="https://bchplease.org" target="_blank" class="mx-1">
-                    <strong class="text-success">Bitcoin Cash Please.</strong>
+                    <strong class="text-success">Bitcoin Please.</strong>
                 </a>
                 All rights reserved.
             </div>

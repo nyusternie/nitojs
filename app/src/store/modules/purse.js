@@ -46,6 +46,27 @@ const state = {
     activeSessionId: null,
 
     /**
+     * Coins
+     *
+     * Manages coin info in an object:
+     *   - status [ active | disabled | locked ]
+     *   - txid
+     *   - vout
+     *   - satoshis
+     *   - wif
+     *   - cashAddress
+     *   - legacyAddress
+     */
+    coins: null,
+
+    /**
+     * (Account) Indices
+     *
+     * Manages the indices of account addresses.
+     */
+    indices: null,
+
+    /**
      * Master Seed
      *
      * A 32-byte key, used to secure the entire purse.

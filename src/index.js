@@ -88,6 +88,16 @@ class Nito extends EventEmitter {
         return require('./Address')
     }
 
+    /* Application */
+    get App() {
+        return require('./App')
+    }
+
+    /* (Static) Application */
+    static get App() {
+        return require('./App')
+    }
+
     /* Blockchain */
     get Blockchain() {
         return require('./Blockchain')
@@ -133,6 +143,16 @@ class Nito extends EventEmitter {
     /* (Static) Purse */
     static get Purse() {
         return require('./Purse')
+    }
+
+    /* SLP */
+    get SLP() {
+        return require('./SLP')
+    }
+
+    /* (Static) SLP */
+    static get SLP() {
+        return require('./SLP')
     }
 
     /* Transaction */
