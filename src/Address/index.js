@@ -10,8 +10,11 @@ const EventEmitter = require('events').EventEmitter
  * NOTE: This class is read-only and ONLY supports static methods.
  */
 class Address extends EventEmitter {
-    constructor() {
+    constructor(_mappedKeys, _reqNumSigs) {
         super()
+
+        this.mappedKeys = _mappedKeys
+        this.reqNumSigs = _reqNumSigs
 
         debug('Address class has been initialized.')
     }
@@ -58,6 +61,11 @@ class Address extends EventEmitter {
     /* To Public Key (Script) Hash */
     static toPubKeyHash(_address) {
         return require('./toPubKeyHash')(_address)
+    }
+
+    /* To String */
+    toString() {
+        return require('./toString').bind(this)()
     }
 
     /* Unspent Transaction Outputs */

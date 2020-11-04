@@ -24,14 +24,24 @@ class Crypto extends EventEmitter {
         return require('./mnemonic')(_entropy, _language)
     }
 
+    /* Private Key */
+    static PrivateKey(_node) {
+        return require('./PrivateKey')(_node)
+    }
+
+    /* Public Key */
+    static PublicKey(_node) {
+        return require('./PublicKey')(_node)
+    }
+
     /* Random Bytes */
     static randomBytes(_size) {
         return require('./randomBytes')(_size)
     }
 
     /* SHA-256 */
-    static sha256(_message) {
-        return require('./hash')(_message, 'sha256')
+    static sha256(_message, _hexFormat) {
+        return require('./hash')(_message, 'sha256', _hexFormat)
     }
 
 }

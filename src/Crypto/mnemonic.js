@@ -8,6 +8,8 @@ const Mnemonic = require('bitcore-mnemonic')
 const mnemonic = (_entropy, _language) => {
     debug('Generating mnemonic phrase with:', _entropy)
 
+    // FIXME: We need to validate the _entropy (string or buffer)
+
     /* Validate entropy. */
     const entropy = Buffer.from(_entropy)
 
@@ -26,8 +28,16 @@ const mnemonic = (_entropy, _language) => {
         language = Mnemonic.Words.ENGLISH
     }
 
+    /* Initialize mnemonic. */
+    let mnemonic = null
+
     /* Generate mnemonic. */
-    const mnemonic = Mnemonic(entropy, language)
+    try {
+        mnemonic = Mnemonic(entropy, language)
+    } catch (err) {
+        // FIXME: Add better error handling.
+        mnemonic = Mnemonic(_entropy, language)
+    }
 
     /* Return mnemonic word phrase. */
     return mnemonic

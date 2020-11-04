@@ -1,7 +1,7 @@
 /* Import modules. */
 const bch = require('bitcore-lib-cash')
 const bchaddr = require('bchaddrjs')
-const debug = require('debug')('nitojs:address:tocashaddr')
+const debug = require('debug')('nitojs:address:topubkeyhash')
 
 /**
  * To Public Key (Script) Hash
