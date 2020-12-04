@@ -145,6 +145,16 @@ class Nito extends EventEmitter {
         return require('./Purse')
     }
 
+    /* Script */
+    get Script() {
+        return require('./Script')
+    }
+
+    /* (Static) Script */
+    static get Script() {
+        return require('./Script')
+    }
+
     /* SLP */
     get SLP() {
         return require('./SLP')
