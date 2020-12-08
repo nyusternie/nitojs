@@ -14,10 +14,16 @@ class SLP extends EventEmitter {
         debug('SLP class has been initialized.')
     }
 
-    /* Details */
+    /* Balance */
     // NOTE: Returns a promise.
     static balance(_txid) {
         return require('./balance')(_txid)
+    }
+
+    /* Create Token */
+    // NOTE: Returns a transaction.
+    static create(_params) {
+        return require('./create')(_params)
     }
 
     /* Get Raw SLP */
@@ -37,6 +43,16 @@ class SLP extends EventEmitter {
     // static sendRawSLP(_rawTx) {
     //     return require('./sendRawSLP')(_rawTx)
     // }
+
+    /* SLPDB Query */
+    get Query() {
+        return require('./Query')
+    }
+
+    /* (Static) SLPDB Query */
+    static get Query() {
+        return require('./Query')
+    }
 
 }
 
