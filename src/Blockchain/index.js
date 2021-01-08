@@ -88,11 +88,16 @@ class Blockchain extends EventEmitter {
      * Blockchain Class - Core Modules
      * -------------------------------
      *
-     *   1. Insomnia
-     *   2. Query
-     *   3. Socket
-     *   4. Utilities
+     *   1. Files
+     *   2. Insomnia
+     *   3. Query
+     *   4. Socket
      */
+
+     /* Files */
+     get Files() {
+         return require('./Files')
+     }
 
     /* Insomnia */
     get Insomnia() {

@@ -174,7 +174,7 @@ class Insomnia extends EventEmitter {
      *
      * Returns raw (or optionally formatted) transaction data.
      */
-    static async transaction(_txid, _verbose = null) {
+    static async transaction(_txid, _verbose = true) {
         /* Validate transaction id. */
         if (!_txid) {
             return null
