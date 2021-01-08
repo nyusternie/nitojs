@@ -794,7 +794,7 @@ Possible Ban Reasons:
  */
 // function blameMessage (
 //     options,
-//     mySessionId,
+//     mySessionid,
 //     myPlayerNumber,
 //     myVerificationPublicKey,
 //     myVerificationPrivateKey
@@ -843,7 +843,7 @@ Possible Ban Reasons:
 //         return msg
 //     }, PB.Signed.create({
 //         packet: PB.Packet.create({
-//             session: mySessionId,
+//             session: mySessionid,
 //             number: myPlayerNumber,
 //             fromKey: PB.VerificationKey.create({
 //                 key: myVerificationPublicKey

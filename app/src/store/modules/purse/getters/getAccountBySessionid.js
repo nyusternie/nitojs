@@ -38,7 +38,7 @@ const loadPath = (_getters, _account, _sessionid, _chainid, _acctIdx) => {
  * Returns the full account for a session id. This will return coin details
  * (incl. index and WIF) for ALL derivation paths in-use for a session.
  */
-const getAccountBySessionId = (state, getters) => (_sessionid) => {
+const getAccountBySessionid = (state, getters) => (_sessionid) => {
     /* Initialize account. */
     const account = []
 
@@ -81,4 +81,4 @@ const getAccountBySessionId = (state, getters) => (_sessionid) => {
 }
 
 /* Export module. */
-export default getAccountBySessionId
+export default getAccountBySessionid

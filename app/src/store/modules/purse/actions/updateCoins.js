@@ -68,7 +68,7 @@ const updateStatus = (_coins, _meta, dispatch) => {
  */
 const updateCoins = async ({ dispatch, getters }) => {
     /* Set session id. */
-    const sessionid = getters.getActiveSessionId
+    const sessionid = getters.getActiveSessionid
     // console.log('UPDATE COINS (sessionid)', sessionid)
 
     /* Validate session id. */
@@ -97,7 +97,7 @@ const updateCoins = async ({ dispatch, getters }) => {
     updateStatus(coins, dispatch)
 
     /* Retrieve account. */
-    const account = getters.getAccountBySessionId(sessionid)
+    const account = getters.getAccountBySessionid(sessionid)
     // console.log('UPDATE COINS (account)', account)
 
     /* Validate account. */
@@ -229,7 +229,7 @@ const updateCoins = async ({ dispatch, getters }) => {
                     }
                     // console.log('UPDATE COINS (coin)', coin)
 
-                    const coins = getters.getCoinsBySessionId(sessionid)
+                    const coins = getters.getCoinsBySessionid(sessionid)
                     // console.log('COINS', sessionid, coins)
 
                     /* Validate new coin. */

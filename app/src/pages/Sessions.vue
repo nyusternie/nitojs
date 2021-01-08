@@ -36,7 +36,7 @@ export default {
     },
     computed: {
         ...mapGetters('purse', [
-            'getActiveSessionId',
+            'getActiveSessionid',
             'getSessions',
         ]),
     },
@@ -48,7 +48,7 @@ export default {
     },
     created: function () {
         console.log('SESSIONS:', this.getSessions)
-        console.log('ACTIVE SESSION ID:', this.getActiveSessionId)
+        console.log('ACTIVE SESSION ID:', this.getActiveSessionid)
     },
 }
 </script>

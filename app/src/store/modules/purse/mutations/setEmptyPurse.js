@@ -6,7 +6,7 @@
  */
 const destroyPurse = (state) => {
     /* Reset active session. */
-    state.activeSessionId = null
+    state.activeSessionid = null
 
     /* Reset master seed. */
     state.masterSeed = null

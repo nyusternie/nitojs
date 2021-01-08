@@ -9,18 +9,18 @@ const Nito = require('nitojs')
 * NOTE: Optional (market price) parameter is used to calculate fiat value,
 *       and return a "formatted" value package.
 */
-const getBalanceBySessionId = (
+const getBalanceBySessionid = (
     state, getters, rootState, rootGetters
 ) => async (_sessionid, _currency) => {
     /* Validate (session) accounts. */
-    if (!getters.getCoinsBySessionId(_sessionid)) {
+    if (!getters.getCoinsBySessionid(_sessionid)) {
         return null
     }
 
     /* Initialize (search) addresses. */
     const addresses = []
 
-    const coins = getters.getCoinsBySessionId(_sessionid)
+    const coins = getters.getCoinsBySessionid(_sessionid)
     // console.log('GET BALANCE BY SESSION (coins)', coins)
 
     /* Add all active receiving account (addresses) to pool. */
@@ -75,4 +75,4 @@ const getBalanceBySessionId = (
 }
 
 /* Export module. */
-export default getBalanceBySessionId
+export default getBalanceBySessionid

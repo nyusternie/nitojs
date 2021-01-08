@@ -6,7 +6,7 @@ const Nito = require('nitojs')
  *
  * Returns the next avaialble "receiving" account, for the session.
  */
-const getAddressBySessionId = (state, getters) => (_sessionid) => {
+const getAddressBySessionid = (state, getters) => (_sessionid) => {
     // console.log('GET ADDRESS BY SESSION (sessionid)', _sessionid)
     /* Validate sessions. */
     if (!getters.getSessions) {
@@ -43,4 +43,4 @@ const getAddressBySessionId = (state, getters) => (_sessionid) => {
 }
 
 /* Export module. */
-export default getAddressBySessionId
+export default getAddressBySessionid

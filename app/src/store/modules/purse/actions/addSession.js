@@ -70,7 +70,7 @@ const addSession = ({ commit, getters }) => {
             sessions[nextIndex] = sessionModel
 
             /* Commit active session id. */
-            commit('setActiveSessionId', nextIndex)
+            commit('setActiveSessionid', nextIndex)
         } else {
             /* Initialize (first) session(s). */
             sessions = {
@@ -78,7 +78,7 @@ const addSession = ({ commit, getters }) => {
             }
 
             /* Commit active session id. */
-            commit('setActiveSessionId', 0)
+            commit('setActiveSessionid', 0)
         }
 
         /* Commit sessions. */

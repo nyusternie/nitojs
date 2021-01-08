@@ -183,8 +183,8 @@ export default {
     },
     computed: {
         ...mapGetters('purse', [
-            'getActiveSessionId',
-            'getCoinsBySessionId',
+            'getActiveSessionid',
+            'getCoinsBySessionid',
             'getDerivationPath',
             'getHDNode',
             'getNitoCashIdx',
@@ -397,7 +397,7 @@ export default {
             // console.log('TARGET (sessions):', sessions)
 
             /* Set accounts. */
-            const accounts = sessions[this.getActiveSessionId].accounts
+            const accounts = sessions[this.getActiveSessionid].accounts
             // console.log('TARGET (accounts):', accounts)
 
             /* Set account index. */
@@ -405,7 +405,7 @@ export default {
 
             /* Set derivation path. */
             const path = this.getDerivationPath(
-                this.getActiveSessionId, chain, acctIndex)
+                this.getActiveSessionid, chain, acctIndex)
             console.log('MANAGER (change path)', path)
 
             /* Initialize HD node. */
@@ -459,7 +459,7 @@ export default {
          * Start Shuffle
          */
         startShuffle() {
-            const coins = this.getCoinsBySessionId(this.getActiveSessionId)
+            const coins = this.getCoinsBySessionid(this.getActiveSessionid)
             console.log('MANAGER (coins):', coins)
 
             if (coins) {
@@ -587,7 +587,7 @@ export default {
         this.session.phase = 'INACTIVE'
 
         /* Retrieve coins. */
-        this.coins = this.getCoinsBySessionId(this.getActiveSessionId)
+        this.coins = this.getCoinsBySessionid(this.getActiveSessionid)
         console.log('COINS', this.coins)
 
     }

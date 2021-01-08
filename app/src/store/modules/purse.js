@@ -1,11 +1,11 @@
 /* Import modules (getters). */
-import getAccountBySessionId from './purse/getters/getAccountBySessionId'
-import getActiveSessionId from './purse/getters/getActiveSessionId'
-import getAddressBySessionId from './purse/getters/getAddressBySessionId'
+import getAccountBySessionid from './purse/getters/getAccountBySessionid'
+import getActiveSessionid from './purse/getters/getActiveSessionid'
+import getAddressBySessionid from './purse/getters/getAddressBySessionid'
 import getBalance from './purse/getters/getBalance'
-import getBalanceBySessionId from './purse/getters/getBalanceBySessionId'
+import getBalanceBySessionid from './purse/getters/getBalanceBySessionid'
 import getCoinById from './purse/getters/getCoinById'
-import getCoinsBySessionId from './purse/getters/getCoinsBySessionId'
+import getCoinsBySessionid from './purse/getters/getCoinsBySessionid'
 import getDerivationPath from './purse/getters/getDerivationPath'
 import getDustAmount from './purse/getters/getDustAmount'
 import getHDNode from './purse/getters/getHDNode'
@@ -28,7 +28,7 @@ import updateMeta from './purse/actions/updateMeta'
 import updateOutbox from './purse/actions/updateOutbox'
 
 /* Import modules (mutations). */
-import setActiveSessionId from './purse/mutations/setActiveSessionId'
+import setActiveSessionid from './purse/mutations/setActiveSessionid'
 import setEmptyPurse from './purse/mutations/setEmptyPurse'
 import setMasterSeed from './purse/mutations/setMasterSeed'
 import setMeta from './purse/mutations/setMeta'
@@ -43,7 +43,7 @@ const state = {
      *
      * Most recently selected session's id.
      */
-    activeSessionId: null,
+    activeSessionid: null,
 
     /**
      * Coins
@@ -109,13 +109,13 @@ const state = {
 
 /* Getters. */
 const getters = {
-    getAccountBySessionId,
-    getActiveSessionId,
-    getAddressBySessionId,
+    getAccountBySessionid,
+    getActiveSessionid,
+    getAddressBySessionid,
     getBalance,
     getCoinById,
-    getBalanceBySessionId,
-    getCoinsBySessionId,
+    getBalanceBySessionid,
+    getCoinsBySessionid,
     getDerivationPath,
     getDustAmount,
     getHDNode,
@@ -142,7 +142,7 @@ const actions = {
 
 /* Mutations. */
 const mutations = {
-    setActiveSessionId,
+    setActiveSessionid,
     setEmptyPurse,
     setMasterSeed,
     setMeta,

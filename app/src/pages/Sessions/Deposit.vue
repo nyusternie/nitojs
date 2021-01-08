@@ -110,10 +110,10 @@ export default {
         ]),
 
         ...mapGetters('purse', [
-            'getAddressBySessionId',
-            'getActiveSessionId',
-            'getBalanceBySessionId',
-            'getCoinsBySessionId',
+            'getAddressBySessionid',
+            'getActiveSessionid',
+            'getBalanceBySessionid',
+            'getCoinsBySessionid',
         ]),
 
         /**
@@ -123,12 +123,12 @@ export default {
          */
         depositAddress() {
             /* Set deposit address. */
-            return this.getAddressBySessionId(this.getActiveSessionId)
+            return this.getAddressBySessionid(this.getActiveSessionid)
         },
 
         coins() {
             /* Retreive session balance. */
-            return this.getCoinsBySessionId(this.getActiveSessionId)
+            return this.getCoinsBySessionid(this.getActiveSessionid)
         },
 
         /**
@@ -279,7 +279,7 @@ export default {
         async updateBalance() {
             /* Retreive session balance. */
             this.balance = await this
-                .getBalanceBySessionId(this.getActiveSessionId, 'USD')
+                .getBalanceBySessionid(this.getActiveSessionid, 'USD')
                 .catch(err => console.error(err))
             console.log('DEPOSIT (balance):', this.balance)
         },
