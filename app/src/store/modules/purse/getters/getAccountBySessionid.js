@@ -55,6 +55,11 @@ const getAccountBySessionid = (state, getters) => (_sessionid) => {
     const session = sessions[_sessionid]
     // console.log('GET ACCOUNT BY SESSION (session):', session)
 
+    /* Validate session. */
+    if (!session) {
+        return null
+    }
+
     /* Loop through ALL (deposit) indexes (inclusive). */
     for (let i = 0; i <= session.accounts.deposit; i++) {
         loadPath(getters, account, _sessionid, 0, i)

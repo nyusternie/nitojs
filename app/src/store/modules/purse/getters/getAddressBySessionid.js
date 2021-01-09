@@ -17,8 +17,17 @@ const getAddressBySessionid = (state, getters) => (_sessionid) => {
     const sessions = getters.getSessions
     // console.log('GET ADDRESS BY SESSION (sessions):', sessions)
 
+    /* Set session. */
+    const session = sessions[_sessionid]
+    // console.log('GET ADDRESS BY SESSION (session):', session)
+
+    /* Validate session. */
+    if (!session) {
+        return null
+    }
+
     /* Initialize current (coin) index. */
-    const currentIndex = sessions[_sessionid].accounts.deposit
+    const currentIndex = session.accounts.deposit
     // console.log('GET ADDRESS BY SESSION (currentIndex):', currentIndex)
 
     /* Set chain. */
