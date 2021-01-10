@@ -3,10 +3,10 @@
  *
  * Returns the full coin details.
  */
-const getCoinById = (state, getters) => (_coinId) => {
+const getCoinById = (state, getters) => (_coinid) => {
     /* Set coin id. */
-    const coinId = _coinId
-    console.log('GET COIN BY ID (coinid)', coinId)
+    const coinid = _coinid
+    console.log('GET COIN BY ID (coinid)', coinid)
 
     /* Validate sessions. */
     if (!getters.getSessions) {
@@ -30,12 +30,12 @@ const getCoinById = (state, getters) => (_coinId) => {
         /* Set coins. */
         const coins = session.coins
 
-        Object.keys(coins).forEach(_coinId => {
+        Object.keys(coins).forEach(_coinid => {
             /* Validate coin. */
             if (coin) return
 
-            if (_coinId === coinId) {
-                coin = coins[_coinId]
+            if (_coinid === coinid) {
+                coin = coins[_coinid]
             }
         })
     })

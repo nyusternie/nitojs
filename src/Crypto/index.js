@@ -14,6 +14,11 @@ class Crypto extends EventEmitter {
         debug('Crypto class has been initialized.')
     }
 
+    /* Encryption */
+    static get Encryption() {
+        return require('./Encryption')
+    }
+
     /* Hashing */
     static hash(_message, _algo, _hexFormat) {
         return require('./hash')(_message, _algo, _hexFormat)
