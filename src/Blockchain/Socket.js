@@ -8,7 +8,8 @@ const util = require('util')
 // https://github.com/fountainhead-cash/bitplaylist/blob/master/bitsocket/README.md
 
 /* Set endpoint. */
-const ENDPOINT = 'https://bitsocket.bch.sx/s/'
+// const ENDPOINT = 'https://bitsocket.bch.sx/s/'
+const ENDPOINT = 'https://bitsocket.devops.cash/s/'
 
 /* Set fountainhead API key. */
 // const APIKEY = '1M2PjV7yGRg4dB8N32Qhw1wrDfDfZyi8VQ'

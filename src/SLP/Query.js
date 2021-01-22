@@ -7,8 +7,10 @@ const superagent = require('superagent')
 // https://slp.dev/tooling/slpdb_examples/
 
 /* Set endpoint. */
-const ENDPOINT = 'https://slpdb.fountainhead.cash/q/'
-const FALLBACK = 'https://slpdb.devops.cash/q/'
+// const ENDPOINT = 'https://slpdb.fountainhead.cash/q/'
+// const FALLBACK = 'https://slpdb.devops.cash/q/'
+const ENDPOINT = 'https://slpdb.devops.cash/q/'
+const FALLBACK = 'https://slpdb.fountainhead.cash/q/'
 
 /* Set fountainhead API key. */
 const APIKEY = '1M2PjV7yGRg4dB8N32Qhw1wrDfDfZyi8VQ'

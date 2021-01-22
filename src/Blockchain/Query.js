@@ -7,8 +7,10 @@ const superagent = require('superagent')
 // https://github.com/fountainhead-cash/bitplaylist/blob/master/bitdb/README.md
 
 /* Set endpoint. */
-const ENDPOINT = 'https://bitdb.bch.sx/q/'
-const FALLBACK = 'https://bitdb.devops.cash/q/'
+// const ENDPOINT = 'https://bitdb.bch.sx/q/'
+// const FALLBACK = 'https://bitdb.devops.cash/q/'
+const ENDPOINT = 'https://bitdb.devops.cash/q/'
+const FALLBACK = 'https://bitdb.bch.sx/q/'
 
 /* Set fountainhead API key. */
 const APIKEY = '1M2PjV7yGRg4dB8N32Qhw1wrDfDfZyi8VQ'
