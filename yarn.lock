@@ -1695,13 +1695,12 @@ bc-bip68@^1.0.5:
   resolved "https://registry.yarnpkg.com/bc-bip68/-/bc-bip68-1.0.5.tgz#4d3774067d8c9e922e225f5f2c4178ee9ae8dc94"
   integrity sha512-GzaMlN7pNthrY5BhReVhnfr4Ixx+GUSfyNRHYh0QiMUF0d0+0YaD8MpEdv6AjFBksg/zlqL1fVCBBm6PpTt2Rg==
 
-bchaddrjs@0.4.8:
-  version "0.4.8"
-  resolved "https://registry.yarnpkg.com/bchaddrjs/-/bchaddrjs-0.4.8.tgz#08dd465dab9fc5425546c980ea769923f1240de8"
-  integrity sha512-2U2BVogvxIwvTgjNAgM5Znabkyf8opORLq+gPPYekgZoAWk/FenLSoa2p1oB3pUMdFQJm9/TMmMx8Q9o8Q6EAw==
+"bchaddrjs@https://github.com/simpleledger/bchaddrjs":
+  version "0.2.12"
+  resolved "https://github.com/simpleledger/bchaddrjs#f9b0ccc4a58c2cf3eb03393adbc02f9094d19099"
   dependencies:
     bs58check "^2.1.2"
-    cashaddrjs "^0.3.11"
+    cashaddrjs-slp "^0.2.12"
 
 bcrypt-pbkdf@^1.0.0:
   version "1.0.2"
@@ -1726,11 +1725,6 @@ better-assert@~1.0.0:
   integrity sha1-QIZrnhueC1W0gYlDEeaPr/rrxSI=
   dependencies:
     callsite "1.0.0"
-
-big-integer@1.6.36:
-  version "1.6.36"
-  resolved "https://registry.yarnpkg.com/big-integer/-/big-integer-1.6.36.tgz#78631076265d4ae3555c04f85e7d9d2f3a071a36"
-  integrity sha512-t70bfa7HYEA1D9idDbmuv7YbsbVkQ+Hp+8KFSul4aE5e/i1bjCNIRYJZlA8Q8p0r9T8cF/RVvwUgRA//FydEyg==
 
 big-integer@1.6.48, big-integer@^1.6.34:
   version "1.6.48"
@@ -2329,19 +2323,19 @@ caseless@~0.12.0:
   resolved "https://registry.yarnpkg.com/caseless/-/caseless-0.12.0.tgz#1b681c21ff84033c826543090689420d187151dc"
   integrity sha1-G2gcIf+EAzyCZUMJBolCDRhxUdw=
 
+cashaddrjs-slp@^0.2.12:
+  version "0.2.12"
+  resolved "https://registry.yarnpkg.com/cashaddrjs-slp/-/cashaddrjs-slp-0.2.12.tgz#30eda56cfc3ad4a949911258a0356459f45879d4"
+  integrity sha512-n2TTIuW6vZZxYvjvsUAA+wOM0Zkj+3RRKUtDC1XSu4Ic4XVr0yFJkl1bzQkHWda7nkVT51sxjZneygz7D0SyrQ==
+  dependencies:
+    big-integer "^1.6.34"
+
 cashaddrjs@^0.2.9:
   version "0.2.9"
   resolved "https://registry.yarnpkg.com/cashaddrjs/-/cashaddrjs-0.2.9.tgz#e38e323e11e0ab761767006b3938a36278dadec9"
   integrity sha512-DhJF4iAH0/RM3UjHDHKRxzs09YGL9px+oTyizzydanhC7jTyM2aJ+aLKA96vZGTTWayvvr2iDF2l13lpqXiRFg==
   dependencies:
     big-integer "^1.6.34"
-
-cashaddrjs@^0.3.11:
-  version "0.3.11"
-  resolved "https://registry.yarnpkg.com/cashaddrjs/-/cashaddrjs-0.3.11.tgz#9c38565ccd628942c279a105cfc3122b6f4e6f57"
-  integrity sha512-TXbSJVCPa5ER9jRId0S1ZgxvAqLYowciCpgzDC66hYarQKeDRZ5wvjAa8xKPZwLEDI8t5fBL3f8PyPzz7PoMnA==
-  dependencies:
-    big-integer "1.6.36"
 
 chai-checkmark@^1.0.1:
   version "1.0.1"

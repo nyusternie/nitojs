@@ -32,15 +32,18 @@ class Address extends EventEmitter {
     }
 
     /* Is Cash Address */
-    // TODO: Add tests plus more methods (https://www.npmjs.com/package/bchaddrjs)
     static isCashAddress(_address) {
         return require('./isCashAddress')(_address)
     }
 
     /* Is Legacy Address */
-    // TODO: Add tests plus more methods (https://www.npmjs.com/package/bchaddrjs)
     static isLegacyAddress(_address) {
         return require('./isLegacyAddress')(_address)
+    }
+
+    /* Is SLP Address */
+    static isSlpAddress(_address) {
+        return require('./isSlpAddress')(_address)
     }
 
     /* From Extended Public Key */
@@ -56,6 +59,11 @@ class Address extends EventEmitter {
     /* To Legacy Address */
     static toLegacyAddress(_address) {
         return require('./toLegacyAddress')(_address)
+    }
+
+    /* To SLP Address */
+    static toSlpAddress(_address) {
+        return require('./toSlpAddress')(_address)
     }
 
     /* To Public Key (Script) Hash */
