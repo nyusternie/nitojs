@@ -96,7 +96,7 @@ const sendCoin = async (_coin, _receivers, _autoFee) => {
         throw new Error(`Amount is too low. Minimum is [ ${DUST_SATOSHIS} ] satoshis.`)
     }
 
-    /* Sign the transaction. */
+    /* Sign transaction. */
     transaction.sign(privateKey)
     debug('Raw transaction (hex):', transaction.toString())
     // console.info('Raw transaction:', transaction) // eslint-disable-line no-console

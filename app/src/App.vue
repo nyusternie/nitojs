@@ -83,8 +83,7 @@ export default {
         },
     },
     created: async function () {
-        // console.log('APPLICATION STATE', this.$store.state)
-        console.log('Initializing Nito Cash...')
+        console.info('Initializing Nito Cash...') // eslint-disable-line no-console
 
         /* Security check. */
         this.securityCheck()
