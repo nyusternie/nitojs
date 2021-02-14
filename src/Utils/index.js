@@ -39,6 +39,11 @@ class Utils extends EventEmitter {
         return require('./reverseBuffer')(_buffer)
     }
 
+    /* Sleep */
+    static sleep(_ms) {
+        return require('./sleep')(_ms)
+    }
+
     /* Variable Buffer */
     static varBuf(_buffer) {
         return require('./varBuf')(_buffer)
