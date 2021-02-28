@@ -1,7 +1,7 @@
 /* Import core modules. */
 const _ = require('lodash')
 const bch = require('bitcore-lib-cash')
-const debug = require('debug')('cashshuffle:utils')
+const debug = require('debug')('shuffle:utils')
 
 /* Import local modules. */
 const getCoinDetails = require('./_utils/getCoinDetails')

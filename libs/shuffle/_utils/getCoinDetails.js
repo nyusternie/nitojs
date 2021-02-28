@@ -1,5 +1,5 @@
 /* Import core modules. */
-const debug = require('debug')('cashshuffle:utils:getcoindata')
+const debug = require('debug')('shuffle:utils:getcoindata')
 const Nito = require('nitojs')
 
 /**

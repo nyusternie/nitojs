@@ -1,7 +1,7 @@
 /* Import core modules. */
 const _ = require('lodash')
 const bch = require('bitcore-lib-cash')
-const debug = require('debug')('cashshuffle:utils:prepareinsouts')
+const debug = require('debug')('shuffle:utils:prepareinsouts')
 const Nito = require('nitojs')
 
 /* Set dust threshold. */

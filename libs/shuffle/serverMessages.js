@@ -1,7 +1,7 @@
 /* Import core modules. */
 const _ = require('lodash')
 const bch = require('bitcore-lib-cash')
-const debug = require('debug')('cashshuffle:server-messages')
+const debug = require('debug')('shuffle:server-messages')
 const path = require('path')
 const protobuf = require('protobufjs')
 

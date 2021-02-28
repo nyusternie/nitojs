@@ -1,6 +1,6 @@
 /* Import core modules. */
 const _ = require('lodash')
-const debug = require('debug')('cashshuffle:client')
+const debug = require('debug')('shuffle:client')
 const EventEmitter = require('events').EventEmitter
 const superagent = require('superagent')
 const URL = require('url')

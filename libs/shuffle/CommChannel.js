@@ -1,6 +1,6 @@
 /* Import core modules. */
 const _ = require('lodash')
-const debug = require('debug')('cashshuffle:comm')
+const debug = require('debug')('shuffle:comm')
 const EventEmitter = require('events').EventEmitter
 const moment = require('moment')
 const WebSocket = require('ws')

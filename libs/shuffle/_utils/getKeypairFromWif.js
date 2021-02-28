@@ -1,6 +1,6 @@
 /* Import core modules. */
 const bch = require('bitcore-lib-cash')
-const debug = require('debug')('cashshuffle:utils:getkeypairwif')
+const debug = require('debug')('shuffle:utils:getkeypairwif')
 const Nito = require('nitojs')
 
 /**

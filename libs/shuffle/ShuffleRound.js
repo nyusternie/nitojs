@@ -1,7 +1,7 @@
 /* Import core modules. */
 const _ = require('lodash')
 const bch = require('bitcore-lib-cash')
-const debug = require('debug')('cashshuffle:round')
+const debug = require('debug')('shuffle:round')
 const EventEmitter = require('events').EventEmitter
 const Nito = require('nitojs')
 
