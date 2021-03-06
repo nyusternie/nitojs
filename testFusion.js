@@ -47,7 +47,7 @@ const _parsePlayers = (_tier) => {
 
 /* Initialize protobuf. */
 const PB = {
-    root: protobuf.loadSync(path.join(__dirname, 'libs', 'cashfusion', 'fusion.proto'))
+    root: protobuf.loadSync(path.join(__dirname, 'libs', 'fusion', 'fusion.proto'))
 }
 
 /* Loop through ALL protobuf types. */

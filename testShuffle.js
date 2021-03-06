@@ -2,7 +2,7 @@
 const debug = require('debug')('cashshuffle:test')
 
 /* Import local modules. */
-const ShuffleClient = require('./src/libs/cashshuffle/ShuffleClient.js')
+const ShuffleClient = require('./src/libs/shuffle/ShuffleClient.js')
 // const testCoins = require('./testCoins')
 
 /* Initialize Shuffle Manager. */
