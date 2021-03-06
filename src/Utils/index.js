@@ -29,6 +29,11 @@ class Utils extends EventEmitter {
         return require('./encodeNumber')(_satoshis)
     }
 
+    /* Is String */
+    static isString(_str) {
+        return require('./isString')(_str)
+    }
+
     /* Maximum (Satoshi) Limit */
     static get maxLimit() {
         return 2099999997690000
