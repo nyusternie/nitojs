@@ -2,7 +2,7 @@ const debug = require('debug')('nitojs:privacy:shufflemanager')
 const EventEmitter = require('events').EventEmitter
 
 /* Initialize shuffle client. */
-const shuffleClient = require('../../libs/cashshuffle/ShuffleClient.js')
+const shuffleClient = require('../../libs/shuffle/ShuffleClient.js')
 
 /**
  * Shuffle Manager
