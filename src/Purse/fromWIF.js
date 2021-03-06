@@ -3,16 +3,18 @@ const bch = require('bitcore-lib-cash')
 const debug = require('debug')('nitojs:purse:fromwif')
 
 /**
- * From WIF
+ * Address (Node)
+ *
+ * Initialize an address from its Wallet Import Format (WIF).
  */
 const fromWIF = (_wif) => {
-    debug(`Initialize coin from [ ${_wif} ]`)
+    debug(`Initialize node from [ ${_wif} ]`)
 
-    /* Initialize coin. */
-    const coin = bch.PrivateKey.fromWIF(_wif)
+    /* Initialize node. */
+    const node = bch.PrivateKey.fromWIF(_wif)
 
-    /* Return coin. */
-    return coin
+    /* Return node. */
+    return node
 }
 
 /* Export module. */

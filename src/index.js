@@ -72,25 +72,15 @@ class Nito extends EventEmitter {
         return 0
     }
 
-    /* Account */
-    get Account() {
-        return require('./Account')
-    }
-
     /* (Static) Account */
     static get Account() {
         return require('./Account')
     }
 
-    /* Address */
+    /* (Static) Address */
     // NOTE: This class is read-only and ONLY supports static methods.
     static get Address() {
         return require('./Address')
-    }
-
-    /* Application */
-    get App() {
-        return require('./App')
     }
 
     /* (Static) Application */
@@ -98,14 +88,9 @@ class Nito extends EventEmitter {
         return require('./App')
     }
 
-    /* Blender */
-    get Blender() {
+    /* (Static) Blender */
+    static get Blender() {
         return require('./Blender')
-    }
-
-    /* Blockchain */
-    get Blockchain() {
-        return require('./Blockchain')
     }
 
     /* (Static) Blockchain */
@@ -118,21 +103,16 @@ class Nito extends EventEmitter {
         return require('./Crypto')
     }
 
-    /* Markets */
+    /* (Static) Markets */
     // NOTE: This class is read-only and ONLY supports static methods.
     static get Markets() {
         return require('./Markets')
     }
 
-    /* Message */
+    /* (Static) Message */
     // NOTE: This class is read-only and ONLY supports static methods.
     static get Message() {
         return require('./Message')
-    }
-
-    /* Privacy */
-    get Privacy() {
-        return require('./Privacy')
     }
 
     /* (Static) Privacy */
@@ -140,14 +120,9 @@ class Nito extends EventEmitter {
         return require('./Privacy')
     }
 
-    /* Purse */
-    get Purse() {
+    /* (Static) Purse */
+    static get Purse() {
         return require('./Purse')
-    }
-
-    /* Script */
-    get Script() {
-        return require('./Script')
     }
 
     /* (Static) Script */
@@ -155,19 +130,9 @@ class Nito extends EventEmitter {
         return require('./Script')
     }
 
-    /* SLP */
-    get SLP() {
-        return require('./SLP')
-    }
-
     /* (Static) SLP */
     static get SLP() {
         return require('./SLP')
-    }
-
-    /* Transaction */
-    get Transaction() {
-        return require('./Transaction')
     }
 
     /* (Static) Transaction */
@@ -180,8 +145,8 @@ class Nito extends EventEmitter {
         return require('./Utils')
     }
 
-    /* Wallet */
-    get Wallet() {
+    /* (Static) Wallet */
+    static get Wallet() {
         return require('./Wallet')
     }
 

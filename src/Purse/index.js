@@ -8,10 +8,18 @@ const EventEmitter = require('events').EventEmitter
  * A coin management system that can be used for creating custom wallets.
  */
 class Purse extends EventEmitter {
-    constructor() {
+    constructor(_wif) {
         super()
 
-        debug('Purse class has been initialized.')
+        /* Initialize node. */
+        this.node = null
+
+        /* Validate WIF. */
+        if (_wif) {
+            this.node = require('./fromWIF')(_wif)
+        }
+
+        debug(`Purse class has been initialized from [ ${_wif} ].`)
     }
 
     init(_auth) {
@@ -20,12 +28,28 @@ class Purse extends EventEmitter {
     }
 
     /**
-     * (Static) Coin from WIF
+     * To Address
      *
-     * Initialize a coin from its Wallet Import Format.
+     * Retrieves the cash address for this node.
      */
-    static fromWIF(_wif) {
-        return require('./fromWIF')(_wif)
+    toAddress() {
+        if (!this.node) {
+            return null
+        }
+
+        /* Return address. */
+        return this.node.toAddress()
+    }
+
+    /**
+     * To String
+     *
+     * Retrieves the cash address for this node.
+     *
+     * NOTE: Displays in ascii format.
+     */
+    toString() {
+        return this.toAddress().toString()
     }
 
     /**
