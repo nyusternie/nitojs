@@ -26,6 +26,12 @@ class Wallet extends EventEmitter {
         /* Initialize security level. */
         this._securityLevel = null
 
+        /* Initialize mapped keys. */
+        this._mappedKeys = null
+
+        /* Initialize required number of signatures. */
+        this._numSigs = null
+
         /* Validate wallet key. */
         if (_params.key) {
             this._walletKey = _params.key
@@ -48,6 +54,16 @@ class Wallet extends EventEmitter {
             this._securityLevel = 24 // NOTE: 12 = 128-bit, 24 = 256-bit
         }
 
+        /* Validate mapped keys. */
+        if (_params.mappedKeys) {
+            this._mappedKeys = _params.mappedKeys
+        }
+
+        /* Validate required number of signatures. */
+        if (_params.numSigs) {
+            this._numSigs = _params.numSigs
+        }
+
         debug(`Wallet class has been initialized by with [ ${this._walletKey} ] at [ ${this._derivationPath} ] with [ ${this.security} ]`)
 
         /* Initialize accounts. */
@@ -65,6 +81,11 @@ class Wallet extends EventEmitter {
     /* Create Account */
     createAccount(_params) {
         return require('./createAccount').bind(this)(_params)
+    }
+
+    /* To String */
+    toString() {
+        return require('./toString').bind(this)()
     }
 
 }

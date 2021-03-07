@@ -8,11 +8,11 @@ const debug = require('debug')('nitojs:address:tostring')
  * ...
  */
 const toString = function () {
-    debug(`Displaying [ ${this.mappedKeys} ] [ ${this.reqNumSigs} ] as string.`)
+    debug(`Displaying [ ${this._mappedKeys} ] [ ${this._numSigs} ] as string.`)
 
     /* Initialize new address. */
     // FIXME: Why does this have to be "new"??
-    const address = new bch.Address(this.mappedKeys, this.reqNumSigs)
+    const address = new bch.Address(this._mappedKeys, this._numSigs)
 
     /* Return address string. */
     return address.toString()

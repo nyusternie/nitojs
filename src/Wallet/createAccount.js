@@ -1,4 +1,5 @@
 /* Import modules. */
+const bch = require('bitcore-lib-cash')
 const debug = require('debug')('nitojs:wallet:createaccount')
 const Crypto = require('../Crypto')
 
@@ -16,17 +17,29 @@ const Crypto = require('../Crypto')
 const createAccount = function () {
     debug('Initializing wallet...') // eslint-disable-line no-console
 
+    // FIXME
+    if (this._mappedKeys && this._numSigs) {
+        return bch.Address(this._mappedKeys, this._numSigs)
+    }
+
     /* Validate wallet key. */
     if (!this._walletKey) {
         throw new Error(`[ ${this._walletKey} ] is an invalid wallet key.`)
     }
 
+    /* Generate an addres from 2-of-3 multisig. */
+    // const node = new Nito.Address(mappedKeys, REQ_NUM_SIGS)
+
+
     /* Validate wallet key. */
     // TODO: Add improved validation for seed.
-    if (this._walletKey.length === 32) {
+    if (this._walletKey.length === 32) { // buffer
         /* Set seed. */
         this._seed = this._walletKey
-    } else if (this._walletKey.length > 20) { // FIXME: Improve mnemonic validation.
+    } else if (this._walletKey.length === 64) { // hex
+        /* Set seed. */
+        this._seed = Buffer.from(this._walletKey, 'hex')
+    } else if (this._walletKey.length > 64) { // FIXME: Improve mnemonic validation.
         /* Set mnemonic. */
         this._mnemonic = this._walletKey
     }
