@@ -10,7 +10,7 @@ describe('Purse:fromWIF', () => {
         const purse = new Nito.Purse(wif)
 
         /* Set cash address. */
-        const cashAddress = purse.toString()
+        const cashAddress = purse.toAddress().toString()
 
         /* Set expected. */
         const expected = 'bitcoincash:qrk3ykhr7ssrl6nc50xfcgur703h5cjkguxkk0tjxc'

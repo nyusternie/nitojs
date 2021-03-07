@@ -69,7 +69,7 @@ class Address extends EventEmitter {
 
 }
 
-/* Initialize aliases. */
+/* Initialize (static) aliases. */
 Address.utxo = Address.utxos
 
 /* Export module. */

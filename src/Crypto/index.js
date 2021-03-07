@@ -51,7 +51,7 @@ class Crypto extends EventEmitter {
 
 }
 
-/* Initialize aliases. */
+/* Initialize (static) aliases. */
 Crypto.sha512 = Crypto.hash
 
 /* Export module. */

@@ -5,7 +5,11 @@ const EventEmitter = require('events').EventEmitter
 /**
  * Purse Class
  *
- * A coin management system that can be used for creating custom wallets.
+ * A coin management system for creating custom wallets.
+ *
+ * NOTE: The `Purse` can ONLY accepts a WIF (private key) during instantiation.
+ *       This class is reserved for advanced use ONLY. Most developers should
+ *       make use of methods from the `Wallet` class.
  */
 class Purse extends EventEmitter {
     constructor(_wif) {
@@ -15,16 +19,38 @@ class Purse extends EventEmitter {
         this.node = null
 
         /* Validate WIF. */
-        if (_wif) {
-            this.node = require('./fromWIF')(_wif)
+        if (!_wif) {
+            throw new Error('Wallet Import Format (WIF) is required to create a new Purse.')
         }
+
+        /* Initialize node. */
+        this.node = require('./fromWIF')(_wif)
 
         debug(`Purse class has been initialized from [ ${_wif} ].`)
     }
 
-    init(_auth) {
-        debug('Initializing wallet...')
-        debug('Authorization:', _auth)
+    /**
+     * Cash Address
+     *
+     *
+     */
+    get cashAddress() {
+        /* Return cash address. */
+        return require('./cashAddress').bind(this)()
+    }
+    get address() {
+        /* Return cash address. */
+        return require('./cashAddress').bind(this)()
+    }
+
+    /**
+     * Legacy Address
+     *
+     * Retrieves the legacy address for this node.
+     */
+    get legacyAddress() {
+        /* Return cash address. */
+        return require('./legacyAddress').bind(this)()
     }
 
     /**
@@ -39,17 +65,6 @@ class Purse extends EventEmitter {
 
         /* Return address. */
         return this.node.toAddress()
-    }
-
-    /**
-     * To String
-     *
-     * Retrieves the cash address for this node.
-     *
-     * NOTE: Displays in ascii format.
-     */
-    toString() {
-        return this.toAddress().toString()
     }
 
     /**
