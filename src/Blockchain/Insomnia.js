@@ -96,18 +96,36 @@ class Insomnia extends EventEmitter {
         /* Set target. */
         const target = ENDPOINT + 'tx/broadcast'
 
+        /* Initialize error. */
+        let error
+
         /* Call remote API. */
         const response = await superagent
             .post(target)
             .set('Content-Type', 'text/plain')
             .send(_rawTx)
-            .catch(err => console.error(err)) // eslint-disable-line no-console
+            .catch(err => {
+                debug(err)
+
+                /* Set error. */
+                error = err
+            })
 
         /* Validate response. */
-        if (response) {
+        if (response && response.body) {
+            /* Return response. */
+            return response.body
+        } else if (response) {
             /* Return response. */
             return response
+        } else if (error && error.response && error.response.body) {
+            /* Return error. */
+            return error.response.body
+        } else if (error) {
+            /* Return error. */
+            return error
         } else {
+            /* Return null. */
             return null
         }
 
