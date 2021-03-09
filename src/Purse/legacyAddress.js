@@ -9,7 +9,7 @@ const Address = require('../Address')
 const legacyAddress = function () {
     /* Return legacy address. */
     // FIXME: Can this be simplified??
-    return Address.toLegacyAddress(this.node.toAddress().toString())
+    return Address.toLegacyAddress(this._node.toAddress().toString())
 }
 
 /* Export module. */

@@ -5,7 +5,7 @@
  */
 const cashAddress = function () {
     /* Return cash address. */
-    return this.node.toAddress().toString()
+    return this._node.toAddress().toString()
 }
 
 /* Export module. */
