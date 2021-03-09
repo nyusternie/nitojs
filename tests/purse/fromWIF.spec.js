@@ -7,10 +7,11 @@ describe('Purse:fromWIF', () => {
         const wif = 'KxzMaq6eFVJFPaEM7UH7yG8nCFNmNBPHZYPakNAVBcEm7eGrDnSc'
 
         /* Instantiate new purse. */
-        const purse = new Nito.Purse(wif)
+        // NOTE: Disable live updates.
+        const purse = new Nito.Purse(wif, false)
 
         /* Set cash address. */
-        const cashAddress = purse.toAddress().toString()
+        const cashAddress = purse._node.toAddress().toString()
 
         /* Set expected. */
         const expected = 'bitcoincash:qrk3ykhr7ssrl6nc50xfcgur703h5cjkguxkk0tjxc'

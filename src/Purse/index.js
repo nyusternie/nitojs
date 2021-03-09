@@ -20,48 +20,62 @@ class Purse extends EventEmitter {
     constructor(_wif, _sync = true) {
         super()
 
-        /* Initialize node. */
-        this._node = null
-
         /* Validate WIF. */
         if (!_wif) {
             throw new Error('Wallet Import Format (WIF) is required to create a new Purse.')
         }
 
-        /* Initialize node. */
-        this._node = require('./fromWIF')(_wif)
-
         /* Initialize blockchain. */
         this._blockchain = null
 
         /* Initialize (cash) address. */
-        this._cashAddress
+        this._cashAddress = null
+
+        /**
+         * Coins
+         *
+         * Repository of all UTXOs (confirmed / unconfirmed) and their details:
+         *   - cashAddress
+         *   - isLocked
+         *   - isSpent
+         *   - legacyAddress
+         *   - meta
+         *     - comments
+         *     - title
+         *   - satoshis
+         *   - status (DEPRECATED)
+         *   - txid
+         *   - vout
+         *   - wif
+         */
+        this._coins = {}
 
         /* Initialize (legacy) address. */
-        this._legacyAddress
+        this._legacyAddress = null
 
-        /* Initialize UTXOs. */
-        this._utxos = []
+        /* Initialize mutex. */
+        this._mutex = new Mutex()
+
+        /* Initialize node. */
+        this._node = require('./fromWIF')(_wif)
+
+        /* Initialize coins. */
+        require('./initCoins').bind(this)()
 
         /* Validate LIVE sync flag. */
         if (_sync) {
-            /* Set sync handler. */
-            // this._syncHandler = setInterval(this.sync, 30)
-
+            /* Start sync. */
             this.sync()
         }
-
-        /* Initialize new mutex. */
-        this._mutex = new Mutex()
 
         debug(`Purse class has been initialized from [ ${_wif} ]`)
     }
 
     /* Address */
-    // NOTE: Alias for `cashAddress`.
+    // NOTE: Shortened cash address, sans "bitcoincash:" prefix.
     get address() {
         /* Return cash address. */
-        return require('./cashAddress').bind(this)()
+        return require('./address').bind(this)()
     }
 
     /* Balance */
@@ -74,6 +88,13 @@ class Purse extends EventEmitter {
     get cashAddress() {
         /* Return cash address. */
         return require('./cashAddress').bind(this)()
+    }
+
+    /* Coins */
+    // NOTE: Unspent Transaction Outputs (UTXOs) plus details
+    get coins() {
+        /* Return coins. */
+        return this._coins
     }
 
     /* Confirmed */
@@ -92,12 +113,6 @@ class Purse extends EventEmitter {
     get unconfirmed() {
         /* Return (unconfirmed) balance. */
         return 0
-    }
-
-    /* Unspent Transaction Outputs (UTXOs) */
-    get utxos() {
-        /* Return UTXOs. */
-        return this._utxos
     }
 
     /**
