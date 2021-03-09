@@ -2,6 +2,7 @@
 const Blockchain = require('../Blockchain')
 const debug = require('debug')('nitojs:purse')
 const EventEmitter = require('events').EventEmitter
+const Mutex = require('async-mutex').Mutex
 
 /**
  * Purse Class
@@ -49,6 +50,9 @@ class Purse extends EventEmitter {
 
             this.sync()
         }
+
+        /* Initialize new mutex. */
+        this._mutex = new Mutex()
 
         debug(`Purse class has been initialized from [ ${_wif} ]`)
     }
