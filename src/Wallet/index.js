@@ -11,6 +11,9 @@ class Wallet extends EventEmitter {
     constructor(_params) {
         super()
 
+        /* Initialize node. */
+        this.node = null
+
         /* Initialize mnemonic. */
         this._mnemonic = null
 
@@ -31,6 +34,12 @@ class Wallet extends EventEmitter {
 
         /* Initialize required number of signatures. */
         this._numSigs = null
+
+        /* Initialize coins. */
+        this._coins = null
+
+        /* Initialize indices. */
+        this._indices = null
 
         /* Validate wallet key. */
         if (_params.key) {
@@ -78,14 +87,16 @@ class Wallet extends EventEmitter {
         return this._accounts
     }
 
-    /* Create Account */
-    createAccount(_params) {
-        return require('./createAccount').bind(this)(_params)
+    /* Add Account */
+    // FIXME: Remove `createAccount`.
+    addAccount(_path) {
+        return require('./addAccount').bind(this)(_path)
     }
 
-    /* To String */
-    toString() {
-        return require('./toString').bind(this)()
+    /* Create Account */
+    // FIXME: Remove `addAccount`.
+    createAccount(_params) {
+        return require('./createAccount').bind(this)(_params)
     }
 
 }

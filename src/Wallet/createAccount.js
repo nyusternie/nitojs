@@ -159,10 +159,16 @@ const createAccount = function () {
     // console.info('Wallet accounts..', accounts) // eslint-disable-line no-console
 
     /* Initialize HD node. */
-    const hdNode = this._mnemonic.toHDPrivateKey()
+    this.node = this._mnemonic.toHDPrivateKey()
 
-    /* Return HD node. */
-    return hdNode
+    /* Set path. */
+    const path = this._derivationPath + '/0/0'
+
+    /* Initialize child node. */
+    const childNode = this.node.deriveChild(path)
+
+    /* Return child node. */
+    return childNode
 }
 
 /* Export module. */
