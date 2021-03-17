@@ -25,6 +25,9 @@ class Purse extends EventEmitter {
             throw new Error('Wallet Import Format (WIF) is required to create a new Purse.')
         }
 
+        /* Set WIF. */
+        this._wif = _wif
+
         /* Initialize blockchain. */
         this._blockchain = null
 
@@ -160,7 +163,7 @@ class Purse extends EventEmitter {
 
             /* Validate data. */
             if (!data) {
-                throw new Error(`Invalid message data was returned from the blockchain. [ ${JSON.stringify(_msg)} ]`)
+                throw new Error(`Invalid message data was returned from the blockchain. [ ${JSON.stringify(data)} ]`)
             } else if (data.length > 0) {
                 /* Update coins. */
                 require('./updateCoins').bind(this)(data)

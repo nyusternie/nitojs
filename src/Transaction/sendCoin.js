@@ -11,22 +11,45 @@ const DUST_SATOSHIS = 546
  * Send Coin
  *
  * Simple coin sending to one or more receipients.
+ *
+ * NOTE: By default, the transaction fee will be automatically calculated
+ *       and subtracted from the transaction value.
  */
-const sendCoin = async (_coin, _receivers, _autoFee) => {
+const sendCoin = async (_coin, _receivers, _autoFee = true) => {
     debug('Sending coin', _coin, _receivers)
-    console.log('Sending coin', _coin, _receivers)
+    // console.log('Sending coin', _coin, _receivers)
+
+    /* Initialize coin. */
+    let coin
+
+    /* Initialize receivers. */
+    let receivers
+
+    /* Validate coin. */
+    if (_coin) {
+        coin = _coin
+    } else {
+        throw new Error(`The coin provided is invalid [ ${JSON.stringify(_coin)} ]`)
+    }
+
+    /* Validate receivers. */
+    if (Array.isArray(_receivers)) {
+        receivers = _receivers
+    } else {
+        receivers = [_receivers]
+    }
 
     /* Set address. */
-    const address = _coin.cashAddress
+    const address = coin.cashAddress
 
     /* Set transaction id. */
-    const txId = _coin.txid
+    const txId = coin.txid
 
     /* Set output index. */
-    const outputIndex = _coin.vout
+    const outputIndex = coin.vout
 
     /* Set satoshis. */
-    const satoshis = _coin.satoshis
+    const satoshis = coin.satoshis
 
     /* Validate satoshis (sending to receiver). */
     if (!satoshis) {
@@ -34,10 +57,10 @@ const sendCoin = async (_coin, _receivers, _autoFee) => {
     }
 
     /* Set public key (hash) script. */
-    const script = Address.toPubKeyHash(_coin.cashAddress)
+    const script = Address.toPubKeyHash(coin.cashAddress)
 
     /* Initialize private key. */
-    const privateKey = new bch.PrivateKey(_coin.wif)
+    const privateKey = new bch.PrivateKey(coin.wif)
 
     /* Build UTXO. */
     const utxo = { txId, outputIndex, address, script, satoshis }
@@ -61,8 +84,18 @@ const sendCoin = async (_coin, _receivers, _autoFee) => {
     let txAmount = 0
 
     /* Handle all receivers. */
-    _receivers.forEach(_receiver => {
+    receivers.forEach(_receiver => {
+        /* Validate receiver. */
+        if (!_receiver.address) {
+            throw new Error(`Invalid receiver address [ ${JSON.stringify(_receiver.address)} ]`)
+        }
+
+        if (!_receiver.satoshis) {
+            throw new Error(`Invalid receiver value [ ${JSON.stringify(_receiver.satoshis)} ]`)
+        }
+
         /* Set receipient address. */
+        // TODO: Add protection against accidental legacy address.
         const address = _receiver.address
 
         /* Initialize satoshis. */
@@ -71,7 +104,7 @@ const sendCoin = async (_coin, _receivers, _autoFee) => {
         if (_autoFee) {
             /* Calculate fee per recipient. */
             // NOTE: Fee is split evenly between all recipients.
-            const feePerRecipient = Math.ceil(byteCount / _receivers.length)
+            const feePerRecipient = Math.ceil(byteCount / receivers.length)
 
             /* Calculate satoshis. */
             satoshis = _receiver.satoshis - feePerRecipient

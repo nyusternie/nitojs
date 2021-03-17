@@ -87,21 +87,136 @@ const initCoins = async function () {
 
     /* Request results. */
     const results = await Blockchain.Query.request(query)
-    // console.log('INIT COINS (results):', results)
+    // const util = require('util')
+    // console.log('INIT COINS (results):', util.inspect(results, false, null, true))
 
     /* Validate results. */
     if (results) {
+        /* Initialize total confirmed. */
+        let totalConfirmed = 0
+        // const totalUnconfirmed = 0
+
         const unconfirmed = results.u
         console.log('\nUNCONFIRMED', unconfirmed)
 
         const confirmed = results.c
         // console.log('\nCONFIRMED', confirmed)
 
-        console.log('\nINPUT-0', confirmed[0].in)
-        console.log('\nOUTPUT-0', confirmed[0].out)
+        /* Handle transactions. */
+        for (let i = 0; i < confirmed.length; i++) {
+            /* Set transaction. */
+            const tx = confirmed[i]
 
-        console.log('\nINPUT-1', confirmed[1].in)
-        console.log('\nOUTPUT-1', confirmed[1].out)
+            /* Set transaction id. */
+            const txid = tx.tx.h
+
+            /* Set outputs. */
+            const outputs = tx.out
+
+            /* Handle outputs. */
+            for (let j = 0; j < outputs.length; j++) {
+                /* Set output. */
+                const output = outputs[j]
+
+                /* Set address. */
+                const address = output.e.a
+
+                /* Validate address. */
+                if (address === this.address) {
+                    /* Set cash address. */
+                    const cashAddress = this.cashAddress
+
+                    /* Set legacy address. */
+                    const legacyAddress = this.legacyAddress
+
+                    /* Set satoshis. */
+                    const satoshis = output.e.v
+
+                    /* Add value. */
+                    totalConfirmed += satoshis
+
+                    /* Set vout. */
+                    const vout = output.e.i
+
+                    /* Set outpoint. */
+                    const outpoint = `${txid}:${vout}`
+
+                    /* Set WIF. */
+                    const wif = this._wif
+
+                    /* Build coin package. */
+                    const coin = {
+                        cashAddress,
+                        isLocked: false,
+                        isSpent: false,
+                        legacyAddress,
+                        meta: {
+                            comments: null,
+                            title: null,
+                        },
+                        satoshis,
+                        txid,
+                        vout,
+                        wif,
+                    }
+                    // console.log('\nCOIN', outpoint, coin)
+
+                    /* Update coins. */
+                    this._coins[outpoint] = coin
+
+                }
+            }
+        }
+
+        /* Handle transactions. */
+        for (let i = 0; i < confirmed.length; i++) {
+            /* Set transaction. */
+            const tx = confirmed[i]
+
+            /* Set transaction id. */
+            // const txid = tx.tx.h
+
+            /* Set inputs. */
+            const inputs = tx.in
+
+            /* Handle inputs. */
+            for (let j = 0; j < inputs.length; j++) {
+                /* Set input. */
+                const input = inputs[j]
+
+                /* Set address. */
+                const address = input.e.a
+
+                /* Validate address. */
+                if (address === this.address) {
+                    // console.log('\nINPUT', util.inspect(input, false, null, true))
+
+                    /* Set transaction id. */
+                    const txid = input.e.h
+
+                    /* Set vout. */
+                    const vout = input.e.i
+
+                    /* Set outpoint. */
+                    const outpoint = `${txid}:${vout}`
+                    // console.log('\nSEARCHING (outpoint):', outpoint)
+                    // console.log('\nSEARCHING MATCH:', this._coins[outpoint])
+
+                    /* Validate (coin) outpoint. */
+                    if (this._coins[outpoint]) {
+                        /* Sent spent flag. */
+                        this._coins[outpoint].isSpent = true
+                    }
+
+                }
+            }
+        }
+
+        this._confirmed = totalConfirmed
+        console.log('\nthis.confirmed', totalConfirmed, this._confirmed)
+
+        /* Emit ready. */
+        this.emit('ready', this._coins)
 
     }
 
