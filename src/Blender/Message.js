@@ -1,5 +1,5 @@
 /* Import core modules. */
-const _ = require('lodash')
+// const _ = require('lodash')
 const bch = require('bitcore-lib-cash')
 
 const $ = bch.util.preconditions

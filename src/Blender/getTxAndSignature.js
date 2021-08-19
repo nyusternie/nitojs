@@ -75,6 +75,8 @@ const getTxAndSignature = function (_options) {
         debug('Transaction input:', txInput)
 
         /* Set shuffle transaction. */
+        // FIXME: I don't understand why we can't build `txInput` with all
+        //        its changes BEFORE calling `.from()`?
         blenderTransaction.from(txInput)
 
         // WARNING: For some stupid reason, bitcoincashjs's `PublicKeyHashInput`
@@ -90,6 +92,10 @@ const getTxAndSignature = function (_options) {
         })
 
         /* Fix the sequence number. */
+        // FIXME: Why are we changing the sequence number??
+        //        0xFFFFFFFE = nSequence is disabled, nLocktime is enabled, RBF is not signaled
+        //        Most apps fulfill nSequence as maximum – 0xffffffff
+        //        (source: https://en.bitcoinwiki.org/wiki/NSequence)
         Object.assign(grabIt, { sequenceNumber: 0xfffffffe })
 
         /* Add public key to input's script. */
@@ -116,6 +122,8 @@ const getTxAndSignature = function (_options) {
     }
 
     /* Set version 2. */
+    // FIXME: Test for any side-effects of enabling v2 features.
+    //        (source: https://github.com/bitcoin/bips/blob/master/bip-0068.mediawiki)
     // NOTE: CashShuffle transactions use v1.
     blenderTransaction.setVersion(2)
 

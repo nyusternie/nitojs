@@ -1,9 +1,6 @@
 /* Import modules. */
 const debug = require('debug')('nitojs:blender:start')
 
-/* Import modules. */
-const Request = require('./Request')
-
 /**
  * Start (New Request)
  *
@@ -23,6 +20,9 @@ const start = async (_coin, poolAmount) => {
     if (!coinToShuffle) {
         throw new Error('coin_not_found')
     }
+
+    /* Import request manager. */
+    const Request = require('./Request')
 
     /* Initialize new shuffle round. */
     const newShuffleRound = new Request({
