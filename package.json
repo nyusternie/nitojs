@@ -19,7 +19,6 @@
     "bitcoinjs-message": "2.1.1",
     "bitcore-lib-cash": "https://gitlab.com/bchplease/bitcore-lib-cash",
     "bitcore-mnemonic": "8.20.4",
-    "lodash": "4.17.15",
     "moment": "2.24.0",
     "numeral": "2.0.6",
     "protobufjs": "6.9.0",
