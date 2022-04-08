@@ -8,11 +8,9 @@ module.exports = {
   env: {
     es6: true,
     node: true,
-    jest: true
   },
   extends: [
     'eslint:recommended',
-    'plugin:jest/recommended'
   ],
   rules: {
     'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',

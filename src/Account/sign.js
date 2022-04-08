@@ -2,9 +2,6 @@
 const bch = require('bitcore-lib-cash')
 const debug = require('debug')('nitojs:account:sign')
 
-// const BITBOX = require('bitbox-sdk').BITBOX
-// const bitbox = new BITBOX()
-
 /**
  * Sign
  */
