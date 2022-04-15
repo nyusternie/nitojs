@@ -1,0 +1,19 @@
+{
+  "name": "NitoJS",
+  "version": "0.0.1",
+  "description": "Nito JavaScript Library and Software Development Kit (SDK).",
+  "main": "index.js",
+  "authors": {
+    "name": "HoS",
+    "email": ""
+  },
+  "repository": "/NitoJS",
+  "scripts": {
+    "dev": "vuepress dev src",
+    "build": "vuepress build src"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "vuepress": "^1.5.3"
+  }
+}
