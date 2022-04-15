@@ -1,6 +1,6 @@
 {
   "name": "nitojs",
-  "version": "22.4.7",
+  "version": "22.4.15",
   "license": "MIT",
   "author": "Shomari Prince <s.prince@bchplease.org>",
   "description": "Nito JavaScript Library and Software Development Kit (SDK).",
@@ -12,19 +12,18 @@
   },
   "dependencies": {
     "@bitauth/libauth": "1.19.1",
-    "async-mutex": "0.3.1",
+    "async-mutex": "0.3.2",
     "bchaddrjs": "https://github.com/simpleledger/bchaddrjs",
     "big-integer": "1.6.48",
-    "bitcoinjs-lib": "5.1.10",
-    "bitcoinjs-message": "2.1.1",
+    "bitcoinjs-lib": "6.0.1",
+    "bitcoinjs-message": "2.2.0",
     "bitcore-lib-cash": "https://gitlab.com/bchplease/bitcore-lib-cash",
-    "bitcore-mnemonic": "8.20.4",
-    "moment": "2.24.0",
+    "bitcore-mnemonic": "8.25.25",
+    "moment": "2.29.2",
     "numeral": "2.0.6",
-    "protobufjs": "6.9.0",
-    "qrcode-terminal": "0.12.0",
-    "superagent": "5.2.2",
-    "ws": "7.2.5"
+    "protobufjs": "6.11.2",
+    "superagent": "7.1.2",
+    "ws": "8.5.0"
   },
   "devDependencies": {
     "babel-eslint": "10.1.0",

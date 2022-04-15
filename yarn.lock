@@ -1080,7 +1080,7 @@ bitcoinjs-message@2.1.1:
     inherits "2.0.1"
     lodash "^4.17.20"
 
-bitcore-lib@^8.20.4, bitcore-lib@^8.24.1:
+bitcore-lib@^8.24.1, bitcore-lib@^8.25.25:
   version "8.25.25"
   resolved "https://registry.yarnpkg.com/bitcore-lib/-/bitcore-lib-8.25.25.tgz#113049722be84f6c4b11860b1f14c69c41e9f11b"
   integrity sha512-H6qNCVl4M8/MglXhvc04mmeus1d6nrmqTJGQ+xezJLvL7hs7R3dyBPtOqSP3YSw0iq/GWspMd8f5OOlyXVipJQ==
@@ -1094,12 +1094,12 @@ bitcore-lib@^8.20.4, bitcore-lib@^8.24.1:
     inherits "=2.0.1"
     lodash "^4.17.20"
 
-bitcore-mnemonic@8.20.4:
-  version "8.20.4"
-  resolved "https://registry.yarnpkg.com/bitcore-mnemonic/-/bitcore-mnemonic-8.20.4.tgz#90b1277c4027408d795d336f3cba0e3bdcec7d14"
-  integrity sha512-5wNVwalTZWsCuHAPtpk1RU6uf30nB8OYBaHfnPppYam/XOc1LIxvgobchHRQ6n1doGO8EI5x0QxauRYgrQFlNg==
+bitcore-mnemonic@8.25.25:
+  version "8.25.25"
+  resolved "https://registry.yarnpkg.com/bitcore-mnemonic/-/bitcore-mnemonic-8.25.25.tgz#c2401fcb16bae66204addd9b8d091d6ac2b411e1"
+  integrity sha512-7HvRxHrmd+Rh0Ohl0SEDMKQBAM+FoevXbCFnxGju6H+uZjtWMOToHA8vUg0+B91pfEMjdt9mQVB/wSA8GMqnCA==
   dependencies:
-    bitcore-lib "^8.20.4"
+    bitcore-lib "^8.25.25"
     unorm "^1.4.1"
 
 bn.js@4.11.8, bn.js@=4.11.8:
