@@ -9,14 +9,14 @@ describe('Wallet:createAccount', () => {
         /* Instantiate new wallet. */
         const wallet = new Nito.Wallet(key)
 
-        /* Set cash address. */
-        const cashAddress = wallet.accounts[0].toString()
+        /* Set extended private key. */
+        const extPrivKey = wallet.accounts[0].toString()
 
         /* Set expected. */
         const expected = 'xprv9s21ZrQH143K2GhnNaw5vEUP8RWgeqbbVB8oPE6ASdm3Laqt9GU5v69a3LFR53dnP7VbVZknJ1tcaFwwgiPkJbcAYufGwrjQ49QP82MbdRZ'
 
         /* Evaluate test. */
-        expect(cashAddress).toEqual(expected)
+        expect(extPrivKey).toEqual(expected)
     })
 
     test('it should create a new wallet account (from mnemonic phrase)', async () => {
@@ -26,13 +26,13 @@ describe('Wallet:createAccount', () => {
         /* Instantiate new wallet. */
         const wallet = new Nito.Wallet(key)
 
-        /* Set cash address. */
-        const cashAddress = wallet.accounts[0].toString()
+        /* Set extended private key. */
+        const extPrivKey = wallet.accounts[0].toString()
 
         /* Set expected. */
         const expected = 'xprv9s21ZrQH143K2GhnNaw5vEUP8RWgeqbbVB8oPE6ASdm3Laqt9GU5v69a3LFR53dnP7VbVZknJ1tcaFwwgiPkJbcAYufGwrjQ49QP82MbdRZ'
 
         /* Evaluate test. */
-        expect(cashAddress).toEqual(expected)
+        expect(extPrivKey).toEqual(expected)
     })
 })
