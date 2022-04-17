@@ -1,12 +1,9 @@
-/* Import modules. */
-const msgpack = require('msgpack-lite')
-
 /**
  * Set Notices
  */
 const setNotices = (state, _notices) => {
     /* Set notices. */
-    state.notices = msgpack.encode(_notices).toString('hex')
+    state.notices = _notices
 }
 
 /* Export module. */

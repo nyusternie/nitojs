@@ -1,6 +1,3 @@
-/* Import modules. */
-const msgpack = require('msgpack-lite')
-
 /**
  * Get Pool
  */
@@ -15,10 +12,9 @@ const getPool = (state) => {
 
     /* Initialize accounts. */
     try {
-        pool = msgpack.decode(Buffer.from(state.pool, 'hex'))
+        pool = state.pool
     } catch (err) {
         console.error(err) // eslint-disable-line no-console
-        pool = state.pool // DEPRECATED in June '20
     }
 
     /* Return pool. */

@@ -1,6 +1,6 @@
 {
   "name": "nitojs-app",
-  "version": "20.6.11",
+  "version": "22.4.15",
   "license": "MIT",
   "author": "Shomari Prince <s.prince@bchplease.org>",
   "description": "Nito JavaScript Library and Software Development Kit (SDK).",
@@ -15,7 +15,6 @@
   "dependencies": {
     "bootstrap": "4.5.0",
     "chartist": "0.11.4",
-    "msgpack-lite": "0.1.26",
     "qr-scanner": "1.1.1",
     "qrcode": "1.4.4",
     "superagent": "5.2.2",

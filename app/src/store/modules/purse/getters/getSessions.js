@@ -1,6 +1,3 @@
-/* Import modules. */
-const msgpack = require('msgpack-lite')
-
 /**
  * Get Sessions
  *
@@ -13,7 +10,7 @@ const getSessions = (state) => {
     }
 
     /* Initialize sessions. */
-    const sessions = msgpack.decode(Buffer.from(state.sessions, 'hex'))
+    const sessions = state.sessions
 
     /* Return sessions. */
     return sessions

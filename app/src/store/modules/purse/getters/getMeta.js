@@ -1,6 +1,3 @@
-/* Import modules. */
-const msgpack = require('msgpack-lite')
-
 /**
  * Get Metadata
  */
@@ -11,7 +8,7 @@ const getMeta = (state) => {
     }
 
     /* Initialize metadata. */
-    const meta = msgpack.decode(Buffer.from(state.meta, 'hex'))
+    const meta = state.meta
 
     /* Return metadata. */
     return meta

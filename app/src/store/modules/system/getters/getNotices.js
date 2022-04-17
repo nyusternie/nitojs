@@ -1,6 +1,3 @@
-/* Import modules. */
-const msgpack = require('msgpack-lite')
-
 /**
  * Get Notices
  */
@@ -15,10 +12,9 @@ const getNotices = (state) => {
 
     /* Initialize accounts. */
     try {
-        notices = msgpack.decode(Buffer.from(state.notices, 'hex'))
+        notices = state.notices
     } catch (err) {
         console.error(err) // eslint-disable-line no-console
-        notices = state.notices // DEPRECATED in June '20
     }
 
     /* Return notices. */
