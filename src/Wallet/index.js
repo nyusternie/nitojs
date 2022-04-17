@@ -95,8 +95,8 @@ class Wallet extends EventEmitter {
 
     /* Create Account */
     // FIXME: Remove `addAccount`.
-    createAccount(_params) {
-        return require('./createAccount').bind(this)(_params)
+    createAccount() {
+        return require('./createAccount').bind(this)()
     }
 
 }

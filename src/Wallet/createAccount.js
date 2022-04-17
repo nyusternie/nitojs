@@ -27,10 +27,6 @@ const createAccount = function () {
         throw new Error(`[ ${this._walletKey} ] is an invalid wallet key.`)
     }
 
-    /* Generate an addres from 2-of-3 multisig. */
-    // const node = new Nito.Address(mappedKeys, REQ_NUM_SIGS)
-
-
     /* Validate wallet key. */
     // TODO: Add improved validation for seed.
     if (this._walletKey.length === 32) { // buffer
