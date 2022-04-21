@@ -154,17 +154,26 @@ const createAccount = function () {
     // const accounts = getters.getAccounts
     // console.info('Wallet accounts..', accounts) // eslint-disable-line no-console
 
-    /* Initialize HD node. */
-    this.node = this._mnemonic.toHDPrivateKey()
+    /* Generate seed. */
+    const seed = this._mnemonic.toSeed()
 
-    /* Set path. */
-    const path = this._derivationPath + '/0/0'
+    /* Initialize HD "parent" node. */
+    // this.node = this._mnemonic.toHDPrivateKey()
+    const root = bch.HDPrivateKey.fromSeed(seed)
+    // console.log('ROOT PRIVATE KEY', root.toString())
 
-    /* Initialize child node. */
-    const childNode = this.node.deriveChild(path)
+    /* Set "default" BCH path. */
+    const path = `m/44'/145'/0'`
 
-    /* Return child node. */
-    return childNode
+    /* Initialize "BCH" node. */
+    this.node = root.deriveChild(path)
+    // console.log('DEFAULT PRIVATE KEY', this.node.toString())
+
+    /* Initialize first account. */
+    const firstAcct = this.node.deriveChild(`m/0/0`)
+
+    /* Return first account. */
+    return firstAcct
 }
 
 /* Export module. */

@@ -99,6 +99,11 @@ class Wallet extends EventEmitter {
         return require('./createAccount').bind(this)()
     }
 
+    /* To Public Key */
+    toPubKey() {
+        return require('./toPubKey').bind(this)()
+    }
+
 }
 
 /* Export module. */

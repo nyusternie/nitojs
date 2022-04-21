@@ -5,7 +5,7 @@ const debug = require('debug')('nitojs:crypto:privatekey')
 /**
  * Private Key
  */
-const privateKey = (_node) => {
+const PrivateKey = (_node) => {
     debug(`Generating private key for [ ${_node} ]`)
 
     /* Validate node. */
@@ -23,4 +23,4 @@ const privateKey = (_node) => {
 }
 
 /* Export module. */
-module.exports = privateKey
+module.exports = PrivateKey
