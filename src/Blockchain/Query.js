@@ -6,11 +6,11 @@ const superagent = require('superagent')
 // examples source:
 // https://github.com/fountainhead-cash/bitplaylist/blob/master/bitdb/README.md
 
-/* Set endpoint. */
-// const ENDPOINT = 'https://bitdb.bch.sx/q/'
-// const FALLBACK = 'https://bitdb.devops.cash/q/'
-const ENDPOINT = 'https://bitdb.devops.cash/q/'
-const FALLBACK = 'https://bitdb.bch.sx/q/'
+/* Set endpoints. */
+const ENDPOINTS = [
+    'https://bitdb.bch.sx/q/',
+    'https://bitdb.devops.cash/q/',
+]
 
 /* Set fountainhead API key. */
 const APIKEY = '1M2PjV7yGRg4dB8N32Qhw1wrDfDfZyi8VQ'
@@ -129,7 +129,7 @@ const VERSION = 3
  *
  * Performs an on-chain BitDB query.
  */
-const dbQuery = async (_params, _endpoint = ENDPOINT, _retry = false) => {
+const dbQuery = async (_params, _endpoint = ENDPOINTS[0], _retry = false) => {
     /* Set query. */
     const query = Buffer.from(
         JSON.stringify(_params)
@@ -159,7 +159,7 @@ const dbQuery = async (_params, _endpoint = ENDPOINT, _retry = false) => {
     // NOTE: We will automatically retry the "fallback" before failing.
     if ((!response || error) && !_retry) {
         // console.log('RETRYING REQUEST (fallback)', _params)
-        response = await dbQuery(_params, FALLBACK, true)
+        response = await dbQuery(_params, ENDPOINTS[1], true)
             .catch(err => console.error(err)) // eslint-disable-line no-console
         // console.log('RESPONSE (fallback)', response)
 

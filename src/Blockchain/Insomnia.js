@@ -5,8 +5,8 @@ const superagent = require('superagent')
 
 /* Set endpoints. */
 const ENDPOINTS = [
-    'https://insomnia.fountainhead.cash/v1/',
-    'https://insomnia.devops.cash/v1/',
+    'https://insomnia.fountainhead.cash/',
+    'https://insomnia.devops.cash/',
 ]
 
 /**
