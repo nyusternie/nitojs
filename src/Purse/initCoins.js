@@ -65,7 +65,7 @@ const Blockchain = require('../Blockchain')
 const initCoins = async function () {
     /* Set coins. */
     const coins = this._coins
-    console.log('INITIALIZING COINS (coins)', coins)
+    // console.log('INITIALIZING COINS (coins)', coins)
 
     /* Validate coins. */
     if (!coins) {
@@ -97,7 +97,7 @@ const initCoins = async function () {
         // const totalUnconfirmed = 0
 
         const unconfirmed = results.u
-        console.log('\nUNCONFIRMED', unconfirmed)
+        // console.log('\nUNCONFIRMED', unconfirmed)
 
         const confirmed = results.c
         // console.log('\nCONFIRMED', confirmed)

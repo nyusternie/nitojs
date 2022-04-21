@@ -12,9 +12,23 @@ describe('Address:UTXO', () => {
         /* Set expected UTXOs. */
         const expected = []
 
+        /*
+        TODO: Add a check for static UTXO
+        {
+          height: 736785,
+          tx_hash: '2d4bdf2cffad516fbc7701a79c8a6320ada15aaaac12169472966eb0f74b7ca1',
+          tx_pos: 0,
+          value: 13370,
+          txid: '2d4bdf2cffad516fbc7701a79c8a6320ada15aaaac12169472966eb0f74b7ca1',
+          vout: 0,
+          satoshis: 13370,
+          amount: 0.0001337
+        }
+        */
+
         /* Request UTXOs. */
         const utxos = await Nito.Address.utxo(address, compatiblity)
-
+        
         /* Evaluate test. */
         expect(utxos.utxos).toEqual(expect.arrayContaining(expected))
         expect(utxos.legacyAddress).toEqual('1KLhURVwWqmoMYCxYeTcywuGE9EGeH1FKd')

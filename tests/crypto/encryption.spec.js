@@ -12,11 +12,9 @@ describe('Crypto:encryption', () => {
 
         /* Generate random bytes. */
         const ciphertext = Nito.Crypto.Encryption.encrypt(plaintext, pubKey)
-        console.log('CIPHERTEXT', ciphertext)
 
         /* Generate random bytes. */
         const ciphertext_verify = Nito.Crypto.Encryption.encrypt(plaintext, pubKey)
-        console.log('CIPHERTEXT VERIFY', ciphertext_verify)
 
         /* Evaluate test. */
         expect(ciphertext).not.toEqual(ciphertext_verify)
